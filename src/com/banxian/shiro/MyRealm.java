@@ -16,8 +16,9 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
-import com.banxian.entity.ResFormMap;
-import com.banxian.entity.UserFormMap;
+import com.banxian.entity.MenuFormBean;
+import com.banxian.entity.UserFormBean;
+import com.banxian.util.SysConsts;
 
 /**
  * 自定义Realm,进行数据源配置
@@ -35,9 +36,8 @@ public class MyRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
 		String loginName = SecurityUtils.getSubject().getPrincipal().toString();
 		if (loginName != null) {
-			String userId = SecurityUtils.getSubject().getSession().getAttribute("userSessionId").toString();
-			ResFormMap resFormMap = new ResFormMap();
-			List<ResFormMap> rs = ResFormMap.mapper().findUserResourcess(userId);
+			String roleId = SecurityUtils.getSubject().getSession().getAttribute(SysConsts.ROLE_ID).toString();
+			List<MenuFormBean> rs = MenuFormBean.mapper().findUserResourcess(roleId);
 			// 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			// 用户的角色集合
@@ -45,8 +45,8 @@ public class MyRealm extends AuthorizingRealm {
 			// 用户的角色集合
 			// info.setRoles(user.getRolesName());
 			// 用户的角色对应的所有权限，如果只使用角色定义访问权限
-			for (ResFormMap resources : rs) {
-				info.addStringPermission(resources.get("resKey").toString());
+			for (MenuFormBean resources : rs) {
+				info.addStringPermission(resources.get("menu_key").toString());
 			}
 
 			return info;
@@ -67,11 +67,12 @@ public class MyRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		String username = (String) token.getPrincipal();
 
-		UserFormMap userFormMap = new UserFormMap();
-		userFormMap.put("accountName", username);
-		List<UserFormMap> userFormMaps = userFormMap.findByNames();
+//		UserFormMap userFormMap = new UserFormMap();
+		UserFormBean userMap = new UserFormBean();
+		userMap.put("ACC_NAME", username);
+		List<UserFormBean> userFormMaps = userMap.findByNames();
 		if (userFormMaps.size() != 0) {
-			if ("2".equals(userFormMaps.get(0).get("locked"))) {
+			if ("2".equals(userFormMaps.get(0).get("LOCKED"))) {
 				throw new LockedAccountException(); // 帐号锁定
 			}
 			// 从数据库查询出来的账号名和密码,与用户输入的账号和密码对比
@@ -79,14 +80,15 @@ public class MyRealm extends AuthorizingRealm {
 			// 然后会自动进入这个类进行认证
 			// 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
 			SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, // 用户名
-					userFormMaps.get(0).get("password"), // 密码
-					ByteSource.Util.bytes(username + "" + userFormMaps.get(0).get("credentialsSalt")),// salt=username+salt
+					userFormMaps.get(0).get("PASSWORD"), // 密码
+					ByteSource.Util.bytes(username + "" + userFormMaps.get(0).get("CREDENTIAL_SALT")),// salt=username+salt
 					getName() // realm name
 			);
 			// 当验证都通过后，把用户信息放在session里
 			Session session = SecurityUtils.getSubject().getSession();
 			session.setAttribute("userSession", userFormMaps.get(0));
-			session.setAttribute("userSessionId", userFormMaps.get(0).get("id"));
+			session.setAttribute("userSessionId", userFormMaps.get(0).get(SysConsts.USER_ID));
+			session.setAttribute(SysConsts.ROLE_ID, userFormMaps.get(0).get(SysConsts.ROLE_ID));
 			return authenticationInfo;
 		} else {
 			throw new UnknownAccountException();// 没找到帐号

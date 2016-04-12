@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.banxian.entity.ResFormMap;
+import com.banxian.entity.MenuFormBean;
 import com.banxian.entity.base.FormMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
@@ -49,15 +49,15 @@ public class BaseController {
 	 * @return Class<T>
 	 * @throws Exception
 	 */
-	public List<ResFormMap> findByRes(){
+	public List<MenuFormBean> findByRes(){
 		// 资源ID
 		String id = getPara("id");
 		// 获取request
-		ResFormMap resQueryForm = new ResFormMap();
+		MenuFormBean resQueryForm = new MenuFormBean();
 		resQueryForm.put("parentId", id);
 		resQueryForm.put("userId", Common.findUserSessionId());
-		List<ResFormMap> rse = ResFormMap.mapper().findRes(resQueryForm);
-		for (ResFormMap resFormMap : rse) {
+		List<MenuFormBean> rse = MenuFormBean.mapper().findRes(resQueryForm);
+		for (MenuFormBean resFormMap : rse) {
 			Object o =resFormMap.get("description");
 			if(o!=null&&!Common.isEmpty(o.toString())){
 				resFormMap.put("description",Common.stringtohtml(o.toString()));

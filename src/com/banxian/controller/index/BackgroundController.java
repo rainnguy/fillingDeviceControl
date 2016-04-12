@@ -28,10 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.banxian.entity.ResFormMap;
-import com.banxian.entity.UserFormMap;
-import com.banxian.entity.UserLoginFormMap;
+import com.banxian.entity.MenuFormBean;
+import com.banxian.entity.UserFormBean;
+import com.banxian.entity.UserLoginFormBean;
 import com.banxian.util.Common;
+import com.banxian.util.SysConsts;
 import com.banxian.util.TreeObject;
 import com.banxian.util.TreeUtil;
 import com.mysql.jdbc.Connection;
@@ -86,13 +87,13 @@ public class BackgroundController extends BaseController {
 				request.setAttribute("error", "用户或密码不正确！");
 				return "/login";
 			}
-			UserLoginFormMap userLogin = new UserLoginFormMap();
-			Session session = SecurityUtils.getSubject().getSession();
-			userLogin.put("userId", session.getAttribute("userSessionId"));
-			userLogin.put("accountName", username);
-			userLogin.put("loginIP", session.getHost());
-			userLogin.save();
-			request.removeAttribute("error");
+//			UserLoginFormBean userLogin = new UserLoginFormBean();
+//			Session session = SecurityUtils.getSubject().getSession();
+//			userLogin.put("userId", session.getAttribute("userSessionId"));
+//			userLogin.put("accountName", username);
+//			userLogin.put("loginIP", session.getHost());
+//			userLogin.save();
+//			request.removeAttribute("error");
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", "登录异常，请联系管理员！");
@@ -107,11 +108,12 @@ public class BackgroundController extends BaseController {
 	 */
 	@RequestMapping("index")
 	public String index(Model model) throws Exception {
-		ResFormMap resFormMap = new ResFormMap();
-		resFormMap.put("userId", Common.findUserSessionId());
-		List<ResFormMap> mps = ResFormMap.mapper().findRes(resFormMap);
+		MenuFormBean resFormMap = new MenuFormBean();
+//		resFormMap.put("userId", Common.findUserSessionId());
+		resFormMap.put("roleId", Common.findAttrValue(SysConsts.ROLE_ID));
+		List<MenuFormBean> mps = MenuFormBean.mapper().findRes(resFormMap);
 		List<TreeObject> list = new ArrayList<TreeObject>();
-		for (ResFormMap map : mps) {
+		for (MenuFormBean map : mps) {
 			TreeObject ts = new TreeObject();
 			Common.flushObject(ts, map);
 			list.add(ts);
@@ -120,7 +122,7 @@ public class BackgroundController extends BaseController {
 		List<TreeObject> ns = treeUtil.getChildTreeObjects(list, 0);
 		model.addAttribute("list", ns);
 		// 登陆的信息回传页面
-		model.addAttribute("userFormMap",(UserFormMap) Common.findUserSession());
+		model.addAttribute("userFormMap",(UserFormBean) Common.findUserSession());
 		return "/index";
 	}
 
@@ -153,8 +155,7 @@ public class BackgroundController extends BaseController {
 		java.io.BufferedInputStream bis = null;
 		java.io.BufferedOutputStream bos = null;
 
-		String ctxPath = request.getSession().getServletContext().getRealPath("/") + "\\"
-				+ "filezip\\";
+		String ctxPath = request.getSession().getServletContext().getRealPath("/") + "\\" + "filezip\\";
 		String downLoadPath = ctxPath + fileName;
 		System.out.println(downLoadPath);
 		try {
