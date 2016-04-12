@@ -4,18 +4,14 @@ package com.banxian.controller.system;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hyperic.sigar.Sigar;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.ServerInfoFormMap;
-import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 import com.banxian.util.PropertiesUtils;
-import com.banxian.util.SystemInfo;
 
 /**
  * 
@@ -31,14 +27,14 @@ public class MonitorController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/monitor/list";
 	}
 	
-	@ResponseBody
-	@RequestMapping("findByPage")
-	public PageView findByPage( String pageNow,
-			String pageSize) throws Exception {
-		ServerInfoFormMap serverInfoFormMap = getFormMap(ServerInfoFormMap.class);
-		pageView=serverInfoFormMap.findByPage(getPageView(pageNow, pageSize));
-		return pageView;
-	}
+//	@ResponseBody
+//	@RequestMapping("findByPage")
+//	public PageView findByPage( String pageNow,
+//			String pageSize) throws Exception {
+//		ServerInfoFormMap serverInfoFormMap = getFormMap(ServerInfoFormMap.class);
+//		pageView=serverInfoFormMap.findByPage(getPageView(pageNow, pageSize));
+//		return pageView;
+//	}
 	
 	@RequestMapping("info")
 	public String info(Model model) throws Exception {
@@ -54,17 +50,17 @@ public class MonitorController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/monitor/monitor";
 	}
 	
-	@RequestMapping("systemInfo")
-	public String systemInfo(Model model) throws Exception {
-		model.addAttribute("systemInfo", SystemInfo.SystemProperty());
-		return Common.BACKGROUND_PATH + "/system/monitor/systemInfo";
-	}
+//	@RequestMapping("systemInfo")
+//	public String systemInfo(Model model) throws Exception {
+//		model.addAttribute("systemInfo", SystemInfo.SystemProperty());
+//		return Common.BACKGROUND_PATH + "/system/monitor/systemInfo";
+//	}
 	
-	@ResponseBody
-	@RequestMapping("usage")
-	public ServerInfoFormMap usage(Model model) throws Exception {
-		return SystemInfo.usage(new Sigar());
-	}
+//	@ResponseBody
+//	@RequestMapping("usage")
+//	public ServerInfoFormMap usage(Model model) throws Exception {
+//		return SystemInfo.usage(new Sigar());
+//	}
 	/**
 	 * 修改配置　
 	 * @param request

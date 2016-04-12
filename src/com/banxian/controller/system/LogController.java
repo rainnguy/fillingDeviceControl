@@ -3,11 +3,8 @@ package com.banxian.controller.system;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.LogFormMap;
-import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 
 /**
@@ -24,14 +21,14 @@ public class LogController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/log/list";
 	}
 
-	@ResponseBody
-	@RequestMapping("findByPage")
-	public PageView findByPage( String pageNow,
-			String pageSize) throws Exception {
-		LogFormMap logFormMap = getFormMap(LogFormMap.class);
-		String order = " order by id asc";
-		logFormMap.put("$orderby", order);
-        pageView=logFormMap.findByPage(getPageView(pageNow, pageSize));
-		return pageView;
-	}
+//	@ResponseBody
+//	@RequestMapping("findByPage")
+//	public PageView findByPage( String pageNow,
+//			String pageSize) throws Exception {
+//		LogFormMap logFormMap = getFormMap(LogFormMap.class);
+//		String order = " order by id asc";
+//		logFormMap.put("$orderby", order);
+//        pageView=logFormMap.findByPage(getPageView(pageNow, pageSize));
+//		return pageView;
+//	}
 }

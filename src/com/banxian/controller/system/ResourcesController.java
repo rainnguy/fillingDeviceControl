@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.ButtomFormMap;
+import com.banxian.entity.ButtonFormBean;
+import com.banxian.entity.MenuFormBean;
 import com.banxian.entity.Params;
-import com.banxian.entity.ResFormMap;
-import com.banxian.entity.ResUserFormMap;
-import com.banxian.entity.UserGroupsFormMap;
-import com.banxian.mapper.ResourcesMapper;
+import com.banxian.mapper.SysMenuMapper;
 import com.banxian.util.Common;
 import com.banxian.util.TreeObject;
 import com.banxian.util.TreeUtil;
@@ -32,7 +30,7 @@ import com.banxian.util.TreeUtil;
 @RequestMapping("/resources/")
 public class ResourcesController extends BaseController {
 	@Inject
-	private ResourcesMapper resourcesMapper;
+	private SysMenuMapper sysMenuMapper;
 	/**
 	 * @param model
 	 *            存放返回界面的model
@@ -40,20 +38,20 @@ public class ResourcesController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("treelists")
-	public ResFormMap findByPage(Model model) {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
+	public MenuFormBean findByPage(Model model) {
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
 		String order = " order by level asc";
 		resFormMap.put("$orderby", order);
-		List<ResFormMap> mps = resFormMap.findByNames();
+		List<MenuFormBean> mps = resFormMap.findByNames();
 		List<TreeObject> list = new ArrayList<TreeObject>();
-		for (ResFormMap map : mps) {
+		for (MenuFormBean map : mps) {
 			TreeObject ts = new TreeObject();
 			Common.flushObject(ts, map);
 			list.add(ts);
 		}
 		TreeUtil treeUtil = new TreeUtil();
 		List<TreeObject> ns = treeUtil.getChildTreeObjects(list, 0);
-		resFormMap = new ResFormMap();
+		resFormMap = new MenuFormBean();
 		resFormMap.put("treelists", ns);
 		return resFormMap;
 	}
@@ -61,10 +59,10 @@ public class ResourcesController extends BaseController {
 	@ResponseBody
 	@RequestMapping("reslists")
 	public List<TreeObject> reslists(Model model) throws Exception {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
-		List<ResFormMap> mps = resFormMap.findByWhere();
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
+		List<MenuFormBean> mps = resFormMap.findByWhere();
 		List<TreeObject> list = new ArrayList<TreeObject>();
-		for (ResFormMap map : mps) {
+		for (MenuFormBean map : mps) {
 			TreeObject ts = new TreeObject();
 			Common.flushObject(ts, map);
 			list.add(ts);
@@ -97,7 +95,7 @@ public class ResourcesController extends BaseController {
 	public String editUI(Model model) {
 		String id = getPara("id");
 		if(Common.isNotEmpty(id)){
-			ResFormMap formMap=new ResFormMap();
+			MenuFormBean formMap=new MenuFormBean();
 			model.addAttribute("resources", formMap.findById(id));
 		}
 		return Common.BACKGROUND_PATH + "/system/resources/edit";
@@ -122,10 +120,10 @@ public class ResourcesController extends BaseController {
 	 */
 	@RequestMapping("permissions")
 	public String permissions(Model model) {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
-		List<ResFormMap> mps = resFormMap.findByWhere();
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
+		List<MenuFormBean> mps = resFormMap.findByWhere();
 		List<TreeObject> list = new ArrayList<TreeObject>();
-		for (ResFormMap map : mps) {
+		for (MenuFormBean map : mps) {
 			TreeObject ts = new TreeObject();
 			Common.flushObject(ts, map);
 			list.add(ts);
@@ -148,7 +146,7 @@ public class ResourcesController extends BaseController {
 	@Transactional(readOnly=false)//需要事务操作必须加入此注解
 	@SystemLog(module="系统管理",methods="资源管理-新增资源")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String addEntity() throws Exception {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
 		if("2".equals(resFormMap.get("type"))){
 			resFormMap.put("description", Common.htmltoString(resFormMap.get("description")+""));
 		}
@@ -174,7 +172,7 @@ public class ResourcesController extends BaseController {
 	@Transactional(readOnly=false)//需要事务操作必须加入此注解
 	@SystemLog(module="系统管理",methods="资源管理-修改资源")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity(Model model) throws Exception {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
 		if("2".equals(resFormMap.get("type"))){
 			resFormMap.put("description", Common.htmltoString(resFormMap.get("description")+""));
 		}
@@ -200,7 +198,7 @@ public class ResourcesController extends BaseController {
 	public String deleteEntity(Model model) throws Exception {
 		String[] ids = getParaValues("ids");
 		for (String id : ids) {
-			ResFormMap resFormMap = new ResFormMap();
+			MenuFormBean resFormMap = new MenuFormBean();
 			resFormMap.deleteById(id);
 		};
 		return "success";
@@ -213,59 +211,59 @@ public class ResourcesController extends BaseController {
 	public String sortUpdate(Params params) throws Exception {
 		List<String> ids = params.getId();
 		List<String> es = params.getRowId();
-		List<ResFormMap> maps = new ArrayList<ResFormMap>();
-		ResFormMap map = null;
+		List<MenuFormBean> maps = new ArrayList<MenuFormBean>();
+		MenuFormBean map = null;
 		for (int i = 0; i < ids.size(); i++) {
-			 map = new ResFormMap();
+			 map = new MenuFormBean();
 			map.put("id", ids.get(i));
 			map.put("level", es.get(i));
 			maps.add(map);
 		}
-		ResFormMap.mapper().updateSortOrder(maps);
+		MenuFormBean.mapper().updateSortOrder(maps);
 		return "success";
 	}
 
 	@ResponseBody
 	@RequestMapping("findRes")
-	public List<ResFormMap> findUserRes() {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
-		List<ResFormMap> rs = ResFormMap.mapper().findRes(resFormMap);
+	public List<MenuFormBean> findUserRes() {
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
+		List<MenuFormBean> rs = MenuFormBean.mapper().findRes(resFormMap);
 		return rs;
 	}
-	@ResponseBody
-	@RequestMapping("addUserRes")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
-	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")//凡需要处理业务逻辑的.都需要记录操作日志
-	public String addUserRes() throws Exception {
-		String userId = "";
-		String u = getPara("userId");
-		String g = getPara("roleId");
-		if (null != u && !Common.isEmpty(u.toString())) {
-			userId = u.toString();
-		} else if (null != g && !Common.isEmpty(g.toString())) {
-			List<UserGroupsFormMap> gs =new UserGroupsFormMap().findByAttribute("roleId", g.toString());
-			for (UserGroupsFormMap ug : gs) {
-				userId += ug.get("userId") + ",";
-			}
-		}
-		userId = Common.trimComma(userId);
-		String[] users = userId.split(",");
-		ResUserFormMap resUserFormMap = new ResUserFormMap();
-		for (String uid : users) {
-			resUserFormMap.deleteByAttribute("userId", uid);
-			String[] s = getParaValues("resId[]");
-			List<ResUserFormMap> resUserFormMaps = new ArrayList<ResUserFormMap>();
-			for (String rid : s) {
-			    resUserFormMap = new ResUserFormMap();
-				resUserFormMap.put("resId", rid);
-				resUserFormMap.put("userId", uid);
-				resUserFormMaps.add(resUserFormMap);
-			
-			}
-			resUserFormMap.batchSave(resUserFormMaps);
-		}
-		return "success";
-	}
+//	@ResponseBody
+//	@RequestMapping("addUserRes")
+//	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+//	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")//凡需要处理业务逻辑的.都需要记录操作日志
+//	public String addUserRes() throws Exception {
+//		String userId = "";
+//		String u = getPara("userId");
+//		String g = getPara("roleId");
+//		if (null != u && !Common.isEmpty(u.toString())) {
+//			userId = u.toString();
+//		} else if (null != g && !Common.isEmpty(g.toString())) {
+//			List<UserGroupsFormMap> gs =new UserGroupsFormMap().findByAttribute("roleId", g.toString());
+//			for (UserGroupsFormMap ug : gs) {
+//				userId += ug.get("userId") + ",";
+//			}
+//		}
+//		userId = Common.trimComma(userId);
+//		String[] users = userId.split(",");
+//		RoleFuncFormBean resUserFormMap = new RoleFuncFormBean();
+//		for (String uid : users) {
+//			resUserFormMap.deleteByAttribute("userId", uid);
+//			String[] s = getParaValues("resId[]");
+//			List<RoleFuncFormBean> resUserFormMaps = new ArrayList<RoleFuncFormBean>();
+//			for (String rid : s) {
+//			    resUserFormMap = new RoleFuncFormBean();
+//				resUserFormMap.put("resId", rid);
+//				resUserFormMap.put("userId", uid);
+//				resUserFormMaps.add(resUserFormMap);
+//			
+//			}
+//			resUserFormMap.batchSave(resUserFormMaps);
+//		}
+//		return "success";
+//	}
 
 	/**
 	 * 验证菜单是否存在
@@ -276,8 +274,8 @@ public class ResourcesController extends BaseController {
 	@RequestMapping("isExist")
 	@ResponseBody
 	public boolean isExist(String name,String resKey) {
-		ResFormMap resFormMap = getFormMap(ResFormMap.class);
-		List<ResFormMap> r = resFormMap.findByNames();
+		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
+		List<MenuFormBean> r = resFormMap.findByNames();
 		if (r.size()==0) {
 			return true;
 		} else {
@@ -287,8 +285,8 @@ public class ResourcesController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping("findByButtom")
-	public List<ButtomFormMap> findByButtom(){
-		return resourcesMapper.findByWhere(new ButtomFormMap());
+	public List<ButtonFormBean> findByButtom(){
+		return sysMenuMapper.findByWhere(new ButtonFormBean());
 	}
 	
 }

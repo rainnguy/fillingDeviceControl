@@ -6,8 +6,8 @@ import com.banxian.entity.UserFormBean;
 import com.banxian.mapper.base.BaseMapper;
 
 
-public interface UserMapper extends BaseMapper{
+public interface SysUserMapper extends BaseMapper{
 
-	public List<UserFormBean> findUserPage(UserFormBean userFormMap);
+	public List<UserFormBean> findUserPage(UserFormBean sysUserMap);
 	
 }

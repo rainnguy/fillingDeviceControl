@@ -17,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.banxian.annotation.SystemLog;
-import com.banxian.entity.LogFormMap;
-import com.banxian.mapper.LogMapper;
 import com.banxian.util.Common;
 /**
  * 切点类
@@ -31,7 +29,7 @@ public  class LogAopAction {
     //本地异常日志记录对象
      private  static  final Logger logger = LoggerFactory.getLogger(LogAopAction. class);
      @Inject
-     public LogMapper logMapper;
+//     public LogMapper logMapper;
      //Controller层切点
     @Pointcut("@annotation(com.banxian.annotation.SystemLog)")
      public  void controllerAspect() {
@@ -47,7 +45,7 @@ public  class LogAopAction {
      */
     @AfterThrowing(pointcut = "controllerAspect()", throwing = "e")  
     public  void doAfterThrowing(JoinPoint point, Throwable e) {  
-    	LogFormMap logForm = new LogFormMap();
+//    	LogFormMap logForm = new LogFormMap();
 		 Map<String, Object> map = null;
 		String user = null;
 		String ip = null;
@@ -67,17 +65,17 @@ public  class LogAopAction {
 			user = "无法获取登录用户信息！";
 		}
 		
-    	logForm.put("accountName",user);
-		logForm.put("module",map.get("module"));
-		logForm.put("methods","<font color=\"red\">执行方法异常:-->"+map.get("methods")+"</font>");
-		logForm.put("description","<font color=\"red\">执行方法异常:-->"+e+"</font>");
-		logForm.put("actionTime","0");
-		logForm.put("userIP",ip);
-		try {
-			logMapper.addEntity(logForm);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+//    	logForm.put("accountName",user);
+//		logForm.put("module",map.get("module"));
+//		logForm.put("methods","<font color=\"red\">执行方法异常:-->"+map.get("methods")+"</font>");
+//		logForm.put("description","<font color=\"red\">执行方法异常:-->"+e+"</font>");
+//		logForm.put("actionTime","0");
+//		logForm.put("userIP",ip);
+//		try {
+//			logMapper.addEntity(logForm);
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
     }
     /**
      * 前置通知 用于拦截Controller层记录用户的操作
@@ -90,7 +88,7 @@ public  class LogAopAction {
 		// 执行方法名
 		String methodName = point.getSignature().getName();
 		String className = point.getTarget().getClass().getSimpleName();
-		LogFormMap logForm = new LogFormMap();
+//		LogFormMap logForm = new LogFormMap();
 		 Map<String, Object> map = null;
 		String user = null;
 		Long start = 0L;
@@ -123,13 +121,13 @@ public  class LogAopAction {
 			throw new RuntimeException(e);
 		}
          try {
- 			logForm.put("accountName",user);
- 			logForm.put("module",map.get("module"));
- 			logForm.put("methods",map.get("methods"));
- 			logForm.put("description",map.get("description"));
- 			logForm.put("actionTime",time.toString());
- 			logForm.put("userIP",ip);
- 			logMapper.addEntity(logForm);
+// 			logForm.put("accountName",user);
+// 			logForm.put("module",map.get("module"));
+// 			logForm.put("methods",map.get("methods"));
+// 			logForm.put("description",map.get("description"));
+// 			logForm.put("actionTime",time.toString());
+// 			logForm.put("userIP",ip);
+// 			logMapper.addEntity(logForm);
             //*========控制台输出=========*//
             System.out.println("=====通知开始=====");
             System.out.println("请求方法:" + className + "." + methodName + "()");

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
-import com.banxian.entity.RoleFormMap;
+import com.banxian.entity.RoleFormBean;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 
@@ -34,7 +34,7 @@ public class RoleController extends BaseController {
 	@RequestMapping("findByPage")
 	public PageView findByPage(String pageNow,
 			String pageSize) throws Exception {
-		RoleFormMap roleFormMap = getFormMap(RoleFormMap.class);
+		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);
 		pageView=roleFormMap.findByPage(getPageView(pageNow, pageSize));
 		return pageView;
 	}
@@ -49,7 +49,7 @@ public class RoleController extends BaseController {
 	@Transactional(readOnly=false)//需要事务操作必须加入此注解
 	@SystemLog(module="系统管理",methods="组管理-新增组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String addEntity() throws Exception {
-		RoleFormMap roleFormMap = getFormMap(RoleFormMap.class);
+		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);
 		roleFormMap.save();
 		return "success";
 	}
@@ -60,7 +60,7 @@ public class RoleController extends BaseController {
 	@SystemLog(module="系统管理",methods="组管理-删除组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String deleteEntity() throws Exception {
 		String[] ids = getParaValues("ids");
-		RoleFormMap roleFormMap = new RoleFormMap();
+		RoleFormBean roleFormMap = new RoleFormBean();
 		for (String id : ids) {
 			roleFormMap.deleteById(id);
 		}
@@ -71,7 +71,7 @@ public class RoleController extends BaseController {
 	public String editUI(Model model) throws Exception {
 		String id = getPara("id");
 		if(Common.isNotEmpty(id)){
-			RoleFormMap roleFormMap = new RoleFormMap();
+			RoleFormBean roleFormMap = new RoleFormBean();
 			model.addAttribute("role", roleFormMap.findById(id));
 		}
 		return Common.BACKGROUND_PATH + "/system/role/edit";
@@ -82,7 +82,7 @@ public class RoleController extends BaseController {
 	@Transactional(readOnly=false)//需要事务操作必须加入此注解
 	@SystemLog(module="系统管理",methods="组管理-修改组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity() throws Exception {
-		RoleFormMap roleFormMap = getFormMap(RoleFormMap.class);
+		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);
 		roleFormMap.update();
 		return "success";
 	}
@@ -90,12 +90,12 @@ public class RoleController extends BaseController {
 	
 	@RequestMapping("selRole")
 	public String seletRole(Model model) throws Exception {
-		RoleFormMap roleFormMap = getFormMap(RoleFormMap.class);
+		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);
 		Object userId = roleFormMap.get("userId");
 		if(null!=userId){
-			List<RoleFormMap> list = RoleFormMap.mapper().seletUserRole(roleFormMap);
+			List<RoleFormBean> list = RoleFormBean.mapper().seletUserRole(roleFormMap);
 			String ugid = "";
-			for (RoleFormMap ml : list) {
+			for (RoleFormBean ml : list) {
 				ugid += ml.get("id")+",";
 			}
 			ugid = Common.trimComma(ugid);
@@ -105,7 +105,7 @@ public class RoleController extends BaseController {
 				roleFormMap.put("where", " id not in ("+ugid+")");
 			}
 		}
-		List<RoleFormMap> roles = roleFormMap.findByWhere();
+		List<RoleFormBean> roles = roleFormMap.findByWhere();
 		model.addAttribute("role", roles);
 		return Common.BACKGROUND_PATH + "/system/user/roleSelect";
 	}
