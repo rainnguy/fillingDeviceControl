@@ -24,19 +24,20 @@
 	<!-- 初始化数据 -->
 	<!--  <bean id="SpringIocUtils" class="com.banxian.util.SpringIocUtils" lazy-init="default" init-method="setBean"/> -->
 	
-<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
-       <property name ="locations">
-           <list>
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+       	<property name ="locations">
+        	<list>
             <value>classpath:jdbc.properties</value>
-           </list>
-       </property>
-       <property name="ignoreUnresolvablePlaceholders" value="true" />
-</bean>
-<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-		<property name="driverClassName" value="${jdbc.driverClass}" />
+           	</list>
+       	</property>
+       	<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="driverClassName" value="${jdbc.driverClass}" />
 	</bean>
 	
 	<bean id="pagePlugin" class="com.banxian.plugin.PagePlugin">
