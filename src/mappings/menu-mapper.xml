@@ -1,62 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.banxian.mapper.ResourcesMapper">
+<mapper namespace="com.banxian.mapper.SysMenuMapper">
 	<!--mybatis ehcache缓存配置 -->
 	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
 		/> -->
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 
 	<sql id="selectId">
-		id,
-		name,
-		parentId,
-		(select r.name from ly_resources r where r.id = ly_resources.parentId )
+		menu_id,
+		menu_name,
+		parent_id,
+		(select r.menu_name from sys_menu r where r.menu_id = sys_menu.parent_id )
 		parentName,
-		resKey,
-		ishide,
-		type,
-		resUrl,
-		level,
-		icon,
-		description
+		menu_key,
+		menu_hide,
+		menu_type,
+		menu_url,
+		sortno,
+		menu_icon,
+		menu_desc
 	</sql>
-	<select id="findChildlists" resultType="com.banxian.entity.ResFormMap">
-		SELECT
-		<include refid="selectId" />
-		from ly_resources
-		where parentId = #{id}
-	</select>
+<!-- 	<select id="findChildlists" resultType="com.banxian.entity.ResFormMap"> -->
+<!-- 		SELECT -->
+<!-- 		<include refid="selectId" /> -->
+<!-- 		from ly_resources -->
+<!-- 		where parentId = #{id} -->
+<!-- 	</select> -->
 	<!-- 获取该用户的权限 -->
 	<select id="findRes" parameterType="String" resultType="com.banxian.entity.ResFormMap">
 		SELECT
 		<include refid="selectId" />
-		from ly_resources where id in(
-		select resId from
-		ly_res_user where 1=1
-		<if test="userId != null and userId != '' and userId != 0">
-		and userId = #{userId}
-		</if>
-		<if test="roleId != null and roleId != '' and roleId != 0">
-		and userId in (
-		      SELECT userId from ly_user_role where roleId = #{roleId}
-		   )
-		</if>
+		from sys_menu where menu_id in(
+		select menu_id from role_function where 1=1
+		and role_id = #{roleId}
 		)
-		<if test="parentId != null and parentId != '' and parentId != 0">
-			and parentId = #{parentId}
-		</if>
-		order by level asc
+<!-- 		<if test="parentId != null and parentId != '' and parentId != 0"> -->
+<!-- 			and parentId = #{parentId} -->
+<!-- 		</if> -->
+		order by sortno asc
 	</select>
 
 	<!-- 根据账号Id获取该用户的权限 -->
-	<select id="findUserResourcess" parameterType="String"
-		resultType="com.banxian.entity.ResFormMap">
+	<select id="findUserResourcess" parameterType="String" resultType="com.banxian.entity.MenuFormBean">
 		SELECT
 		<include refid="selectId" />
-		from ly_resources where id in(
-		select resId from ly_res_user
-		where userId=#{userId})
+		from sys_menu where menu_id in(
+		select menu_id from role_function
+		where role_id=#{roleId})
 	</select>
 	<update id="updateSortOrder" parameterType="java.util.List">
           <foreach collection="list" item="item" index="index" open="" close="" separator=";">
