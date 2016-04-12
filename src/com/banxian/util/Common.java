@@ -353,6 +353,22 @@ public class Common {
 		}
 		return null;
 	}
+	
+	/**
+	 * 获取登录账号的ID
+	 * 
+	 * @author _wsq 2016-03-10
+	 * @version 2.0v
+	 * @param request
+	 * @return
+	 */
+	public static String findAttrValue(String key) {
+		Object obj = SecurityUtils.getSubject().getSession().getAttribute(key);
+		if (obj != null) {
+			return obj.toString();
+		}
+		return null;
+	}
 
 	/**
 	 * 获取登录账号的的对象
