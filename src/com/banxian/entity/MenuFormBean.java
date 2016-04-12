@@ -3,7 +3,7 @@ package com.banxian.entity;
 
 import com.banxian.annotation.TableSeg;
 import com.banxian.entity.base.FormMap;
-import com.banxian.mapper.ResourcesMapper;
+import com.banxian.mapper.SysMenuMapper;
 import com.banxian.util.SpringIocUtils;
 
 
@@ -11,8 +11,8 @@ import com.banxian.util.SpringIocUtils;
 /**
  * 菜单实体表
  */
-@TableSeg(tableName = "ly_resources", id="id")
-public class ResFormMap extends FormMap<String,Object>{
+@TableSeg(tableName = "SYS_MENU", id="MENU_ID")
+public class MenuFormBean extends FormMap<String,Object>{
 	/**
 	 *@descript
  	 * @author _wsq 2016-03-10
@@ -20,7 +20,7 @@ public class ResFormMap extends FormMap<String,Object>{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static ResourcesMapper mapper() {
-		return SpringIocUtils.getBean(ResourcesMapper.class);
+	public static SysMenuMapper mapper() {
+		return SpringIocUtils.getBean(SysMenuMapper.class);
 	}
 }

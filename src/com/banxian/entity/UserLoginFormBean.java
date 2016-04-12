@@ -8,14 +8,13 @@ import com.banxian.entity.base.FormMap;
 /**
  * 实体表
  */
-@TableSeg(tableName = "ly_user_role", id="userId")
-public class UserGroupsFormMap extends FormMap<String,Object>{
+@TableSeg(tableName = "USER_LOGIN", id="ID")
+public class UserLoginFormBean extends FormMap<String,Object>{
 
 	/**
 	 *@descript
-	 * @author _wsq 2016-03-10
-	 * @version 2.0v
+	  * @author _wsq 2016-03-10
+	  * @version 2.0v
 	 */
 	private static final long serialVersionUID = 1L;
-	
 }

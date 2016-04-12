@@ -8,8 +8,8 @@ import com.banxian.entity.base.FormMap;
 /**
  * 实体表
  */
-@TableSeg(tableName = "ly_buttom", id="id")
-public class ButtomFormMap extends FormMap<String,Object>{
+@TableSeg(tableName = "OPER_HISTORY", id="OPER_HISTORY_ID")
+public class SysLogFormBean extends FormMap<String,Object>{
 
 	/**
 	 *@descript
@@ -17,5 +17,4 @@ public class ButtomFormMap extends FormMap<String,Object>{
 	 * @version 2.0v
 	 */
 	private static final long serialVersionUID = 1L;
-
 }

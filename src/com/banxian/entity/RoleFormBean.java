@@ -2,14 +2,14 @@ package com.banxian.entity;
 
 import com.banxian.annotation.TableSeg;
 import com.banxian.entity.base.FormMap;
-import com.banxian.mapper.UserMapper;
+import com.banxian.mapper.SysRoleMapper;
 import com.banxian.util.SpringIocUtils;
 
 /**
- * user实体表
+ * 实体表
  */
-@TableSeg(tableName = "ly_user", id = "id")
-public class UserFormMap extends FormMap<String, Object> {
+@TableSeg(tableName = "SYS_ROLE", id = "ROLE_ID")
+public class RoleFormBean extends FormMap<String, Object> {
 
 	/**
 	 * @descript
@@ -17,7 +17,9 @@ public class UserFormMap extends FormMap<String, Object> {
 	 * @version 2.0v
 	 */
 	private static final long serialVersionUID = 1L;
-	public static UserMapper mapper() {
-		return SpringIocUtils.getBean(UserMapper.class);
+	
+	public static SysRoleMapper mapper() {
+		return SpringIocUtils.getBean(SysRoleMapper.class);
 	}
+
 }
