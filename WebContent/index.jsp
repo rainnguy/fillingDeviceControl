@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<html lang="en"
-	class="app">
+<html lang="en" class="app">
 <head>
 <%@include file="/common/common.jspf"%>
 <script type="text/javascript" src="${ctx}/js/system/user/updatePassword.js"></script>
@@ -8,15 +7,14 @@
 	$(function() {
     //修改时间2015年10月13日14:32:57
     //修改在手机上点击菜单后菜单不关闭问题
-    //修改人赵雷
     var winwidth = $("body").width();
     if(winwidth<770){
       $("#nav ul.lt li").click(function(){
         $("#nav").removeClass("nav-off-screen");
      });
     }
-    //---------修改人赵雷完毕----------
-		var tb = $("#loadhtml");
+
+    var tb = $("#loadhtml");
 		tb.html(CommnUtil.loadingImg());
 		tb.load(rootPath+"/welcome.jsp");
 		$("[nav-n]").each(function () {

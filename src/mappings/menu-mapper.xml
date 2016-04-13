@@ -35,9 +35,9 @@
 		select menuId from role_function where 1=1
 		and roleId = #{roleId}
 		)
-<!-- 		<if test="parentId != null and parentId != '' and parentId != 0"> -->
-<!-- 			and parentId = #{parentId} -->
-<!-- 		</if> -->
+		<if test="parentId != null and parentId != '' and parentId != 0">
+			and parentId = #{parentId}
+		</if>
 		order by sortNo asc
 	</select>
 

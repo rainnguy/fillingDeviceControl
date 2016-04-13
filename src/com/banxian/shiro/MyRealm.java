@@ -46,7 +46,7 @@ public class MyRealm extends AuthorizingRealm {
 			// info.setRoles(user.getRolesName());
 			// 用户的角色对应的所有权限，如果只使用角色定义访问权限
 			for (MenuFormBean resources : rs) {
-				info.addStringPermission(resources.get("menu_key").toString());
+				info.addStringPermission(resources.get(SysConsts.MENU_KEY).toString());
 			}
 
 			return info;

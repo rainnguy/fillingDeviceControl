@@ -16,7 +16,7 @@
 	<header class="panel-heading">
 	<div class="doc-buttons">
 		<c:forEach items="${res}" var="key">
-			${key.description}
+			${key.menuName}
 		</c:forEach>
 	</div>
 	</header>

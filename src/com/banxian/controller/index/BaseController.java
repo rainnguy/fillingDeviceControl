@@ -12,6 +12,7 @@ import com.banxian.entity.MenuFormBean;
 import com.banxian.entity.base.FormMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.SysConsts;
 
 /**
  * 
@@ -51,16 +52,16 @@ public class BaseController {
 	 */
 	public List<MenuFormBean> findByRes(){
 		// 资源ID
-		String id = getPara("id");
+		String id = getPara(SysConsts.ID);
 		// 获取request
 		MenuFormBean resQueryForm = new MenuFormBean();
-		resQueryForm.put("parentId", id);
-		resQueryForm.put("userId", Common.findUserSessionId());
+		resQueryForm.put(SysConsts.PARENT_ID, id);
+		resQueryForm.put(SysConsts.ROLE_ID, Common.findAttrValue(SysConsts.ROLE_ID));
 		List<MenuFormBean> rse = MenuFormBean.mapper().findRes(resQueryForm);
 		for (MenuFormBean resFormMap : rse) {
-			Object o =resFormMap.get("description");
+			Object o =resFormMap.get(SysConsts.MENU_DESCRIPTION);
 			if(o!=null&&!Common.isEmpty(o.toString())){
-				resFormMap.put("description",Common.stringtohtml(o.toString()));
+				resFormMap.put(SysConsts.MENU_DESCRIPTION,Common.stringtohtml(o.toString()));
 			}
 		}
 		return rse;

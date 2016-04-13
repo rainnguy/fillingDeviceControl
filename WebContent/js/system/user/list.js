@@ -4,13 +4,13 @@ $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
 		l_column : [ {
-			colkey : "id",
+			colkey : "userId",
 			name : "id",
 		}, {
 			colkey : "userName",
 			name : "用户名"
 		}, {
-			colkey : "accountName",
+			colkey : "accName",
 			name : "账号"
 		}, {
 			colkey : "roleName",

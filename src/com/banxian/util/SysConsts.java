@@ -11,6 +11,10 @@ public interface SysConsts {
 	public static final String CREDENTIAL_SALT = "credentialsalt";
 	public static final String USER_SESSION = "userSession";
 	public static final String USER_SESSION_ID = "userSessionId";
+	public static final String MENU_KEY = "menuKey";
+	public static final String PARENT_ID = "parentId";
+	public static final String ID = "id";
+	public static final String MENU_DESCRIPTION = "menuDesc";
 	
 	
 }

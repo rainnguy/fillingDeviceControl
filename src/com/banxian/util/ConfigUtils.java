@@ -82,8 +82,8 @@ public class ConfigUtils {
 				Map<String, Object> m = new HashMap<String, Object>();
 				m.put("field", Common.trimComma(rs.getString("COLUMN_NAME")));
 				String ble =rs.getString("TABLE_NAME");//表名
-				m.put("column_key", map.get(ble.toUpperCase()));//获取表的主键
-				EhcacheUtils.put(ble.toUpperCase(), m);//某表对应的主键和字段放到缓存
+				m.put("column_key", map.get(ble));//获取表的主键
+				EhcacheUtils.put(ble, m);//某表对应的主键和字段放到缓存
 			}
 		} catch (Exception e) {
 			logger.error(" 初始化数据失败,没法加载表字段到缓存 -->> "+e.fillInStackTrace());
