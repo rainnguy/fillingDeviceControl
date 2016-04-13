@@ -8,7 +8,7 @@ import com.banxian.util.SpringIocUtils;
 /**
  * user实体表
  */
-@TableSeg(tableName = "SYS_USER", id = "USER_ID")
+@TableSeg(tableName = "sys_user", id = "userId")
 public class UserFormBean extends FormMap<String, Object> {
 
 	/**

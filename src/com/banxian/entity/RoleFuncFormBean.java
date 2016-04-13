@@ -8,7 +8,7 @@ import com.banxian.entity.base.FormMap;
 /**
  * 实体表
  */
-@TableSeg(tableName = "ROLE_FUNCTION", id="ID")
+@TableSeg(tableName = "role_function", id="id")
 public class RoleFuncFormBean extends FormMap<String,Object>{
 
 	/**

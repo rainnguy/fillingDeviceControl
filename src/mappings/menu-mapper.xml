@@ -8,18 +8,18 @@
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 
 	<sql id="selectId">
-		menu_id,
-		menu_name,
-		parent_id,
-		(select r.menu_name from sys_menu r where r.menu_id = sys_menu.parent_id )
+		menuId,
+		menuName,
+		parentId,
+		(select r.menuName from sys_menu r where r.menuId = sys_menu.parentId )
 		parentName,
-		menu_key,
-		menu_hide,
-		menu_type,
-		menu_url,
-		sortno,
-		menu_icon,
-		menu_desc
+		menuKey,
+		menuHide,
+		menuType,
+		menuUrl,
+		sortNo,
+		menuIcon,
+		menuDesc
 	</sql>
 <!-- 	<select id="findChildlists" resultType="com.banxian.entity.ResFormMap"> -->
 <!-- 		SELECT -->
@@ -28,26 +28,26 @@
 <!-- 		where parentId = #{id} -->
 <!-- 	</select> -->
 	<!-- 获取该用户的权限 -->
-	<select id="findRes" parameterType="String" resultType="com.banxian.entity.ResFormMap">
+	<select id="findRes" parameterType="String" resultType="com.banxian.entity.MenuFormBean">
 		SELECT
 		<include refid="selectId" />
-		from sys_menu where menu_id in(
-		select menu_id from role_function where 1=1
-		and role_id = #{roleId}
+		from sys_menu where menuId in(
+		select menuId from role_function where 1=1
+		and roleId = #{roleId}
 		)
 <!-- 		<if test="parentId != null and parentId != '' and parentId != 0"> -->
 <!-- 			and parentId = #{parentId} -->
 <!-- 		</if> -->
-		order by sortno asc
+		order by sortNo asc
 	</select>
 
 	<!-- 根据账号Id获取该用户的权限 -->
 	<select id="findUserResourcess" parameterType="String" resultType="com.banxian.entity.MenuFormBean">
 		SELECT
 		<include refid="selectId" />
-		from sys_menu where menu_id in(
-		select menu_id from role_function
-		where role_id=#{roleId})
+		from sys_menu where menuId in(
+		select menuId from role_function
+		where roleId=#{roleId})
 	</select>
 	<update id="updateSortOrder" parameterType="java.util.List">
           <foreach collection="list" item="item" index="index" open="" close="" separator=";">

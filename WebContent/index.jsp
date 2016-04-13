@@ -228,14 +228,14 @@
 													</c:if> <span class="pull-right"> <i
 														class="fa fa-angle-down text"></i> <i
 														class="fa fa-angle-up text-active"></i>
-												</span> <span>${key.name}</span>
+												</span> <span>${key.menuName}</span>
 											</a>
 
 												<ul class="nav lt">
 													<c:forEach var="kc" items="${key.children}">
 														<li class="active"><a
 															href="javascript:void(0)"
-															class="active" nav-n="${key.name},${kc.name},${kc.resUrl}?id=${kc.id}"> <i class="fa fa-angle-right"></i> <span>${kc.name}</span>
+															class="active" nav-n="${key.menuName},${kc.menuName},${kc.menuUrl}?id=${kc.menuId}"> <i class="fa fa-angle-right"></i> <span>${kc.menuName}</span>
 														</a></li>
 													</c:forEach>
 												</ul></li>

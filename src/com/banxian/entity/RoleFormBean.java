@@ -8,7 +8,7 @@ import com.banxian.util.SpringIocUtils;
 /**
  * 实体表
  */
-@TableSeg(tableName = "SYS_ROLE", id = "ROLE_ID")
+@TableSeg(tableName = "sys_role", id = "roleId")
 public class RoleFormBean extends FormMap<String, Object> {
 
 	/**

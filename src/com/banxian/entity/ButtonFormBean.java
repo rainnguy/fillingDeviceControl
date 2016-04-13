@@ -8,7 +8,7 @@ import com.banxian.entity.base.FormMap;
 /**
  * 实体表
  */
-@TableSeg(tableName = "SYS_BUTTON", id="BUTTON_ID")
+@TableSeg(tableName = "sys_button", id="buttonId")
 public class ButtonFormBean extends FormMap<String,Object>{
 
 	/**

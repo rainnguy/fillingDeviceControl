@@ -66,13 +66,12 @@ public class MyRealm extends AuthorizingRealm {
 	 */
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		String username = (String) token.getPrincipal();
-
 //		UserFormMap userFormMap = new UserFormMap();
 		UserFormBean userMap = new UserFormBean();
-		userMap.put("ACC_NAME", username);
+		userMap.put(SysConsts.ACC_NAME, username);
 		List<UserFormBean> userFormMaps = userMap.findByNames();
 		if (userFormMaps.size() != 0) {
-			if ("2".equals(userFormMaps.get(0).get("LOCKED"))) {
+			if ("2".equals(userFormMaps.get(0).get(SysConsts.LOCKED))) {
 				throw new LockedAccountException(); // 帐号锁定
 			}
 			// 从数据库查询出来的账号名和密码,与用户输入的账号和密码对比
@@ -80,14 +79,14 @@ public class MyRealm extends AuthorizingRealm {
 			// 然后会自动进入这个类进行认证
 			// 交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
 			SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, // 用户名
-					userFormMaps.get(0).get("PASSWORD"), // 密码
-					ByteSource.Util.bytes(username + "" + userFormMaps.get(0).get("CREDENTIAL_SALT")),// salt=username+salt
+					userFormMaps.get(0).get(SysConsts.PASS_WORD), // 密码
+					ByteSource.Util.bytes(username + "" + userFormMaps.get(0).get(SysConsts.CREDENTIAL_SALT)),// salt=username+salt
 					getName() // realm name
 			);
 			// 当验证都通过后，把用户信息放在session里
 			Session session = SecurityUtils.getSubject().getSession();
-			session.setAttribute("userSession", userFormMaps.get(0));
-			session.setAttribute("userSessionId", userFormMaps.get(0).get(SysConsts.USER_ID));
+			session.setAttribute(SysConsts.USER_SESSION, userFormMaps.get(0));
+			session.setAttribute(SysConsts.USER_SESSION_ID, userFormMaps.get(0).get(SysConsts.USER_ID));
 			session.setAttribute(SysConsts.ROLE_ID, userFormMaps.get(0).get(SysConsts.ROLE_ID));
 			return authenticationInfo;
 		} else {

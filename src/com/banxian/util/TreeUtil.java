@@ -59,7 +59,7 @@ public class TreeUtil {
 		Iterator<TreeObject> it = list.iterator();
 		while (it.hasNext()) {
 			TreeObject n = (TreeObject) it.next();
-			if (n.getParentId() == t.getId()) {
+			if (n.getParentId() == t.getMenuId()) {
 				tlist.add(n);
 			}
 		}
@@ -95,7 +95,7 @@ public class TreeUtil {
             Iterator<TreeObject> it = childList.iterator();
             while (it.hasNext()) {
                 TreeObject n = (TreeObject) it.next();
-                n.setName(p+n.getName());
+                n.setMenuName(p+n.getMenuName());
                 recursionFn(list, n,p+p);
             }
         } else {

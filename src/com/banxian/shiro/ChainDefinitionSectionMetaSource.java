@@ -35,12 +35,12 @@ public class ChainDefinitionSectionMetaSource implements FactoryBean<Ini.Section
 		List<MenuFormBean> lists = baseMapper.findByNames(new MenuFormBean());
 		for (MenuFormBean resources : lists) {
 			// 构成permission字符串
-			if (StringUtils.isNotEmpty(resources.get("resUrl") + "") && StringUtils.isNotEmpty(resources.get("resKey") + "")) {
-				String permission = "perms[" + resources.get("resKey") + "]";
+			if (StringUtils.isNotEmpty(resources.get("menuUrl") + "") && StringUtils.isNotEmpty(resources.get("menuKey") + "")) {
+				String permission = "perms[" + resources.get("menuKey") + "]";
 				System.out.println(permission);
 				// 不对角色进行权限验证
 				// 如需要则 permission = "roles[" + resources.getResKey() + "]";
-				section.put(resources.get("resUrl") + "", permission);
+				section.put(resources.get("menuUrl") + "", permission);
 			}
 
 		}

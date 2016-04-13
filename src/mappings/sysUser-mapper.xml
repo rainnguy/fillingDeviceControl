@@ -9,17 +9,17 @@
 	<!-- 以下与实体类的中字段一致 -->
 	
 	<sql id="selectId">
-		user_id,
-		user_name,
-		acc_name,
-		(select role_name from sys_role
-		where sys_role.role_id
-		= sys_user.role_id) roleName,
+		userId,
+		userName,
+		accName,
+		(select roleName from sys_role
+		where sys_role.roleId
+		= sys_user.roleId) roleName,
 		password,
 		description,
 		locked,
-		credential_salt,
-		create_time
+		credentialsalt,
+		createtime
 	</sql>
 
 	<select id="findUserPage" resultType="com.banxian.entity.UserFormBean">
