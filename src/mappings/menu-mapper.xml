@@ -32,7 +32,7 @@
 		SELECT
 		<include refid="selectId" />
 		from sys_menu where menuId in(
-		select menuId from role_function where 1=1
+		select menuId from role_function where useStatus = 'Y'
 		and roleId = #{roleId}
 		)
 		<if test="parentId != null and parentId != '' and parentId != 0">
@@ -47,7 +47,7 @@
 		<include refid="selectId" />
 		from sys_menu where menuId in(
 		select menuId from role_function
-		where roleId=#{roleId})
+		where useStatus = 'Y' AND roleId=#{roleId})
 	</select>
 	<update id="updateSortOrder" parameterType="java.util.List">
           <foreach collection="list" item="item" index="index" open="" close="" separator=";">

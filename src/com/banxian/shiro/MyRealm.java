@@ -86,20 +86,24 @@ public class MyRealm extends AuthorizingRealm {
 			// 当验证都通过后，把用户信息放在session里
 			Session session = SecurityUtils.getSubject().getSession();
 			session.setAttribute(SysConsts.USER_SESSION, userFormMaps.get(0));
-			session.setAttribute(SysConsts.USER_SESSION_ID, userFormMaps.get(0).get(SysConsts.USER_ID));
+			session.setAttribute(SysConsts.USER_SESSION_ID, userFormMaps.get(0).get(SysConsts.ID));
 			session.setAttribute(SysConsts.ROLE_ID, userFormMaps.get(0).get(SysConsts.ROLE_ID));
+			session.setAttribute(SysConsts.STATION_ID, userFormMaps.get(0).get(SysConsts.STATION_ID));
+			session.setAttribute(SysConsts.OPER_CODE, userFormMaps.get(0).get(SysConsts.OPER_CODE));
 			return authenticationInfo;
 		} else {
 			throw new UnknownAccountException();// 没找到帐号
 		}
 
 	}
+	
 	/**
      * 更新用户授权信息缓存.
      */
 	public void clearCachedAuthorizationInfo(PrincipalCollection principals) {
 		super.clearCachedAuthorizationInfo(principals);
 	}
+	
 	/**
      * 更新用户信息缓存.
      */

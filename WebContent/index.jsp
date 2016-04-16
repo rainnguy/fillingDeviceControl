@@ -45,7 +45,7 @@
 </head>
 <body class="" style="">
 	<section class="vbox">
-		<header class="bg-success dk header navbar navbar-fixed-top-xs">
+		<header class="bg-dark dk header navbar navbar-fixed-top-xs">
 			<div class="navbar-header aside-md" >
 				<a class="btn btn-link visible-xs"
 					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
@@ -188,7 +188,7 @@
 		<section>
 			<section class="hbox stretch">
 				<!-- .aside -->
-				<aside class="bg-success lter aside-md hidden-print hidden-xs" id="nav">
+				<aside class="bg-dark lter aside-md hidden-print hidden-xs" id="nav">
 					<section class="vbox">
 						<!-- <header class="header bg-primary lter text-center clearfix">
 							<div class="btn-group">
@@ -221,7 +221,7 @@
 														<i class="fa fa-book icon"> <b class="bg-info"></b>
 														</i>
 													</c:if> <c:if test="${s.index==4}">
-														<i class="fa fa-th-list icon"> <b class="bg-success"></b>
+														<i class="fa fa-th-list icon"> <b class="bg-dark"></b>
 														</i>
 													</c:if> <span class="pull-right"> <i
 														class="fa fa-angle-down text"></i> <i

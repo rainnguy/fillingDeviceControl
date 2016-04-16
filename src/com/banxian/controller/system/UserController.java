@@ -21,7 +21,9 @@ import com.banxian.entity.UserFormBean;
 import com.banxian.exception.SystemException;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.DateUtil;
 import com.banxian.util.PasswordHelper;
+import com.banxian.util.SysConsts;
 
 /**
  * 
@@ -53,78 +55,68 @@ public class UserController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/user/add";
 	}
 
-//	@ResponseBody
-//	@RequestMapping("addEntity")
-//	@SystemLog(module="系统管理",methods="用户管理-新增用户")//凡需要处理业务逻辑的.都需要记录操作日志
-//	@Transactional(readOnly=false)//需要事务操作必须加入此注解
-//	public String addEntity(String txtGroupsSelect){
-//		try {
-//			UserFormBean userFormMap = getFormMap(UserFormBean.class);
-//			userFormMap.put("txtGroupsSelect", txtGroupsSelect);
-//			PasswordHelper passwordHelper = new PasswordHelper();
-//			userFormMap.put("password","123456789");
-//			passwordHelper.encryptPassword(userFormMap);
-//			userFormMap.save();
-//			if (!Common.isEmpty(txtGroupsSelect)) {
-//				String[] txt = txtGroupsSelect.split(",");
-//				UserGroupsFormMap userGroupsFormMap =null;
-//				for (String roleId : txt) {
-//					userGroupsFormMap = new UserGroupsFormMap();
-//					userGroupsFormMap.put("userId", userFormMap.get("id"));
-//					userGroupsFormMap.put("roleId", roleId);
-//					userGroupsFormMap.save();
-//				}
-//			}
-//		} catch (Exception e) {
-//			 throw new SystemException("添加账号异常");
-//		}
-//		return "success";
-//	}
+	@ResponseBody
+	@RequestMapping("addEntity")
+	@SystemLog(module="系统管理",methods="用户管理-新增用户")//凡需要处理业务逻辑的.都需要记录操作日志
+	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	public String addEntity(String txtGroupsSelect){
+		try {
+			UserFormBean userFormMap = getFormMap(UserFormBean.class);
+			PasswordHelper passwordHelper = new PasswordHelper();
+			passwordHelper.encryptPassword(userFormMap);
+			userFormMap.put("parentId", "0");
+			userFormMap.put("orgId", Common.findAttrValue(SysConsts.STATION_ID));
+			userFormMap.put("roleId", txtGroupsSelect.trim());
+			userFormMap.put("tel", "123456789");
+			userFormMap.put("mail", "123456@qq.com");
+			userFormMap.put("delFlag", "N");
+			userFormMap.put("userStat", "0");
+			userFormMap.put("operCode", Common.findAttrValue(SysConsts.OPER_CODE));
+			fillCommValeu(userFormMap);
+			userFormMap.save();
+		} catch (Exception e) {
+			throw new SystemException("添加账号异常");
+		}
+		return "success";
+	}
+	
+	public void fillCommValeu(Map<String, Object> targetMap){
+		targetMap.put("updateTime", DateUtil.getCurrDate());
+		
+	}
 
-//	@ResponseBody
-//	@RequestMapping("deleteEntity")
-//	@Transactional(readOnly=false)//需要事务操作必须加入此注解
-//	@SystemLog(module="系统管理",methods="用户管理-删除用户")//凡需要处理业务逻辑的.都需要记录操作日志
-//	public String deleteEntity() throws Exception {
-//		String[] ids = getParaValues("ids");
-//		for (String id : ids) {
-//			new UserGroupsFormMap().deleteByAttribute("userId", id);
-//			new ResUserFormMap().deleteByAttribute("userId", id);
-//			new UserFormMap().deleteByAttribute("id", id);
-//		}
-//		return "success";
-//	}
+	@ResponseBody
+	@RequestMapping("deleteEntity")
+	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@SystemLog(module="系统管理",methods="用户管理-删除用户")//凡需要处理业务逻辑的.都需要记录操作日志
+	public String deleteEntity() throws Exception {
+		String[] ids = getParaValues("ids");
+		for (String id : ids) {
+			new UserFormBean().deleteByAttribute("id", id);
+		}
+		return "success";
+	}
 
-//	@RequestMapping("editUI")
-//	public String editUI(Model model) throws Exception {
-//		String id = getPara("id");
-//		if(Common.isNotEmpty(id)){
-//			model.addAttribute("user", new UserFormMap().findById(id));
-//		}
-//		return Common.BACKGROUND_PATH + "/system/user/edit";
-//	}
+	@RequestMapping("editUI")
+	public String editUI(Model model) throws Exception {
+		String id = getPara(SysConsts.USER_ID);
+		if(Common.isNotEmpty(id)){
+			model.addAttribute("user", new UserFormBean().findById(id));
+		}
+		return Common.BACKGROUND_PATH + "/system/user/edit";
+	}
 
-//	@ResponseBody
-//	@RequestMapping("editEntity")
-//	@Transactional(readOnly=false)//需要事务操作必须加入此注解
-//	@SystemLog(module="系统管理",methods="用户管理-修改用户")//凡需要处理业务逻辑的.都需要记录操作日志
-//	public String editEntity(String txtGroupsSelect) throws Exception {
-//		UserFormBean userFormMap = getFormMap(UserFormBean.class);
-//		userFormMap.put("txtGroupsSelect", txtGroupsSelect);
-//		userFormMap.update();
-//		new UserGroupsFormMap().deleteByAttribute("userId", userFormMap.get("id"));
-//		if(!Common.isEmpty(txtGroupsSelect)){
-//			String[] txt = txtGroupsSelect.split(",");
-//			UserGroupsFormMap userGroupsFormMap = null;
-//			for (String roleId : txt) {
-//			    userGroupsFormMap = new UserGroupsFormMap();
-//				userGroupsFormMap.put("userId", userFormMap.get("id"));
-//				userGroupsFormMap.put("roleId", roleId);
-//				userGroupsFormMap.save();
-//			}
-//		}
-//		return "success";
-//	}
+	@ResponseBody
+	@RequestMapping("editEntity")
+	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@SystemLog(module="系统管理",methods="用户管理-修改用户")//凡需要处理业务逻辑的.都需要记录操作日志
+	public String editEntity(String txtGroupsSelect) throws Exception {
+		UserFormBean userFormMap = getFormMap(UserFormBean.class);
+		userFormMap.put("roleId", txtGroupsSelect.trim());
+		userFormMap.update();
+		return "success";
+	}
+	
 	/**
 	 * 验证账号是否存在
 	 * 

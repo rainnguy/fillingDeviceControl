@@ -3,7 +3,9 @@ package com.banxian.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import com.banxian.exception.SystemException;
 
 public class ConfigUtils {
 	private final Logger logger = Logger.getLogger(ConfigUtils.class);
+	private final String GET_STATION_SQL = "SELECT * FROM SYS_ORGA";
 	public static void main(String[] args) {
 		new ConfigUtils().initTableField();
 	}
@@ -83,8 +86,11 @@ public class ConfigUtils {
 				m.put("field", Common.trimComma(rs.getString("COLUMN_NAME")));
 				String ble =rs.getString("TABLE_NAME");//表名
 				m.put("column_key", map.get(ble));//获取表的主键
+				System.out.println(ble);
 				EhcacheUtils.put(ble, m);//某表对应的主键和字段放到缓存
 			}
+			
+			initialTableData(countStmt);
 		} catch (Exception e) {
 			logger.error(" 初始化数据失败,没法加载表字段到缓存 -->> "+e.fillInStackTrace());
 			e.printStackTrace();
@@ -99,4 +105,24 @@ public class ConfigUtils {
 			}
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	private void initialTableData(Statement countStmt) throws SQLException {
+		ResultSet rs = null;
+		rs = countStmt.executeQuery(GET_STATION_SQL);
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> mapData = null;
+		while (rs.next()) {
+			mapData = new HashMap<String, Object>();
+			Map<String, Object> mapfield=(Map<String, Object>) EhcacheUtils.get("sys_orga");
+			String field = mapfield.get("field").toString();
+			String[] columnArr = field.split(",");
+			for(int i = 0; i < columnArr.length; i++){
+				mapData.put(columnArr[i], rs.getObject(columnArr[i]));
+			}
+			dataList.add(mapData);
+			EhcacheUtils.put(SysConsts.SYS_ORGA_DATA, dataList);//某表对应的主键和字段放到缓存
+		}
+	}
+	
 }

@@ -24,7 +24,7 @@
 	<form id="form" name="form" class="form-horizontal" method="post"
 		action="${ctx}/user/editEntity.shtml">
 		<input type="hidden" class="form-control checkacc"
-			value="${user.id}" name="userFormMap.id" id="id">
+			value="${user.id}" name="userFormBean.id" id="id">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -32,7 +32,7 @@
 				<div class="col-sm-9">
 					<input type="text" class="form-control"
 						placeholder="请输入用户名" value="${user.userName}"
-						name="userFormMap.userName" id="userName">
+						name="userFormBean.userName" id="userName">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -40,13 +40,12 @@
 				<label class="col-sm-3 control-label">账号</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入账号" value="${user.accountName}"
-						name="userFormMap.accountName" id="accountName" readonly="readonly">
+						placeholder="请输入账号" value="${user.accName}"
+						name="userFormBean.accName" id="accountName" readonly="readonly">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
-			<div id="selGroup"
-				data-url="/role/selRole.shtml?roleFormMap.userId=${user.id}"></div>
+			<div id="selGroup" data-url="/role/selRole.shtml?roleFormBean.userId=${user.id}"></div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">是否禁用</label>
@@ -56,14 +55,14 @@
 							class="btn btn-sm btn-default dropdown-toggle">
 							<span class="dropdown-label"><c:if
 									test="${user.locked eq 1}">是</c:if>
-								<c:if test="${user.locked eq 0}">否</c:if></span> <span class="caret"></span>
+								-<c:if test="${user.locked eq 0}">否</c:if></span> <span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-select">
 							<li class="active"><a href="#"><input type="radio"
-									name="userFormMap.locked" value="1"
+									name="userFormBean.locked" value="1"
 									<c:if test="${user.locked eq 1}"> checked="checked"</c:if>>是</a></li>
 							<li class=""><a href="#"><input type="radio"
-									name="userFormMap.locked" value="0"
+									name="userFormBean.locked" value="0"
 									<c:if test="${user.locked eq 0}"> checked="checked"</c:if>>否</a></li>
 						</ul>
 					</div>
@@ -74,7 +73,7 @@
 				<label class="col-sm-3 control-label">描述</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" placeholder="请输入账号描述"
-						value="${user.description}" name="userFormMap.description" id="description">
+						value="${user.description}" name="userFormBean.description" id="description">
 				</div>
 			</div>
 		</div>
