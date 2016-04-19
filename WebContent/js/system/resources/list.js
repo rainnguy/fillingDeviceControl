@@ -8,21 +8,21 @@ $(function() {
 			name : "id",
 			hide : true
 		}, {
-			colkey : "name",
+			colkey : "menuName",
 			name : "菜单名称",
 			align : 'left'
 		}, {
-			colkey : "type",
+			colkey : "menuType",
 			name : "菜单类型",
 			width : "70px",
 		}, {
-			colkey : "resKey",
+			colkey : "menuKey",
 			name : "唯一KEY"
 		}, {
-			colkey : "resUrl",
+			colkey : "menuUrl",
 			name : "URL地址"
 		},{
-			colkey : "ishide",
+			colkey : "menuHide",
 			name : "是否隐藏",
 			renderData : function(rowindex, data, rowdata, column) {
 				if(data=="0"){
@@ -32,7 +32,7 @@ $(function() {
 				}
 			}
 		}, {
-			colkey : "description",
+			colkey : "menuDesc",
 			width : "100px",
 			name : "描述"
 		} ],

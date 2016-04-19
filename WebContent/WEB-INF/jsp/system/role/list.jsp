@@ -8,7 +8,7 @@
 				<label class="control-label"> <span
 					class="h4 font-thin v-middle">角色名:</span></label> <input
 					class="input-medium ui-autocomplete-input" id="name"
-					name="roleFormMap.name">
+					name="roleFormBean.roleName">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
 		</form>
@@ -16,7 +16,7 @@
 	<header class="panel-heading">
 	<div class="doc-buttons">
 		<c:forEach items="${res}" var="key">
-			${key.description}
+			${key.menuDesc}
 		</c:forEach>
 	</div>
 	</header>

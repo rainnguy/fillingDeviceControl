@@ -9,7 +9,7 @@
 	<!-- 以下与实体类的中字段一致 -->
 	<sql id="selectId">
 		id,
-		userStatus,
+		state,
 		roleName,
 		roleKey,
 		roleDesc

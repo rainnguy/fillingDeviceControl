@@ -9,7 +9,7 @@ $(function() {
 			width : "50px",
 			hide : true
 		}, {
-			colkey : "name",
+			colkey : "roleName",
 			name : "角色名"
 		}, {
 			colkey : "state",
@@ -19,7 +19,7 @@ $(function() {
 			colkey : "roleKey",
 			name : "roleKey"
 		}, {
-			colkey : "description",
+			colkey : "roleDesc",
 			name : "描述"
 		} ],
 		jsonUrl : rootPath + '/role/findByPage.shtml',

@@ -31,7 +31,7 @@ label[class^="btn btn-default"]{
 				<label class="col-sm-3 control-label">角色名</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入角色名" name="roleFormMap.name" id="name">
+						placeholder="请输入角色名" name="roleFormBean.roleName" id="roleName">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -39,7 +39,7 @@ label[class^="btn btn-default"]{
 				<label class="col-sm-3 control-label">roleKey</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入roleKey" name="roleFormMap.roleKey" id="roleKey">
+						placeholder="请输入roleKey" name="roleFormBean.roleKey" id="roleKey">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -47,7 +47,7 @@ label[class^="btn btn-default"]{
 				<label class="col-sm-3 control-label">描述</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" placeholder="请输入账号描述"
-						name="roleFormMap.description" id="description">
+						name="roleFormBean.roleDesc" id="description">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -61,9 +61,9 @@ label[class^="btn btn-default"]{
 						</button>
 						<ul class="dropdown-menu dropdown-select">
 							<li class=""><a href="#"><input type="radio"
-									name="roleFormMap.state" value="0" checked="checked">是</a></li>
+									name="roleFormBean.state" value="0" checked="checked">是</a></li>
 							<li class="active"><a href="#"><input type="radio"
-									name="roleFormMap.state" value="1">否</a></li>
+									name="roleFormBean.state" value="1">否</a></li>
 						</ul>
 					</div>
 				</div>
