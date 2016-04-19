@@ -32,6 +32,7 @@ import com.banxian.entity.MenuFormBean;
 import com.banxian.entity.UserFormBean;
 import com.banxian.entity.UserLoginFormBean;
 import com.banxian.util.Common;
+import com.banxian.util.DateUtil;
 import com.banxian.util.SysConsts;
 import com.banxian.util.TreeObject;
 import com.banxian.util.TreeUtil;
@@ -87,15 +88,8 @@ public class BackgroundController extends BaseController {
 				request.setAttribute("error", "用户或密码不正确！");
 				return "/login";
 			}
-//			UserLoginFormBean userLogin = new UserLoginFormBean();
-//			Session session = SecurityUtils.getSubject().getSession();
-//			userLogin.put("userId", session.getAttribute("userSessionId"));
-//			userLogin.put("accountName", username);
-//			userLogin.put("loginIP", session.getHost());
-//			userLogin.save();
-//			request.removeAttribute("error");
+			this.generateLoginRecords(username, request);
 		} catch (Exception e) {
-			e.printStackTrace();
 			request.setAttribute("error", "登录异常，请联系管理员！");
 			return "/login";
 		}
@@ -109,7 +103,6 @@ public class BackgroundController extends BaseController {
 	@RequestMapping("index")
 	public String index(Model model) throws Exception {
 		MenuFormBean resFormMap = new MenuFormBean();
-//		resFormMap.put("userId", Common.findUserSessionId());
 		resFormMap.put("roleId", Common.findAttrValue(SysConsts.ROLE_ID));
 		List<MenuFormBean> mps = MenuFormBean.mapper().findRes(resFormMap);
 		List<TreeObject> list = new ArrayList<TreeObject>();
@@ -210,6 +203,17 @@ public class BackgroundController extends BaseController {
 		}
 
 		return "/install";
+	}
+	
+	private void generateLoginRecords(String username, HttpServletRequest request) throws Exception {
+		UserLoginFormBean userFormBean = new UserLoginFormBean();
+		Session session = SecurityUtils.getSubject().getSession();
+		userFormBean.put(SysConsts.USER_ID, session.getAttribute(SysConsts.USER_SESSION_ID));
+		userFormBean.put(SysConsts.ACC_NAME, username);
+		userFormBean.put(SysConsts.LOGIN_IP, session.getHost());
+		userFormBean.put(SysConsts.LOGIN_TIME, DateUtil.getCurrDate());
+		userFormBean.save();
+		request.removeAttribute("error");
 	}
 
 }

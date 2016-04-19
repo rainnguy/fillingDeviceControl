@@ -987,16 +987,76 @@
 			});
 			return arr;
 		};
+		
+		var selectTreeRow = function(pagId) {
+			var ck = getSelectedCheckbox(pagId);
+			 var json = _getValueByName(returnData, conf.records);
+			 var ret = [];
+			 $.each(json, function(d) {
+				 $.each(ck, function(c) {
+
+					if(ck[c] == _getValueByName(json[d], conf.checkValue)) {
+						ret.push(json[d]);
+					} else {
+						$.each(json[d].children, function(child){
+							if(ck[c] == _getValueByName(json[d].children[child], conf.checkValue)) {
+								ret.push(json[d].children[child]);
+							}
+						})
+					}
+				 });
+			 });
+			 return ret;
+		};
+		
+		var getColumn = function(){
+			return column;
+		};
+		
+		var exportData = function(url){
+			var form=$("<form>");//定义一个form表单
+			form.attr("style","display:none");
+			form.attr("target","");
+			form.attr("method","post");
+			form.attr("action",rootPath + url);
+			$("body").append(form);//将表单放置在web中
+			var input1=$("<input>");
+			input1.attr("type","hidden");
+			input1.attr("name","exportData");
+			input1.attr("value",JSON.stringify(column));
+			form.append(input1);
+			var par=conf.data;
+			for(var p in par){
+				var input1=$("<input>");
+				input1.attr("type","hidden");
+				input1.attr("value",par[p]);
+				if(p.indexOf(".")>0){
+					p = p.split(".")[1];
+				}
+				input1.attr("name",p);
+				form.append(input1);
+			}
+			form.submit();//表单提交 
+		}
+		var getCurrentData = function(){
+			return currentData;
+		}
+		
 		init();
 
 		return {
-			setOptions : setOptions,
-			loadData : loadData,
-			getSelectedCheckbox : getSelectedCheckbox,
+			setOptions : setOptions,//自定义条件查询
+			loadData : loadData,//重新加载数据
+			getSelectedCheckbox : getSelectedCheckbox,//获取选择的行的Checkbox值
 			selectRow : selectRow,// 选中行事件
-			lyGridUp : lyGridUp,
-			lyGridDown : lyGridDown,
-			rowline : rowline
+			selectTreeRow : selectTreeRow,
+			lyGridUp : lyGridUp,//上移
+			lyGridDown : lyGridDown,//下移
+			rowline : rowline,
+			resultJSONData : jsonRequest,//返回列表的所有json数据
+			exportData:exportData,//导出数据
+			getColumn :getColumn,//获取表头
+			getCurrentData:getCurrentData//获取表格的当前页json数据
 		};
 	});
 })();

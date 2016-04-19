@@ -1,8 +1,14 @@
 package com.banxian.controller.system;
 
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,9 +25,12 @@ import com.banxian.annotation.SystemLog;
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.UserFormBean;
 import com.banxian.exception.SystemException;
+import com.banxian.mapper.SysUserMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 import com.banxian.util.DateUtil;
+import com.banxian.util.JsonUtils;
+import com.banxian.util.POIUtils;
 import com.banxian.util.PasswordHelper;
 import com.banxian.util.SysConsts;
 
@@ -33,6 +42,9 @@ import com.banxian.util.SysConsts;
 @Controller
 @RequestMapping("/user/")
 public class UserController extends BaseController {
+	
+	@Inject
+	private SysUserMapper userMapper;
 	
 	@RequestMapping("list")
 	public String listUI(Model model) throws Exception {
@@ -95,6 +107,25 @@ public class UserController extends BaseController {
 			new UserFormBean().deleteByAttribute("id", id);
 		}
 		return "success";
+	}
+	
+	@RequestMapping("/export")
+	public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "用户列表";
+		UserFormBean userFormMap = findHasHMap(UserFormBean.class);
+		//exportData = 
+		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
+		// {"colkey":"total_time","name":"总响应时长","hide":false},
+		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
+		// {"colkey":"record_time","name":"记录时间","hide":false},
+		// {"colkey":"call_count","name":"请求次数","hide":false}
+		// ]
+		String exportData = userFormMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<UserFormBean> lis = userMapper.findUserPage(userFormMap);
+		POIUtils.exportToExcel(response, listMap, lis, fileName);
 	}
 
 	@RequestMapping("editUI")

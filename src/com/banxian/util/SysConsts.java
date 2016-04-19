@@ -17,6 +17,8 @@ public interface SysConsts {
 	public static final String MENU_DESCRIPTION = "menuDesc";
 	public static final String STATION_ID = "orgId";
 	public static final String OPER_CODE = "operCode";
+	public static final String LOGIN_IP = "loginIp";
+	public static final String LOGIN_TIME = "loginTime";
 	
 	//cache data
 	public static final String SYS_ORGA_DATA = "orgaData";
