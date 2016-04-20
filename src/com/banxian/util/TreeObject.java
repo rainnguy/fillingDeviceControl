@@ -10,7 +10,7 @@ import java.util.List;
  * @version 2.0v
  */
 public class TreeObject {
-	private Integer menuId;
+	private Integer id;
 	private Integer parentId;
 	private String menuName;
 	private String parentName;
@@ -23,12 +23,12 @@ public class TreeObject {
 	private Integer menuHide;
 	private List<TreeObject> children = new ArrayList<TreeObject>();
 
-	public Integer getMenuId() {
-		return menuId;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setMenuId(Integer menuId) {
-		this.menuId = menuId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getParentId() {

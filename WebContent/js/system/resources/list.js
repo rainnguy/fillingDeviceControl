@@ -10,7 +10,7 @@ $(function() {
 		}, {
 			colkey : "menuName",
 			name : "菜单名称",
-			align : 'left'
+			align : 'center'
 		}, {
 			colkey : "menuType",
 			name : "菜单类型",

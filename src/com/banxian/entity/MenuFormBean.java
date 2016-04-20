@@ -11,7 +11,7 @@ import com.banxian.util.SpringIocUtils;
 /**
  * 菜单实体表
  */
-@TableSeg(tableName = "sys_menu", id="menuId")
+@TableSeg(tableName = "sys_menu", id="id")
 public class MenuFormBean extends FormMap<String,Object>{
 	/**
 	 *@descript

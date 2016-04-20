@@ -29,7 +29,7 @@ label[class^="btn btn-default"] {
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
 		action="${pageContext.request.contextPath}/resources/editEntity.shtml">
-		<input type="hidden" value="${resources.id}" name="resFormMap.id"
+		<input type="hidden" value="${resources.id}" name="menuFormBean.id"
 			id="id">
 		<section class="panel panel-default">
 		<div class="panel-body">
@@ -37,8 +37,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">菜单名称</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入菜单名称" name="resFormMap.name" id="name"
-						value="${resources.name}">
+						placeholder="请输入菜单名称" name="menuFormBean.menuName" id="name"
+						value="${resources.menuName}">
 				</div>
 			</div>
 
@@ -47,8 +47,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">菜单标识</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入菜单标识" name="resFormMap.resKey" id="resKey"
-						value="${resources.resKey}">
+						placeholder="请输入菜单标识" name="menuFormBean.menuKey" id="resKey"
+						value="${resources.menuKey}">
 				</div>
 			</div>
 
@@ -57,8 +57,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">菜单url</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入菜单url" name="resFormMap.resUrl" id="resUrl"
-						value="${resources.resUrl}">
+						placeholder="请输入菜单url" name="menuFormBean.menuUrl" id="resUrl"
+						value="${resources.menuUrl}">
 				</div>
 			</div>
 
@@ -66,7 +66,7 @@ label[class^="btn btn-default"] {
 			<div class="form-group">
 				<label class="col-sm-3 control-label">上级菜单</label>
 				<div class="col-sm-9">
-					<select id="parentId" name="resFormMap.parentId"
+					<select id="parentId" name="menuFormBean.parentId"
 						class="form-control m-b">
 					</select>
 				</div>
@@ -76,7 +76,7 @@ label[class^="btn btn-default"] {
 			<div class="form-group">
 				<label class="col-sm-3 control-label">菜单类型</label>
 				<div class="col-sm-9">
-						<select id="type" name="resFormMap.type" class="form-control m-b"
+						<select id="type" name="menuFormBean.menuType" class="form-control m-b"
 							tabindex="-1" onchange="but(this)">
 							<option value="0">------ 目录 ------</option>
 							<option value="1">------ 菜单 ------</option>
@@ -96,8 +96,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">图标</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入icon" name="resFormMap.icon" id="icon"
-						value="${resources.icon}">
+						placeholder="请输入icon" name="menuFormBean.menuIcon" id="icon"
+						value="${resources.menuIcon}">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -105,8 +105,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">是否隐藏</label>
 				<div class="col-sm-9">
 					<input id="gritter-light" type="checkbox"
-						<c:if test="${resources.ishide eq 1}"> checked="checked"</c:if>
-						name="resFormMap.ishide" id="ishide"
+						<c:if test="${resources.menuHide eq 1}"> checked="checked"</c:if>
+						name="menuFormBean.menuHide" id="ishide"
 						class="ace ace-switch ace-switch-5" value="1">
 				</div>
 			</div>
@@ -115,8 +115,8 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">菜单描述</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入菜单描述" name="resFormMap.description"
-						id="description" value="${resources.description}">
+						placeholder="请输入菜单描述" name="menuFormBean.menuDesc"
+						id="description" value="${resources.menuDesc}">
 				</div>
 			</div>
 

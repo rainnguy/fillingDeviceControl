@@ -233,7 +233,7 @@
 													<c:forEach var="kc" items="${key.children}">
 														<li class="active"><a
 															href="javascript:void(0)"
-															class="active" nav-n="${key.menuName},${kc.menuName},${kc.menuUrl}?id=${kc.menuId}"> <i class="fa fa-angle-right"></i> <span>${kc.menuName}</span>
+															class="active" nav-n="${key.menuName},${kc.menuName},${kc.menuUrl}?id=${kc.id}"> <i class="fa fa-angle-right"></i> <span>${kc.menuName}</span>
 														</a></li>
 													</c:forEach>
 												</ul></li>

@@ -59,7 +59,7 @@ public class TreeUtil {
 		Iterator<TreeObject> it = list.iterator();
 		while (it.hasNext()) {
 			TreeObject n = (TreeObject) it.next();
-			if (n.getParentId() == t.getMenuId()) {
+			if (n.getParentId() == t.getId()) {
 				tlist.add(n);
 			}
 		}

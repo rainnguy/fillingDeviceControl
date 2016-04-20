@@ -8,10 +8,10 @@
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 
 	<sql id="selectId">
-		menuId,
+		id,
 		menuName,
 		parentId,
-		(select r.menuName from sys_menu r where r.menuId = sys_menu.parentId )
+		(select r.menuName from sys_menu r where r.id = sys_menu.parentId )
 		parentName,
 		menuKey,
 		menuHide,
@@ -31,7 +31,7 @@
 	<select id="findRes" parameterType="String" resultType="com.banxian.entity.MenuFormBean">
 		SELECT
 		<include refid="selectId" />
-		from sys_menu where menuId in(
+		from sys_menu where id in(
 		select menuId from role_function where useStatus = 'Y'
 		and roleId = #{roleId}
 		)
@@ -45,7 +45,7 @@
 	<select id="findUserResourcess" parameterType="String" resultType="com.banxian.entity.MenuFormBean">
 		SELECT
 		<include refid="selectId" />
-		from sys_menu where menuId in(
+		from sys_menu where id in(
 		select menuId from role_function
 		where useStatus = 'Y' AND roleId=#{roleId})
 	</select>

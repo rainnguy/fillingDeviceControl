@@ -20,44 +20,44 @@ $(function() {
 			});
 		},
 		rules : {
-			"resFormMap.name" : {
+			"menuFormBean.menuName" : {
 				required : true,
 				remote : { // 异步验证是否存在
 					type : "POST",
 					url : rootPath + '/resources/isExist.shtml',
 					data : {
 						name : function() {
-							return $("#name").val();
+							return $("#menuName").val();
 						}
-					}
+					} 
 				}
 			},
-			"resFormMap.resKey" : {
+			"menuFormBean.menuKey" : {
 				required : true,
 				remote : { // 异步验证是否存在
 					type : "POST",
 					url : rootPath + '/resources/isExist.shtml',
 					data : {
 						resKey : function() {
-							return $("#resKey").val();
+							return $("#menuKey").val();
 						}
 					}
 				}
 			},
-			"resFormMap.resUrl" : {
+			"menuFormBean.menuUrl" : {
 				required : true
 			}
 		},
 		messages : {
-			"resFormMap.name" : {
+			"menuFormBean.menuName" : {
 				required : "菜单名称不能为空",
 				remote : "该菜单名称已经存在"
 			},
-			"resFormMap.resKey" : {
+			"menuFormBean.menuKey" : {
 				required : "菜单标识不能为空",
 				remote : "该标识已经存在"
 			},
-			"resFormMap.resUrl" : {
+			"menuFormBean.menuUrl" : {
 				required : "url连接不能为空"
 			}
 		},
@@ -75,7 +75,7 @@ $(function() {
 	if (data != null) {
 		var h = "<option value='0'>------顶级目录------</option>";
 		for ( var i = 0; i < data.length; i++) {
-			h+="<option value='" + data[i].id + "'>"+ data[i].name + "</option>";
+			h+="<option value='" + data[i].id + "'>"+ data[i].menuName + "</option>";
 		}
 		$("#parentId").html(h);
 	} else {
@@ -100,7 +100,7 @@ function showBut(){
 		var bb = $("#but");
 		bb.html('');
 		for ( var i = 0; i < data.length; i++) {
-			bb.append("<span onclick=\"toBut(this)\" id=\"span_"+data[i].id+"\">"+ data[i].buttom+"</span>");
+			bb.append("<span onclick=\"toBut(this)\" id=\"span_"+data[i].id+"\">"+ data[i].button+"</span>");
 		}
 	} else {
 		layer.msg("获取按扭列表失败！");

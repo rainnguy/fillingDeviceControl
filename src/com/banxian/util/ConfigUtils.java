@@ -86,7 +86,6 @@ public class ConfigUtils {
 				m.put("field", Common.trimComma(rs.getString("COLUMN_NAME")));
 				String ble =rs.getString("TABLE_NAME");//表名
 				m.put("column_key", map.get(ble));//获取表的主键
-				System.out.println(ble);
 				EhcacheUtils.put(ble, m);//某表对应的主键和字段放到缓存
 			}
 			
