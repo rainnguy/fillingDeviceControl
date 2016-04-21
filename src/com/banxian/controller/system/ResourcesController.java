@@ -175,12 +175,12 @@ public class ResourcesController extends BaseController {
 	@SystemLog(module="系统管理",methods="资源管理-修改资源")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity(Model model) throws Exception {
 		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
-		if("2".equals(resFormMap.get("type"))){
-			resFormMap.put("description", Common.htmltoString(resFormMap.get("description")+""));
+		if("2".equals(resFormMap.get("menuType"))){
+			resFormMap.put("menuDesc", Common.htmltoString(resFormMap.get("menuDesc")+""));
 		}
-		Object o = resFormMap.get("ishide");
+		Object o = resFormMap.get("menuHide");
 		if(null==o){
-			resFormMap.put("ishide", "0");
+			resFormMap.put("menuHide", "0");
 		}
 		resFormMap.update();
 		return "success";

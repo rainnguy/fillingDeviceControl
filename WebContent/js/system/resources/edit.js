@@ -61,8 +61,8 @@ function showBut(){
 	if (data != null) {
 		var bb = $("#but");
 		bb.html('');
-		for ( var i = 0; i < data.length; i++) {
-			bb.append("<span onclick=\"toBut(this)\" id=\"span_"+data[i].id+"\">"+ data[i].buttom+"</span>");
+		for (var i = 0; i < data.length; i++) {
+			bb.append("<span onclick=\"toBut(this)\" id=\"span_"+data[i].id+"\">"+ data[i].button+"</span>");
 		}
 	} else {
 		layer.msg("获取按扭列表失败！");
@@ -76,9 +76,9 @@ function byRes(id){
 		for ( var i = 0; i < data.length; i++) {
 			if(parseInt(id,10)==parseInt(data[i].id,10)){
 				h+="<option value='" + data[i].id + "' selected='selected'>"
-								+ data[i].name + "</option>";
+								+ data[i].menuName + "</option>";
 			}else{
-				h+="<option value='" + data[i].id + "'>"+ data[i].name + "</option>";
+				h+="<option value='" + data[i].id + "'>"+ data[i].menuName + "</option>";
 			}
 		}
 		$("#parentId").html(h);

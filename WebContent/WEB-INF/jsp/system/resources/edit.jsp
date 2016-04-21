@@ -76,12 +76,12 @@ label[class^="btn btn-default"] {
 			<div class="form-group">
 				<label class="col-sm-3 control-label">菜单类型</label>
 				<div class="col-sm-9">
-						<select id="type" name="menuFormBean.menuType" class="form-control m-b"
-							tabindex="-1" onchange="but(this)">
-							<option value="0">------ 目录 ------</option>
-							<option value="1">------ 菜单 ------</option>
-							<option value="2">------ 按扭 ------</option>
-						</select>
+					<select id="type" name="menuFormBean.menuType" class="form-control m-b"
+						tabindex="-1" onchange="but(this)">
+						<option value="0">------ 目录 ------</option>
+						<option value="1">------ 菜单 ------</option>
+						<option value="2">------ 按扭 ------</option>
+					</select>
 				</div>
 			</div>
 			<div class="form-group" id="divbut" style="display: none;">
@@ -126,8 +126,8 @@ label[class^="btn btn-default"] {
 		</footer> </section>
 	</form>
 	<script type="text/javascript">
-		$("#type").val("${resources.type}");
-		if ("${resources.type}" == "2") {
+		$("#type").val("${resources.menuType}");
+		if ("${resources.menuType}" == "2") {
 			showBut();
 		}
 		byRes("${resources.parentId}");
