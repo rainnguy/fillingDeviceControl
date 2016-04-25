@@ -46,7 +46,7 @@ public class RoleController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("addEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="组管理-新增组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String addEntity() throws Exception {
 		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);
@@ -56,7 +56,7 @@ public class RoleController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("deleteEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="组管理-删除组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String deleteEntity() throws Exception {
 		String[] ids = getParaValues("ids");
@@ -79,7 +79,7 @@ public class RoleController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("editEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="组管理-修改组")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity() throws Exception {
 		RoleFormBean roleFormMap = getFormMap(RoleFormBean.class);

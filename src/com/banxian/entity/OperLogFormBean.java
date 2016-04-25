@@ -8,8 +8,8 @@ import com.banxian.entity.base.FormMap;
 /**
  * 实体表
  */
-@TableSeg(tableName = "oper_history", id="operHistId")
-public class SysLogFormBean extends FormMap<String,Object>{
+@TableSeg(tableName = "oper_history", id="id")
+public class OperLogFormBean extends FormMap<String,Object>{
 
 	/**
 	 *@descript

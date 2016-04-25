@@ -9,7 +9,7 @@ $(function() {
 			width : "50px",
 			hide : true
 		}, {
-			colkey : "accountName",
+			colkey : "accName",
 			name : "账号"
 		},{
 			colkey : "loginTime",
@@ -18,14 +18,14 @@ $(function() {
 				return new Date(data).format("yyyy-MM-dd hh:mm:ss");
 			}
 		} , {
-			colkey : "loginIP",
+			colkey : "loginIp",
 			name : "登入IP"
 		}],
 		jsonUrl : rootPath + '/userlogin/findByPage.sxml',
 		checkbox : true
 	});
 	$("#searchForm").click("click", function() {// 绑定查询按扭
-		var searchParams = $("#fenye").serializeJson();
+		var searchParams = $("#searchForm").serializeJson();
 		grid.setOptions({
 			data : searchParams
 		});

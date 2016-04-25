@@ -8,7 +8,7 @@ $(function() {
 					name : "id",
 					hide : true
 				}, {
-					colkey : "accountName",
+					colkey : "accName",
 					name : "账号"
 				}, {
 					colkey : "module",
@@ -37,7 +37,7 @@ $(function() {
 				checkbox : false
 			});
 	$("#searchForm").click("click", function() {//绑定查询按扭
-		var searchParams = $("#fenye").serializeJson();
+		var searchParams = $("#searchForm").serializeJson();
 		grid.setOptions({
 			data : searchParams
 		});

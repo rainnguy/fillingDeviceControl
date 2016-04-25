@@ -145,7 +145,7 @@ public class ResourcesController extends BaseController {
 	 */
 	@RequestMapping("addEntity")
 	@ResponseBody
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="资源管理-新增资源")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String addEntity() throws Exception {
 		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
@@ -171,7 +171,7 @@ public class ResourcesController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("editEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="资源管理-修改资源")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity(Model model) throws Exception {
 		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
@@ -209,7 +209,7 @@ public class ResourcesController extends BaseController {
 
 	@RequestMapping("sortUpdate")
 	@ResponseBody
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	public String sortUpdate(Params params) throws Exception {
 		List<String> ids = params.getId();
 		List<String> es = params.getRowId();
@@ -234,7 +234,7 @@ public class ResourcesController extends BaseController {
 	}
 //	@ResponseBody
 //	@RequestMapping("addUserRes")
-//	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+//	@Transactional(readOnly=false)
 //	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")//凡需要处理业务逻辑的.都需要记录操作日志
 //	public String addUserRes() throws Exception {
 //		String userId = "";

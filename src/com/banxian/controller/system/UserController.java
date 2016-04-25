@@ -70,7 +70,7 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping("addEntity")
 	@SystemLog(module="系统管理",methods="用户管理-新增用户")//凡需要处理业务逻辑的.都需要记录操作日志
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	public String addEntity(String txtGroupsSelect){
 		try {
 			UserFormBean userFormMap = getFormMap(UserFormBean.class);
@@ -99,7 +99,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("deleteEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="用户管理-删除用户")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String deleteEntity() throws Exception {
 		String[] ids = getParaValues("ids");
@@ -139,7 +139,7 @@ public class UserController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("editEntity")
-	@Transactional(readOnly=false)//需要事务操作必须加入此注解
+	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="用户管理-修改用户")//凡需要处理业务逻辑的.都需要记录操作日志
 	public String editEntity(String txtGroupsSelect) throws Exception {
 		UserFormBean userFormMap = getFormMap(UserFormBean.class);
@@ -178,7 +178,7 @@ public class UserController extends BaseController {
 	//保存新密码
 	@RequestMapping("editPassword")
 	@ResponseBody
-	@Transactional//需要事务操作必须加入此注解
+	@Transactional
 	@SystemLog(module="系统管理",methods="用户管理-修改密码")//凡需要处理业务逻辑的.都需要记录操作日志
 	public Map<String, Object> editPassword() throws Exception{
 		// 当验证都通过后，把用户信息放在session里
