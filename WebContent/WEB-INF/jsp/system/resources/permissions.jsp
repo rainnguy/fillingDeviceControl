@@ -115,7 +115,7 @@ function sub(){
 			async : false, //请勿改成异步，下面有些程序依赖此请数据
 			type : "POST",
 			data : $("#from").serializeJson(),
-			url : rootPath + '/resources/addUserRes.shtml',
+			url : rootPath + '/resources/addUserRes.sxml',
 			dataType : 'json',
 			success : function(json) {
 				if (json == "success") {
@@ -145,7 +145,7 @@ function sub(){
   <tr>
     <th scope="row" abbr="L2 Cache" class="specalt">
     <input type="checkbox" name="resId" id="menu" _key="menu_${k.id}" onclick="smenu(this,'${k.id}')" value="${k.id}">
-    ${k.name}
+    ${k.menuName}
     </th>
     <th scope="row" abbr="L2 Cache" class="specalt">
     <table id="mytable" cellspacing="0" summary="The technical specifications of the Apple PowerMac G5 series" style="width: 100%;height: 100%;">
@@ -153,7 +153,7 @@ function sub(){
     <tr>
     <th scope="row" abbr="L2 Cache" class="specalt">
     <input type="checkbox"  name="resId" id="menu" _key="menu_1_${k.id}" _key_1="menu_1_1_${kc.id}" onclick="menu_1(this,'${kc.id}','${k.id}')"  value="${kc.id}">
-    ${kc.name}
+    ${kc.menuName}
     </th>
      <th>
     <c:if test="${not empty kc.children}">
@@ -163,7 +163,7 @@ function sub(){
     <tr>
     <th scope="row" abbr="L2 Cache" class="specalt">
     <input type="checkbox"  name="resId" id="menu" _key="menu_1_1_${k.id}" _key_2="menu_1_1_${kc.id}" onclick="menu_1_1(this,'${kc.id}','${k.id}')" value="${kcc.id}">
-    ${kcc.name}
+    ${kcc.menuName}
     </th>
      </tr>
     </c:forEach>
@@ -191,10 +191,10 @@ function sub(){
 	$.ajax({
 		type : "POST",
 		data : {
-			"resFormMap.userId" : "${param.userId}",
-			"resFormMap.roleId" : "${param.roleId}"
+			"menuFormBean.userId" : "${param.userId}",
+			"menuFormBean.roleId" : "${param.roleId}"
 		},
-		url : rootPath + '/resources/findRes.shtml',
+		url : rootPath + '/resources/findRes.sxml',
 		dataType : 'json',
 		success : function(json) {
 			for (index in json) {

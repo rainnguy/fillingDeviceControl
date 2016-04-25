@@ -14,7 +14,7 @@
 	function modifySer(key){
 		$.ajax({
 	        async: false,
-	        url: "${pageContext.request.contextPath}/monitor/modifySer.shtml",
+	        url: "${pageContext.request.contextPath}/monitor/modifySer.sxml",
 	        data:{"key":key,"value":$("#"+key).val()},
 	        dataType: "json",
 	        success: function (data) {
@@ -119,7 +119,7 @@
 						<i class="fa fa-th-list"></i> 服务器信息
 					</header>
 					<div class="panel-body" style="padding: 0px"
-						data-url="/monitor/systemInfo.shtml"></div>
+						data-url="/monitor/systemInfo.sxml"></div>
 				</section>
 			</div>
 			<div class="col-md-6">

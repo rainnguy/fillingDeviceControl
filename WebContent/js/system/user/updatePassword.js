@@ -7,7 +7,7 @@ function updatePasswordLayer(){
 	    title:'修改密码',
 	    area: ['550px', '360px'],
 	    skin: 'layui-layer-rim', //加上边框
-	    content: [rootPath+'/user/updatePassword.shtml', 'no']
+	    content: [rootPath+'/user/updatePassword.sxml', 'no']
 	});
 	//关闭加载效果
 	layer.close(index);

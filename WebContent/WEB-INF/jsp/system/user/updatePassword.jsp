@@ -18,7 +18,7 @@
 </head>
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
-	<form id="form" name="form" class="form-horizontal" method="post" action="${ctx}/user/editPassword.shtml">
+	<form id="form" name="form" class="form-horizontal" method="post" action="${ctx}/user/editPassword.sxml">
 		<section class="panel panel-default">
 			<div class="panel-body">
 				<div class="form-group">

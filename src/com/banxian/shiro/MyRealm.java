@@ -48,7 +48,7 @@ public class MyRealm extends AuthorizingRealm {
 			for (MenuFormBean resources : rs) {
 				info.addStringPermission(resources.get(SysConsts.MENU_KEY).toString());
 			}
-
+ 
 			return info;
 		}
 		return null;

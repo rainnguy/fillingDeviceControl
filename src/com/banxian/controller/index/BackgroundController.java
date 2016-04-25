@@ -93,7 +93,7 @@ public class BackgroundController extends BaseController {
 			request.setAttribute("error", "登录异常，请联系管理员！");
 			return "/login";
 		}
-		return "redirect:index.shtml";
+		return "redirect:index.sxml";
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class BackgroundController extends BaseController {
 		// 使用权限管理工具进行用户的退出，注销登录
 		SecurityUtils.getSubject().logout(); // session
 												// 会销毁，在SessionListener监听session销毁，清理权限缓存
-		return "redirect:login.shtml";
+		return "redirect:login.sxml";
 	}
 
 	@RequestMapping("install")

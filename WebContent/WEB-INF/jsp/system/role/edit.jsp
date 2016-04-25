@@ -21,7 +21,7 @@
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/role/editEntity.shtml">
+		action="${ctx}/role/editEntity.sxml">
 		<input type="hidden" class="form-control checkacc" value="${role.id}"
 			name="roleFormBean.id" id="id">
 		<section class="panel panel-default">

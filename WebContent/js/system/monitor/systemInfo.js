@@ -163,7 +163,7 @@ $(function() {
 		var cpu = [];
 		$.ajax({
 			type : "POST",
-			url : rootPath + '/monitor/usage.shtml',
+			url : rootPath + '/monitor/usage.sxml',
 			async : false,
 			dataType : 'json',
 			success : function(json) {

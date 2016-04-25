@@ -22,7 +22,7 @@
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/user/editEntity.shtml">
+		action="${ctx}/user/editEntity.sxml">
 		<input type="hidden" class="form-control checkacc"
 			value="${user.id}" name="userFormBean.id" id="id">
 		<section class="panel panel-default">
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
-			<div id="selGroup" data-url="/role/selRole.shtml?roleFormBean.userId=${user.id}"></div>
+			<div id="selGroup" data-url="/role/selRole.sxml?roleFormBean.userId=${user.id}"></div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">是否禁用</label>

@@ -24,7 +24,7 @@
 	<div id="loginbox" style="padding-top: 10%;">
 		<form id="loginform" name="loginform" class="form-vertical"
 			style="background-color: rgba(0, 0, 0, 0.5) !important; background: #000; filter: alpha(opacity = 50); *background: #000; *filter: alpha(opacity = 50); /*黑色透明背景结束*/ color: #FFF; bottom: 0px; right: 0px; border: 1px solid #000;"
-			action="${pageContext.servletContext.contextPath }/login.shtml"
+			action="${pageContext.servletContext.contextPath }/login.sxml"
 			method="post">
 			<div class="control-group normal_text">
 				<table style="width: 100%">
@@ -64,7 +64,7 @@
 			<div class="form-actions">
 				<span class="pull-left" style="width: 33%"><a href="#"
 					class="flip-link btn btn-info" id="to-recover">忘记密码？</a></span>
-					<span class="pull-left" style="width: 33%"><a href="install.shtml"
+					<span class="pull-left" style="width: 33%"><a href="install.sxml"
 					class="flip-link btn btn-danger" id="to-recover">一键初始化系统</a></span>
 					 <span
 					class="pull-right"><a type="submit"

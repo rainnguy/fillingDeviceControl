@@ -41,7 +41,7 @@ $(function() {
 			colkey : "mark",
 			name : "备注"
 		} ],
-		jsonUrl : rootPath + '/monitor/findByPage.shtml',
+		jsonUrl : rootPath + '/monitor/findByPage.sxml',
 		checkbox : true
 	});
 	$("#searchForm").click("click", function() {//绑定查询按扭

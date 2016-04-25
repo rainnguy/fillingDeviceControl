@@ -27,12 +27,12 @@
 	/***
 	//需要三个参数, 目录,菜单,菜单连接
 	例:
-	nav="系统管理,用户列表,/user/list.shtml"; 	
+	nav="系统管理,用户列表,/user/list.sxml"; 	
 	**/
 	function tolaod(nav){
 		var sn = nav.split(",");
 		var html = '<li><i class="fa fa-home"></i>';
-		html+='<a href="index.shtml">Home</a></li>';
+		html+='<a href="index.sxml">Home</a></li>';
 		for(var i=0;i<2;i++){
 			html+='<li><a href="javascript:void(0)">'+sn[i]+'</a></li>';
 		}
@@ -50,7 +50,7 @@
 				<a class="btn btn-link visible-xs"
 					data-toggle="class:nav-off-screen,open" data-target="#nav,html">
 					<i class="fa fa-bars"></i>
-				</a> <a href="index.shtml#" class="navbar-brand"
+				</a> <a href="index.sxml#" class="navbar-brand"
 					data-toggle="fullscreen"><img
 					src="${ctx}/notebook/notebook_files/logo.png" class="m-r-sm">富仁实时监控系统</a>
 				<a class="btn btn-link visible-xs" data-toggle="dropdown"
@@ -174,14 +174,14 @@
 				</a>
 					<ul class="dropdown-menu animated fadeInRight">
 						<span class="arrow top"></span>
-						<li><a href="index.shtml#">Settings</a></li>
+						<li><a href="index.sxml#">Settings</a></li>
 						<li><a href="#" onclick="javascript:updatePasswordLayer();">密码修改</a></li>
 						<li><a href="index.html#"> <span
 								class="badge bg-danger pull-right">3</span> Notifications
 						</a></li>
 						<li><a href="docs.html">Help</a></li>
 						<li class="divider"></li>
-						<li><a href="logout.shtml">Logout</a></li>
+						<li><a href="logout.sxml">Logout</a></li>
 					</ul></li>
 			</ul>
 		</header>

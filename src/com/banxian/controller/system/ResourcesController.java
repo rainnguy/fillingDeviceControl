@@ -203,7 +203,7 @@ public class ResourcesController extends BaseController {
 			MenuFormBean resFormMap = new MenuFormBean();
 			resFormMap.deleteById(id);
 		};
-		return "success";
+ 		return "success";
 	}
 
 

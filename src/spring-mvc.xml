@@ -16,12 +16,8 @@
 	default-lazy-init="true">
 	<tx:annotation-driven />
 	<context:component-scan base-package="com.banxian" />
-	<!-- 启动对@AspectJ注解的支持 -->
-	<!--通知spring使用cglib而不是jdk的来生成代理方法 AOP可以拦截到Controller-->  
-<aop:aspectj-autoproxy proxy-target-class="true"/>
-	<!-- 注解支持 -->  
-<context:annotation-config/> 
-	<!--避免IE执行AJAX时，返回JSON出现下载文件 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<context:annotation-config/> 
 	<bean id="mappingJackson2HttpMessageConverter"
 		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
@@ -32,16 +28,15 @@
 			</list>
 		</property>
 	</bean>
-	<!-- 采用SpringMVC自带的JSON转换工具，支持@ResponseBody注解 -->
+
 	<bean
 		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
-				<ref bean="mappingJackson2HttpMessageConverter" />    <!-- JSON转换器 -->
+				<ref bean="mappingJackson2HttpMessageConverter" />
 			</list>
 		</property>
 	</bean>
-	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
@@ -50,7 +45,6 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	<mvc:annotation-driven>
-		<!-- 处理responseBody 里面日期类型 -->
 		<mvc:message-converters>
 			<bean
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">

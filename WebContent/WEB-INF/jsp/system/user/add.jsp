@@ -28,7 +28,7 @@ label[class^="btn btn-default"] {
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/user/addEntity.shtml">
+		action="${ctx}/user/addEntity.sxml">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -57,7 +57,7 @@ label[class^="btn btn-default"] {
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
-			<div class="form-group" id="selRole" data-url="/role/selRole.shtml"></div>
+			<div class="form-group" id="selRole" data-url="/role/selRole.sxml"></div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">是否禁用</label>
