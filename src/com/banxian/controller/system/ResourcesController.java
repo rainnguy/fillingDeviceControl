@@ -232,40 +232,6 @@ public class ResourcesController extends BaseController {
 		List<MenuFormBean> rs = MenuFormBean.mapper().findRes(resFormMap);
 		return rs;
 	}
-//	@ResponseBody
-//	@RequestMapping("addUserRes")
-//	@Transactional(readOnly=false)
-//	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")//凡需要处理业务逻辑的.都需要记录操作日志
-//	public String addUserRes() throws Exception {
-//		String userId = "";
-//		String u = getPara("userId");
-//		String g = getPara("roleId");
-//		if (null != u && !Common.isEmpty(u.toString())) {
-//			userId = u.toString();
-//		} else if (null != g && !Common.isEmpty(g.toString())) {
-//			List<UserGroupsFormMap> gs =new UserGroupsFormMap().findByAttribute("roleId", g.toString());
-//			for (UserGroupsFormMap ug : gs) {
-//				userId += ug.get("userId") + ",";
-//			}
-//		}
-//		userId = Common.trimComma(userId);
-//		String[] users = userId.split(",");
-//		RoleFuncFormBean resUserFormMap = new RoleFuncFormBean();
-//		for (String uid : users) {
-//			resUserFormMap.deleteByAttribute("userId", uid);
-//			String[] s = getParaValues("resId[]");
-//			List<RoleFuncFormBean> resUserFormMaps = new ArrayList<RoleFuncFormBean>();
-//			for (String rid : s) {
-//			    resUserFormMap = new RoleFuncFormBean();
-//				resUserFormMap.put("resId", rid);
-//				resUserFormMap.put("userId", uid);
-//				resUserFormMaps.add(resUserFormMap);
-//			
-//			}
-//			resUserFormMap.batchSave(resUserFormMaps);
-//		}
-//		return "success";
-//	}
 
 	/**
 	 * 验证菜单是否存在
