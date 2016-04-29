@@ -16,8 +16,10 @@ import com.banxian.controller.index.BaseController;
 import com.banxian.entity.ButtonFormBean;
 import com.banxian.entity.MenuFormBean;
 import com.banxian.entity.Params;
+import com.banxian.entity.RoleFuncFormBean;
 import com.banxian.mapper.SysMenuMapper;
 import com.banxian.util.Common;
+import com.banxian.util.SysConsts;
 import com.banxian.util.TreeObject;
 import com.banxian.util.TreeUtil;
 
@@ -146,7 +148,7 @@ public class ResourcesController extends BaseController {
 	@RequestMapping("addEntity")
 	@ResponseBody
 	@Transactional(readOnly=false)
-	@SystemLog(module="系统管理",methods="资源管理-新增资源")//凡需要处理业务逻辑的.都需要记录操作日志
+	@SystemLog(module="系统管理",methods="资源管理-新增资源")
 	public String addEntity() throws Exception {
 		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
 		if("2".equals(resFormMap.get("menuType"))){
@@ -172,7 +174,7 @@ public class ResourcesController extends BaseController {
 	@ResponseBody
 	@RequestMapping("editEntity")
 	@Transactional(readOnly=false)
-	@SystemLog(module="系统管理",methods="资源管理-修改资源")//凡需要处理业务逻辑的.都需要记录操作日志
+	@SystemLog(module="系统管理",methods="资源管理-修改资源")
 	public String editEntity(Model model) throws Exception {
 		MenuFormBean resFormMap = getFormMap(MenuFormBean.class);
 		if("2".equals(resFormMap.get("menuType"))){
@@ -196,7 +198,7 @@ public class ResourcesController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("deleteEntity")
-	@SystemLog(module="系统管理",methods="资源管理-删除资源")//凡需要处理业务逻辑的.都需要记录操作日志
+	@SystemLog(module="系统管理",methods="资源管理-删除资源")
 	public String deleteEntity(Model model) throws Exception {
 		String[] ids = getParaValues("ids");
 		for (String id : ids) {
@@ -232,6 +234,46 @@ public class ResourcesController extends BaseController {
 		List<MenuFormBean> rs = MenuFormBean.mapper().findRes(resFormMap);
 		return rs;
 	}
+	
+	@ResponseBody
+	@RequestMapping("addRoleRes")
+	@Transactional(readOnly=false)
+	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")
+	public String addUserRes() throws Exception {
+		RoleFuncFormBean roleFuncFormBean = new RoleFuncFormBean();
+		String roleId = getPara(SysConsts.ROLE_ID);
+		String[] menuId = getParaValues("resId[]");
+		
+		if (null != roleId && !Common.isEmpty(roleId.toString())) {
+			roleFuncFormBean.deleteByAttribute(SysConsts.ROLE_ID, roleId);
+		}
+		
+		/**
+		 * menuId
+		 * roleId
+		 * useStatus 'Y'
+		 */
+		
+
+		
+		userId = Common.trimComma(userId);
+		String[] users = userId.split(",");
+		RoleFuncFormBean roleFuncFormBean = new RoleFuncFormBean();
+		for (String uid : users) {
+			roleFuncFormBean.deleteByAttribute("userId", uid);
+			List<RoleFuncFormBean> resUserFormMaps = new ArrayList<RoleFuncFormBean>();
+			for (String rid : s) {
+			    roleFuncFormBean = new RoleFuncFormBean();
+				roleFuncFormBean.put("resId", rid);
+				roleFuncFormBean.put("userId", uid);
+				resUserFormMaps.add(roleFuncFormBean);
+			
+			}
+			roleFuncFormBean.batchSave(resUserFormMaps);
+		}
+		return "success";
+	}
+
 
 	/**
 	 * 验证菜单是否存在

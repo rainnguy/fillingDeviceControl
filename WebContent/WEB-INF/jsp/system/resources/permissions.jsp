@@ -115,7 +115,7 @@ function sub(){
 			async : false, //请勿改成异步，下面有些程序依赖此请数据
 			type : "POST",
 			data : $("#from").serializeJson(),
-			url : rootPath + '/resources/addUserRes.sxml',
+			url : rootPath + '/resources/addRoleRes.sxml',
 			dataType : 'json',
 			success : function(json) {
 				if (json == "success") {
