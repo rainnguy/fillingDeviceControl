@@ -240,37 +240,29 @@ public class ResourcesController extends BaseController {
 	@Transactional(readOnly=false)
 	@SystemLog(module="系统管理",methods="用户管理/组管理-修改权限")
 	public String addUserRes() throws Exception {
-		RoleFuncFormBean roleFuncFormBean = new RoleFuncFormBean();
+		RoleFuncFormBean roleFuncFormBean = null;
+		List<RoleFuncFormBean> resUserFormMaps = new ArrayList<RoleFuncFormBean>();
 		String roleId = getPara(SysConsts.ROLE_ID);
-		String[] menuId = getParaValues("resId[]");
+		String[] menuIds = getParaValues("resId[]");
 		
 		if (null != roleId && !Common.isEmpty(roleId.toString())) {
-			roleFuncFormBean.deleteByAttribute(SysConsts.ROLE_ID, roleId);
+			new RoleFuncFormBean().deleteByAttribute(SysConsts.ROLE_ID, roleId);
 		}
 		
 		/**
+		 * save the role permission menu
 		 * menuId
 		 * roleId
 		 * useStatus 'Y'
 		 */
-		
-
-		
-		userId = Common.trimComma(userId);
-		String[] users = userId.split(",");
-		RoleFuncFormBean roleFuncFormBean = new RoleFuncFormBean();
-		for (String uid : users) {
-			roleFuncFormBean.deleteByAttribute("userId", uid);
-			List<RoleFuncFormBean> resUserFormMaps = new ArrayList<RoleFuncFormBean>();
-			for (String rid : s) {
-			    roleFuncFormBean = new RoleFuncFormBean();
-				roleFuncFormBean.put("resId", rid);
-				roleFuncFormBean.put("userId", uid);
-				resUserFormMaps.add(roleFuncFormBean);
-			
-			}
-			roleFuncFormBean.batchSave(resUserFormMaps);
+		for(String menuId : menuIds){
+			roleFuncFormBean = new RoleFuncFormBean();
+			roleFuncFormBean.put(SysConsts.ROLE_ID, roleId);
+			roleFuncFormBean.put("menuId", menuId);
+			resUserFormMaps.add(roleFuncFormBean);
 		}
+		roleFuncFormBean.batchSave(resUserFormMaps);
+		
 		return "success";
 	}
 
