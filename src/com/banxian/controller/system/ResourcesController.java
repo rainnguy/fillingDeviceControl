@@ -246,7 +246,8 @@ public class ResourcesController extends BaseController {
 		String[] menuIds = getParaValues("resId[]");
 		
 		if (null != roleId && !Common.isEmpty(roleId.toString())) {
-			new RoleFuncFormBean().deleteByAttribute(SysConsts.ROLE_ID, roleId);
+			roleFuncFormBean = new RoleFuncFormBean();
+			roleFuncFormBean.deleteByAttribute(SysConsts.ROLE_ID, roleId);
 		}
 		
 		/**
@@ -259,6 +260,7 @@ public class ResourcesController extends BaseController {
 			roleFuncFormBean = new RoleFuncFormBean();
 			roleFuncFormBean.put(SysConsts.ROLE_ID, roleId);
 			roleFuncFormBean.put("menuId", menuId);
+			roleFuncFormBean.put("useStatus", "Y");
 			resUserFormMaps.add(roleFuncFormBean);
 		}
 		roleFuncFormBean.batchSave(resUserFormMaps);
