@@ -18,8 +18,8 @@ import com.banxian.util.PropertiesUtils;
  * @version 2.0v
  */
 @Controller
-@RequestMapping("/gasMonitor/")
-public class GasMonitorController extends BaseController {
+@RequestMapping("/deviceMonitor/")
+public class DeviceMonitorController extends BaseController {
 
 	@RequestMapping("list")
 	public String listUI() throws Exception {
