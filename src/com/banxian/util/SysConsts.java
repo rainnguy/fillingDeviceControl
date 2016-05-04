@@ -16,6 +16,9 @@ public interface SysConsts {
 	public static final String PARENT_ID = "parentId";
 	public static final String MENU_DESCRIPTION = "menuDesc";
 	public static final String ROLE_DESCRIPTION = "roleDesc";
+	public static final String ROLE_NAME = "roleName";
+	public static final String ROLE_KEY = "roleKey";
+	public static final String STATION_NAME = "orgName";
 	public static final String STATION_ID = "orgId";
 	public static final String OPER_CODE = "operCode";
 	public static final String LOGIN_IP = "loginIp";

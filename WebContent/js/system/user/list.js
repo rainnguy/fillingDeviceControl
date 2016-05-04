@@ -8,7 +8,8 @@ $(function() {
 			name : "id",
 		}, {
 			colkey : "userName",
-			name : "用户名"
+			name : "用户名",
+			l_column : "3"
 		}, {
 			colkey : "accName",
 			name : "账号"

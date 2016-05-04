@@ -9,27 +9,50 @@
 	<!-- 以下与实体类的中字段一致 -->
 	
 	<sql id="selectId">
-		id,
-		userName,
-		accName,
-		(select roleName from sys_role
-		where sys_role.id
-		= sys_user.roleId) roleName,
-		userPass,
-		description,                                  
-		locked,
-		credentialsSalt,
-		updateTime
+		su.id,
+		su.userName,
+		su.accName,
+		su.userPass,
+		su.description,                                  
+		su.locked,
+		su.credentialsSalt,
+		su.updateTime
 	</sql>
 
 	<select id="findUserPage" resultType="com.banxian.entity.UserFormBean">
 		select
-		<include refid="selectId" />
-		from sys_user
+		<include refid="selectId" />,(select roleName from sys_role
+		where sys_role.id
+		= su.roleId) roleName
+		from sys_user su
 		where 1 = 1
 		<if test="accName != null and accName != ''">
-		and accName like '%${accName}%'
+		and su.accName like '%${accName}%'
 		</if>
 	</select>
+	
+	<select id="findUserByAccName" resultType="com.banxian.entity.UserFormBean">
+		SELECT
+			<include refid="selectId" />,
+			sr.roleName,
+			sr.roleKey,
+			so.orgCode,
+			so.orgName,
+			su.tel,
+			su.mail,
+			su.delFlag,
+			su.operCode,
+			su.roleId,
+			su.orgId,
+			su.parentId,
+			su.userStat
+		FROM
+			sys_user su left JOIN sys_role sr on sr.id = su.roleId left JOIN sys_orga so ON so.id = su.orgId
+		WHERE
+		<if test="accName != null and accName != ''">
+		su.accName like '%${accName}%'
+		</if>
+	</select>
+	
 	
 </mapper>

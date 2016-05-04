@@ -27,7 +27,3 @@
 	<div class="table-responsive">
 		<div id="paging" class="pagclass"></div>
 	</div>
-	
-	<div class="table-responsive">
-		<div id="paging2" class="pagclass"></div>
-	</div>

@@ -13,7 +13,6 @@ $(function() {
 			name : "时间",
 			renderData : function(rowindex, data, rowdata, column) {
 				return data;
-//				return new Date(data).format("yyyy-MM-dd hh:mm:ss");
 			}
 		}, {
 			colkey : "deviceName",
@@ -125,8 +124,8 @@ $(function() {
 			colkey : "ambientTemp",
 			name : "环境温度"
 		}],
-		jsonUrl : rootPath + '/monitor/findByPage2.sxml',
-		// checkbox : true,
+		jsonUrl : rootPath + '/gasEquip/findHistoryData.sxml',
+		checkbox : true,
 		serNumber : true
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
