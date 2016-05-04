@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.HistoryInfoMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+	
+	<sql id="selectId">
+		DATE_FORMAT(t1.currTime, '%Y-%m-%d %h:%i:%s') as currTime,
+		t1.deviceId as deviceId,
+		t5.type as deviceType,
+		t1.orgId as orgId,
+		t4.orgName as orgName,		
+		t5.deviceName as deviceName,
+		t2.id as id,
+		t2.attrKey as attrKey,
+		t2.attrValue as attrValue,
+		t3.meterPressure as meterPressure,
+		t3.ambientTemp as ambientTemp
+	</sql>
+
+	<select id="findByPage2" resultType="java.util.HashMap">
+		select
+			<include refid="selectId" />
+		from
+			attr_key t1,
+			attr_value t2,
+			attr_status t3,
+			sys_orga t4,
+			sys_device t5
+		where
+			t1.orgId = t4.orgCode
+			and t1.orgId = t3.orgId
+			and t1.id = t2.foreignId
+			and t1.currTime = t3.currTime
+			and t1.currTime = t2.currTime
+			and t1.deviceId = t5.deviceId
+			and t1.delFlag = '0'
+			and t2.delFlag = '0'
+			and t3.delFlag = '0'
+			and t4.delFlag = '0'
+			<if test="orgName != null and orgName != ''">
+			and t4.orgName = '%${orgName}%'
+			</if>
+			<if test="deviceName != null and deviceName != ''">
+			and t5.deviceName = '%${deviceName}%'
+			</if>
+			<if test="currTimeFrom != null and currTimeFrom != ''">
+			and t1.currTime &gt;= '${currTimeFrom}'
+			</if>
+			<if test="currTimeTo != null and currTimeTo != ''">
+			and t.currTime &lt;= '${currTimeTo}'
+			</if>
+		order by
+			t1.currTime,t1.deviceId,t2.id asc
+	</select>
+	
+</mapper>
