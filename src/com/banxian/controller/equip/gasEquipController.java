@@ -1,4 +1,4 @@
-package com.banxian.controller.system;
+package com.banxian.controller.equip;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import com.banxian.util.PropertiesUtils;
  */
 @Controller
 @RequestMapping("/gasEquip/")
-public class GasEquipController extends BaseController {
+public class gasEquipController extends BaseController {
 
 	@RequestMapping("list")
 	public String listUI() throws Exception {

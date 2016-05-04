@@ -1,4 +1,4 @@
-package com.banxian.controller.system;
+package com.banxian.controller.equip;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
