@@ -26,8 +26,7 @@ public class UserLoginController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("findByPage")
-	public PageView findByPage(String pageNow,
-			String pageSize) throws Exception {
+	public PageView findByPage(String pageNow, String pageSize) throws Exception {
 		UserLoginFormBean userLoginFormMap = getFormMap(UserLoginFormBean.class);
 		pageView=userLoginFormMap.findByPage(getPageView(pageNow, pageSize));
 		return pageView;

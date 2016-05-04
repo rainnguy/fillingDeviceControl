@@ -14,13 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.banxian.bean.DeviceInfoBean;
-import com.banxian.bean.HistoryInfoBean;
 import com.banxian.controller.index.BaseController;
+import com.banxian.entity.equip.DeviceInfoMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
-import com.banxian.util.JsonUtils;
-import com.banxian.util.POIUtils;
 import com.banxian.util.PropertiesUtils;
 
 /**
@@ -59,18 +56,15 @@ public class GasEquipController extends BaseController {
 	 * @throws Exception
 	 */
 	@ResponseBody
-	@RequestMapping("findByPage2")
-	public PageView findByPage2(String pageNow, String pageSize)
-			throws Exception {
-		DeviceInfoBean deviceInfoBean = getFormMap(DeviceInfoBean.class);
-		deviceInfoBean = toFormMap(deviceInfoBean, pageNow, pageSize);
-
-		@SuppressWarnings("unused")
-		List<Map<String, Object>> deviceInfoMap = DeviceInfoBean.mapper()
-				.findByPage2();
-
-		List<HistoryInfoBean> infoBeanList = new ArrayList<HistoryInfoBean>();
-		HistoryInfoBean infoBean = new HistoryInfoBean();
+	@RequestMapping("findHistoryData")
+	public PageView findHistoryData(String pageNow, String pageSize) throws Exception {
+		List<DeviceInfoMap> infoBeanList = new ArrayList<DeviceInfoMap>();
+		DeviceInfoMap infoBean = new DeviceInfoMap();
+		
+		DeviceInfoMap deviceInfoMap = getFormMap(DeviceInfoMap.class);
+		deviceInfoMap = toFormMap(deviceInfoMap, pageNow, pageSize);
+		List<DeviceInfoMap> deviceInfoList = DeviceInfoMap.mapper().findHistoryData(deviceInfoMap);
+		
 		// 当前数据的时间
 		String currTime = "";
 		// 上一条数据的时间
@@ -85,7 +79,7 @@ public class GasEquipController extends BaseController {
 		String lastType = "";
 		// 计数器，list的一条数据有5个属性
 		int temp = 0;
-		for (Map<String, Object> map : deviceInfoMap) {
+		for (Map<String, Object> map : deviceInfoList) {
 			temp++;
 			currTime = map.get("currTime").toString();
 			currDeviceId = map.get("deviceId").toString();
@@ -125,7 +119,7 @@ public class GasEquipController extends BaseController {
 							break;
 						}
 					} else {
-						infoBean = new HistoryInfoBean();
+						infoBean = new DeviceInfoMap();
 						infoBean.put("orgId", map.get("orgId").toString());
 						infoBean.put("orgName", map.get("orgName").toString());
 						infoBean.put("currTime", map.get("currTime").toString());
@@ -169,7 +163,7 @@ public class GasEquipController extends BaseController {
 							break;
 						}
 					} else {
-						infoBean = new HistoryInfoBean();
+						infoBean = new DeviceInfoMap();
 						infoBean.put("orgId", map.get("orgId").toString());
 						infoBean.put("orgName", map.get("orgName").toString());
 						infoBean.put("currTime", map.get("currTime").toString());
@@ -185,7 +179,7 @@ public class GasEquipController extends BaseController {
 					}
 				} else if (currType.equals(lastType) == false
 						&& "1".equals(currType)) {
-					infoBean = new HistoryInfoBean();
+					infoBean = new DeviceInfoMap();
 					infoBean.put("orgId", map.get("orgId").toString());
 					infoBean.put("orgName", map.get("orgName").toString());
 					infoBean.put("currTime", map.get("currTime").toString());
@@ -199,7 +193,7 @@ public class GasEquipController extends BaseController {
 							.toString());
 				} else if (currType.equals(lastType) == false
 						&& "2".equals(currType)) {
-					infoBean = new HistoryInfoBean();
+					infoBean = new DeviceInfoMap();
 					infoBean.put("orgId", map.get("orgId").toString());
 					infoBean.put("orgName", map.get("orgName").toString());
 					infoBean.put("currTime", map.get("currTime").toString());
@@ -213,7 +207,7 @@ public class GasEquipController extends BaseController {
 							.toString());
 				}
 			} else {
-				infoBean = new HistoryInfoBean();
+				infoBean = new DeviceInfoMap();
 				infoBean.put("orgId", map.get("orgId").toString());
 				infoBean.put("orgName", map.get("orgName").toString());
 				infoBean.put("currTime", map.get("currTime").toString());
@@ -243,8 +237,7 @@ public class GasEquipController extends BaseController {
 			}
 		}
 
-		pageView.setRecords(infoBeanList);
-
+		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
 		return pageView;
 	}
 
@@ -262,18 +255,6 @@ public class GasEquipController extends BaseController {
 	public String monitor() throws Exception {
 		return Common.BACKGROUND_PATH + "/system/monitor/monitor";
 	}
-
-	// @RequestMapping("systemInfo")
-	// public String systemInfo(Model model) throws Exception {
-	// model.addAttribute("systemInfo", SystemInfo.SystemProperty());
-	// return Common.BACKGROUND_PATH + "/system/monitor/systemInfo";
-	// }
-	//
-	// @ResponseBody
-	// @RequestMapping("usage")
-	// public ServerInfoFormMap usage(Model model) throws Exception {
-	// return SystemInfo.usage(new Sigar());
-	// }
 
 	/**
 	 * 修改配置　
@@ -329,20 +310,20 @@ public class GasEquipController extends BaseController {
 	public void download(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		String fileName = "用户列表";
-		DeviceInfoBean deviceInfoBean = findHasHMap(DeviceInfoBean.class);
-		// exportData =
-		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
-		// {"colkey":"total_time","name":"总响应时长","hide":false},
-		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
-		// {"colkey":"record_time","name":"记录时间","hide":false},
-		// {"colkey":"call_count","name":"请求次数","hide":false}
-		// ]
-		String exportData = deviceInfoBean.getStr("exportData");// 列表头的json字符串
-
-		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
-
-		List<DeviceInfoBean> lis = DeviceInfoBean.mapper().findByPage(
-				deviceInfoBean);
-		POIUtils.exportToExcel(response, listMap, lis, fileName);
+//		DeviceInfoBean deviceInfoBean = findHasHMap(DeviceInfoBean.class);
+//		// exportData =
+//		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
+//		// {"colkey":"total_time","name":"总响应时长","hide":false},
+//		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
+//		// {"colkey":"record_time","name":"记录时间","hide":false},
+//		// {"colkey":"call_count","name":"请求次数","hide":false}
+//		// ]
+//		String exportData = deviceInfoBean.getStr("exportData");// 列表头的json字符串
+//
+//		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+//
+//		List<DeviceInfoBean> lis = DeviceInfoBean.mapper().findByPage(
+//				deviceInfoBean);
+//		POIUtils.exportToExcel(response, listMap, lis, fileName);
 	}
 }
