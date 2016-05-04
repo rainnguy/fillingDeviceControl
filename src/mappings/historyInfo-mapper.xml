@@ -32,7 +32,7 @@
 			sys_orga t4,
 			sys_device t5
 		where
-			t1.orgId = t4.orgCode
+			t1.orgId = t4.id
 			and t1.orgId = t3.orgId
 			and t1.id = t2.foreignId
 			and t1.currTime = t3.currTime
