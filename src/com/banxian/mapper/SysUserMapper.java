@@ -10,4 +10,6 @@ public interface SysUserMapper extends BaseMapper{
 
 	public List<UserFormBean> findUserPage(UserFormBean sysUserMap);
 	
+	public List<UserFormBean> findUserByAccName(UserFormBean sysUserMap);
+	
 }

@@ -20,4 +20,5 @@ public class UserFormBean extends FormMap<String, Object> {
 	public static SysUserMapper mapper() {
 		return SpringIocUtils.getBean(SysUserMapper.class);
 	}
+	
 }
