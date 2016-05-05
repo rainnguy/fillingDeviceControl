@@ -15,6 +15,7 @@
 	</div>
 	<header class="panel-heading">
 	<div class="doc-buttons">
+	<input type="hidden" value="${orgType}" name="DeviceInfoMap.orgType" id="orgType">
 		<c:forEach items="${res}" var="key">
 			${key.menuDesc}
 		</c:forEach>

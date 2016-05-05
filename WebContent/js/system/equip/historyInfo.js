@@ -1,4 +1,7 @@
 var grid = null;
+var orgType = $("#orgType").val();
+//alert("test = " + orgType);
+
 $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
@@ -17,7 +20,8 @@ $(function() {
 		}, {
 			colkey : "deviceName",
 			name : "设备名称"
-		}, {
+		},
+		{
 			colkey : "storagePressure",
 			name : "储罐压力",
 			renderData : function(rowindex, data, rowdata, colkeyn) {

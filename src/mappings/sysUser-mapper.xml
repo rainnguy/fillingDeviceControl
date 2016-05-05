@@ -38,6 +38,7 @@
 			sr.roleKey,
 			so.orgCode,
 			so.orgName,
+			so.orgType,
 			su.tel,
 			su.mail,
 			su.delFlag,

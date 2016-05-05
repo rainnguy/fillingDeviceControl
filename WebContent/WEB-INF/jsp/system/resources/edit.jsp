@@ -28,8 +28,7 @@ label[class^="btn btn-default"] {
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
 		action="${pageContext.request.contextPath}/resources/editEntity.sxml">
-		<input type="hidden" value="${resources.id}" name="menuFormBean.id"
-			id="id">
+		<input type="hidden" value="${resources.id}" name="menuFormBean.id" id="id">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">

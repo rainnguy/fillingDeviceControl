@@ -22,6 +22,7 @@ public interface SysConsts {
 	public static final String STATION_ID = "orgId";
 	public static final String OPER_CODE = "operCode";
 	public static final String ORG_CODE = "orgCode";
+	public static final String ORG_TYPE = "orgType";
 	public static final String LOGIN_IP = "loginIp";
 	public static final String LOGIN_TIME = "loginTime";
 	
