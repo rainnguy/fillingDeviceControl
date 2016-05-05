@@ -28,11 +28,6 @@ import com.banxian.util.SysConsts;
 @RequestMapping("/gasEquip/")
 public class gasEquipController extends BaseController {
 
-	@RequestMapping("list")
-	public String listUI() throws Exception {
-		return Common.BACKGROUND_PATH + "/system/monitor/list";
-	}
-
 	/**
 	 * 历史信息
 	 * 
@@ -55,21 +50,6 @@ public class gasEquipController extends BaseController {
 		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
 
 		return pageView;
-	}
-
-	@RequestMapping("info")
-	public String info(Model model) throws Exception {
-		model.addAttribute("cpu", PropertiesUtils.findPropertiesKey("cpu"));
-		model.addAttribute("jvm", PropertiesUtils.findPropertiesKey("jvm"));
-		model.addAttribute("ram", PropertiesUtils.findPropertiesKey("ram"));
-		model.addAttribute("toEmail",
-				PropertiesUtils.findPropertiesKey("toEmail"));
-		return Common.BACKGROUND_PATH + "/system/monitor/info";
-	}
-
-	@RequestMapping("monitor")
-	public String monitor() throws Exception {
-		return Common.BACKGROUND_PATH + "/system/monitor/monitor";
 	}
 
 	/**
@@ -120,6 +100,19 @@ public class gasEquipController extends BaseController {
 	public String historyInfo(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
 		return Common.BACKGROUND_PATH + "/system/equip/historyInfo";
+	}
+	
+	/**
+	 * 折线图
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("lineGraph")
+	public String lineGraph(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/monitor/lineGraph";
 	}
 
 	@RequestMapping("/export")
