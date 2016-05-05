@@ -99,6 +99,8 @@ public class gasEquipController extends BaseController {
 	@RequestMapping("historyInfo")
 	public String historyInfo(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
+		model.addAttribute(SysConsts.ORG_TYPE, Common.findAttrValue(SysConsts.ORG_TYPE));
+		System.out.println(Common.findAttrValue(SysConsts.ORG_TYPE));
 		return Common.BACKGROUND_PATH + "/system/equip/historyInfo";
 	}
 	
