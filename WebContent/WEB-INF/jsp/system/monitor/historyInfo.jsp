@@ -7,11 +7,7 @@
 				<label class="control-label"> <span
 					class="h4 font-thin v-middle">站点名称:</span></label>
 				<input class="input-medium ui-autocomplete-input" id="orgName"
-					name="DeviceInfoBean.orgName">
-				<label class="control-label"> <span
-					class="h4 font-thin v-middle">设备名称:</span></label>
-				<input class="input-medium ui-autocomplete-input" id="deviceName"
-					name="DeviceInfoBean.deviceName">
+					name="DeviceInfoMap.orgName">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
 			<a href="javascript:grid.exportData('/monitor/historyInfo.sxml')" class="btn btn-info" id="export">导出excel</a>

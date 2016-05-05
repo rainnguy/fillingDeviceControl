@@ -7,55 +7,249 @@
 		/> -->
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 	<!-- 以下与实体类的中字段一致 -->
-	
+
 	<sql id="selectId">
-		DATE_FORMAT(t1.currTime, '%Y-%m-%d %h:%i:%s') as currTime,
-		t1.deviceId as deviceId,
-		t5.type as deviceType,
-		t1.orgId as orgId,
-		t4.orgName as orgName,		
-		t5.deviceName as deviceName,
-		t2.id as id,
-		t2.attrKey as attrKey,
-		t2.attrValue as attrValue,
-		t3.meterPressure as meterPressure,
-		t3.ambientTemp as ambientTemp
+		<!-- common fields -->
 	</sql>
 
 	<select id="findHistoryData" resultType="com.banxian.entity.equip.DeviceInfoMap">
-		select
-			<include refid="selectId" />
-		from
-			attr_key t1,
-			attr_value t2,
-			attr_status t3,
-			sys_orga t4,
-			sys_device t5
-		where
-			t1.orgId = t4.id
-			and t1.orgId = t3.orgId
-			and t1.id = t2.foreignId
-			and t1.currTime = t3.currTime
-			and t1.currTime = t2.currTime
-			and t1.deviceId = t5.deviceId
-			and t1.delFlag = '0'
-			and t2.delFlag = '0'
-			and t3.delFlag = '0'
-			and t4.delFlag = '0'
-			<if test="orgName != null and orgName != ''">
-			and t4.orgName = '%${orgName}%'
+		SELECT
+		DATE_FORMAT(t1.currTime,'%Y-%m-%d %h:%i:%s') AS currTime,
+		t1.deviceId AS deviceId,
+		t5.type AS deviceType,
+		t4.orgCode AS orgCode,
+		t4.orgName AS orgName,
+		t5.deviceName AS deviceName,
+		t3.meterPressure AS meterPressure,
+		t3.ambientTemp AS ambientTemp,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '储罐压力'
+		AND t2.delFlag = '0'
+		) AS storagePressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = 'LNG液位'
+		AND t2.delFlag = '0'
+		) AS lngLiquidPosition,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = 'LNG差压'
+		AND t2.delFlag = '0'
+		) AS differentialPressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = 'LNG高度'
+		AND t2.delFlag = '0'
+		) AS lngHeight,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = 'LNG重量'
+		AND t2.delFlag = '0'
+		) AS lngWeight,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '泵前压力'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2001'
+		) AS beforePressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '泵后压力'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2001'
+		) AS affterPressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '泵池温度'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2001'
+		) AS pumpTemp,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '变频器频率'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2001'
+		) AS converterFrequency,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '变频器电流'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2001'
+		) AS converterCurrent,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '汽化器后压力'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS cbtBeforePressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '汽化器后温度'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS cbtAffterTemp,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '流量计温度'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS flowmeterTemp,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '流量计瞬时流量'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS flowmeterInstFlow,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '流量计压力'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS flowmeterPressure,
+		(
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.attrKey = '流量计总流量'
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
+		AND t4.orgType = '2002'
+		) AS flowmeterTotalFlow
+		FROM
+		attr_key t1,
+		attr_status t3,
+		sys_orga t4,
+		sys_device t5
+		WHERE
+		t1.orgId = t4.id
+		AND t1.orgId = t3.orgId
+		AND t1.currTime = t3.currTime
+		AND t1.deviceId = t5.deviceId
+		AND t1.delFlag = '0'
+		AND t3.delFlag = '0'
+		AND t4.delFlag = '0'
+		<if test="roleKey != 'admin'">
+			<if test="orgCode != null and orgCode != ''">
+				and t4.orgCode = '${orgCode}'
 			</if>
-			<if test="deviceName != null and deviceName != ''">
-			and t5.deviceName = '%${deviceName}%'
-			</if>
-			<if test="currTimeFrom != null and currTimeFrom != ''">
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and t4.orgName like '%${orgName}%'
+		</if>
+		<if test="currTimeFrom != null and currTimeFrom != ''">
 			and t1.currTime &gt;= '${currTimeFrom}'
-			</if>
-			<if test="currTimeTo != null and currTimeTo != ''">
+		</if>
+		<if test="currTimeTo != null and currTimeTo != ''">
 			and t.currTime &lt;= '${currTimeTo}'
-			</if>
+		</if>
 		order by
-			t1.currTime,t1.deviceId,t2.id asc
+		t1.currTime desc,
+		t1.deviceId asc
 	</select>
-	
+
 </mapper>

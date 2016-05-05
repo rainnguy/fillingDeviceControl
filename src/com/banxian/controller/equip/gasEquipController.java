@@ -1,9 +1,7 @@
 package com.banxian.controller.equip;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +17,7 @@ import com.banxian.entity.equip.DeviceInfoMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 import com.banxian.util.PropertiesUtils;
+import com.banxian.util.SysConsts;
 
 /**
  * 
@@ -34,19 +33,6 @@ public class gasEquipController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/monitor/list";
 	}
 
-	// @ResponseBody
-	// @RequestMapping("findByPage")
-	// public PageView findByPage(String pageNow, String pageSize)
-	// throws Exception {
-	// DeviceInfoBean deviceInfoBean = getFormMap(DeviceInfoBean.class);
-	// deviceInfoBean=toFormMap(deviceInfoBean, pageNow, pageSize);
-	// pageView.setRecords(DeviceInfoBean.mapper().findByPage(deviceInfoBean));//不调用默认分页,调用自已的mapper中findByPage
-	//
-	//
-	// // pageView = deviceInfoBean.findByPage(getPageView(pageNow, pageSize));
-	// return pageView;
-	// }
-
 	/**
 	 * 历史信息
 	 * 
@@ -57,187 +43,17 @@ public class gasEquipController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("findHistoryData")
-	public PageView findHistoryData(String pageNow, String pageSize) throws Exception {
-		List<DeviceInfoMap> infoBeanList = new ArrayList<DeviceInfoMap>();
-		DeviceInfoMap infoBean = new DeviceInfoMap();
-		
+	public PageView findHistoryData(String pageNow, String pageSize)
+			throws Exception {
+
 		DeviceInfoMap deviceInfoMap = getFormMap(DeviceInfoMap.class);
 		deviceInfoMap = toFormMap(deviceInfoMap, pageNow, pageSize);
-		List<DeviceInfoMap> deviceInfoList = DeviceInfoMap.mapper().findHistoryData(deviceInfoMap);
-		
-		// 当前数据的时间
-		String currTime = "";
-		// 上一条数据的时间
-		String lastTime = "";
-		// 当前数据的设备id
-		String currDeviceId = "";
-		// 上一条数据的设备id
-		String lastDeviceId = "";
-		// 当前数据的设备类型
-		String currType = "";
-		// 上一条数据的设备类型
-		String lastType = "";
-		// 计数器，list的一条数据有5个属性
-		int temp = 0;
-		for (Map<String, Object> map : deviceInfoList) {
-			temp++;
-			currTime = map.get("currTime").toString();
-			currDeviceId = map.get("deviceId").toString();
-			currType = map.get("deviceType").toString();
-
-			// 判断时间相同
-			if (currTime.equals(lastTime)) {
-				// 判断设备类型相同
-				if (currType.equals(lastType) && "1".equals(currType)) {
-					// 判断设备ID相同
-					if (currDeviceId.equals(lastDeviceId)) {
-						switch (temp) {
-						case 1:
-							// 储罐压力
-							infoBean.put("storagePressure", map
-									.get("attrValue").toString());
-							break;
-						case 2:
-							// 储罐液位
-							infoBean.put("lngLiquidPosition",
-									map.get("attrValue").toString());
-							break;
-						case 3:
-							// LNG差压
-							infoBean.put("differentialPressure",
-									map.get("attrValue").toString());
-							break;
-						case 4:
-							// LNG高度
-							infoBean.put("lngHeight", map.get("attrValue")
-									.toString());
-							break;
-						case 5:
-							// LNG重量
-							infoBean.put("lngWeight", map.get("attrValue")
-									.toString());
-							break;
-						}
-					} else {
-						infoBean = new DeviceInfoMap();
-						infoBean.put("orgId", map.get("orgId").toString());
-						infoBean.put("orgName", map.get("orgName").toString());
-						infoBean.put("currTime", map.get("currTime").toString());
-						infoBean.put("deviceName", map.get("deviceName")
-								.toString());
-						// 储罐压力
-						infoBean.put("storagePressure", map.get("attrValue")
-								.toString());
-						infoBean.put("meterPressure", map.get("meterPressure")
-								.toString());
-						infoBean.put("ambientTemp", map.get("ambientTemp")
-								.toString());
-					}
-				} else if (currType.equals(lastType) && "2".equals(currType)) {
-					if (currDeviceId.equals(lastDeviceId)) {
-						switch (temp) {
-						case 1:
-							// 泵前压力
-							infoBean.put("beforePressure", map.get("attrValue")
-									.toString());
-							break;
-						case 2:
-							// 泵后压力
-							infoBean.put("affterPressure", map.get("attrValue")
-									.toString());
-							break;
-						case 3:
-							// 泵池温度
-							infoBean.put("pumpTemp", map.get("attrValue")
-									.toString());
-							break;
-						case 4:
-							// 变频器频率
-							infoBean.put("converterFrequency",
-									map.get("attrValue").toString());
-							break;
-						case 5:
-							// 变频器电流
-							infoBean.put("converterCurrent",
-									map.get("attrValue").toString());
-							break;
-						}
-					} else {
-						infoBean = new DeviceInfoMap();
-						infoBean.put("orgId", map.get("orgId").toString());
-						infoBean.put("orgName", map.get("orgName").toString());
-						infoBean.put("currTime", map.get("currTime").toString());
-						infoBean.put("deviceName", map.get("deviceName")
-								.toString());
-						// 泵前压力
-						infoBean.put("beforePressure", map.get("attrValue")
-								.toString());
-						infoBean.put("meterPressure", map.get("meterPressure")
-								.toString());
-						infoBean.put("ambientTemp", map.get("ambientTemp")
-								.toString());
-					}
-				} else if (currType.equals(lastType) == false
-						&& "1".equals(currType)) {
-					infoBean = new DeviceInfoMap();
-					infoBean.put("orgId", map.get("orgId").toString());
-					infoBean.put("orgName", map.get("orgName").toString());
-					infoBean.put("currTime", map.get("currTime").toString());
-					infoBean.put("deviceName", map.get("deviceName").toString());
-					// 储罐压力
-					infoBean.put("storagePressure", map.get("attrValue")
-							.toString());
-					infoBean.put("meterPressure", map.get("meterPressure")
-							.toString());
-					infoBean.put("ambientTemp", map.get("ambientTemp")
-							.toString());
-				} else if (currType.equals(lastType) == false
-						&& "2".equals(currType)) {
-					infoBean = new DeviceInfoMap();
-					infoBean.put("orgId", map.get("orgId").toString());
-					infoBean.put("orgName", map.get("orgName").toString());
-					infoBean.put("currTime", map.get("currTime").toString());
-					infoBean.put("deviceName", map.get("deviceName").toString());
-					// 泵前压力
-					infoBean.put("beforePressure", map.get("attrValue")
-							.toString());
-					infoBean.put("meterPressure", map.get("meterPressure")
-							.toString());
-					infoBean.put("ambientTemp", map.get("ambientTemp")
-							.toString());
-				}
-			} else {
-				infoBean = new DeviceInfoMap();
-				infoBean.put("orgId", map.get("orgId").toString());
-				infoBean.put("orgName", map.get("orgName").toString());
-				infoBean.put("currTime", map.get("currTime").toString());
-				infoBean.put("deviceName", map.get("deviceName").toString());
-				infoBean.put("meterPressure", map.get("meterPressure")
-						.toString());
-				infoBean.put("ambientTemp", map.get("ambientTemp").toString());
-
-				if ("1".equals(currType)) {
-					// 储罐压力
-					infoBean.put("storagePressure", map.get("attrValue")
-							.toString());
-				} else if ("2".equals(currType)) {
-					// 泵前压力
-					infoBean.put("beforePressure", map.get("attrValue")
-							.toString());
-				}
-			}
-
-			lastTime = currTime;
-			lastDeviceId = currDeviceId;
-			lastType = currType;
-
-			if (temp == 5) {
-				temp = 0;
-				infoBeanList.add(infoBean);
-			}
-		}
-
+		// 用户权限
+		deviceInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		deviceInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
+
 		return pageView;
 	}
 
@@ -309,21 +125,5 @@ public class gasEquipController extends BaseController {
 	@RequestMapping("/export")
 	public void download(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		String fileName = "用户列表";
-//		DeviceInfoBean deviceInfoBean = findHasHMap(DeviceInfoBean.class);
-//		// exportData =
-//		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
-//		// {"colkey":"total_time","name":"总响应时长","hide":false},
-//		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
-//		// {"colkey":"record_time","name":"记录时间","hide":false},
-//		// {"colkey":"call_count","name":"请求次数","hide":false}
-//		// ]
-//		String exportData = deviceInfoBean.getStr("exportData");// 列表头的json字符串
-//
-//		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
-//
-//		List<DeviceInfoBean> lis = DeviceInfoBean.mapper().findByPage(
-//				deviceInfoBean);
-//		POIUtils.exportToExcel(response, listMap, lis, fileName);
 	}
 }

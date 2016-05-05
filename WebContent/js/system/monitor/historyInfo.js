@@ -3,7 +3,7 @@ $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
 		l_column : [ {
-			colkey : "orgId",
+			colkey : "orgCode",
 			name : "站点编号",
 		}, {
 			colkey : "orgName",
@@ -125,7 +125,7 @@ $(function() {
 			name : "环境温度"
 		}],
 		jsonUrl : rootPath + '/gasEquip/findHistoryData.sxml',
-		checkbox : true,
+//		checkbox : true,
 		serNumber : true
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
