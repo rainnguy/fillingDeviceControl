@@ -14,7 +14,7 @@
 
 	<select id="findHistoryData" resultType="com.banxian.entity.equip.DeviceInfoMap">
 		SELECT
-		DATE_FORMAT(t1.currTime,'%Y-%m-%d %h:%i:%s') AS currTime,
+		DATE_FORMAT(t1.currTime,'%Y-%m-%d %H:%i:%s') AS currTime,
 		t1.deviceId AS deviceId,
 		t5.type AS deviceType,
 		t4.orgCode AS orgCode,
