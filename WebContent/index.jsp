@@ -5,8 +5,6 @@
 <script type="text/javascript" src="${ctx}/js/system/user/updatePassword.js"></script>
 <script type="text/javascript">
 	$(function() {
-    //修改时间2015年10月13日14:32:57
-    //修改在手机上点击菜单后菜单不关闭问题
     var winwidth = $("body").width();
     if(winwidth<770){
       $("#nav ul.lt li").click(function(){
@@ -58,10 +56,7 @@
 				</a>
 			</div>
 			<ul class="nav navbar-nav hidden-xs">
-				<li class="dropdown"><a href="index.html#"
-					class="dropdown-toggle dker" data-toggle="dropdown"> <i
-						class="fa fa-building-o"></i> <span class="font-bold">Activity</span>
-				</a>
+				<li class="dropdown">
 					<section
 						class="dropdown-menu aside-xl on animated fadeInLeft no-borders lt">
 						<div class="wrapper lter m-t-n-xs">
@@ -98,7 +93,7 @@
 					</section></li>
 				<li>
 					<div class="m-t m-l">
-						<a href="price.html"
+						<a href="index.sxml"
 							class="dropdown-toggle btn btn-xs btn-primary" title="Upgrade"><i
 							class="fa fa-long-arrow-up"></i></a>
 					</div>
@@ -170,7 +165,7 @@
 					class="dropdown-toggle" data-toggle="dropdown"> <span
 						class="thumb-sm avatar pull-left"> <img
 							src="${ctx}/notebook/notebook_files/avatar.jpg">
-					</span> ${userFormMap.accountName} <b class="caret"></b>
+					</span> ${userFormMap.accName} <b class="caret"></b>
 				</a>
 					<ul class="dropdown-menu animated fadeInRight">
 						<span class="arrow top"></span>
