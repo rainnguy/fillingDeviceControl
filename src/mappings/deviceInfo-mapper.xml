@@ -20,14 +20,7 @@
 	</sql>
 	
 	<sql id="pumpAndCarburetor">
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
-		AND t2.delFlag = '0'
+		<include refid="storage" />
 		AND t1.orgId = t4.id
 	</sql>
 
