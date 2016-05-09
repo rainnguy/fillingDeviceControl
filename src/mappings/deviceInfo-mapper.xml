@@ -8,8 +8,27 @@
 	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 	<!-- 以下与实体类的中字段一致 -->
 
-	<sql id="selectId">
-		<!-- common fields -->
+	<sql id="storage">
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.delFlag = '0'
+	</sql>
+	
+	<sql id="pumpAndCarburetor">
+		SELECT
+		t2.attrValue
+		FROM
+		attr_value t2
+		WHERE
+		t1.id = t2.foreignId
+		AND t1.currTime = t2.currTime
+		AND t2.delFlag = '0'
+		AND t1.orgId = t4.id
 	</sql>
 
 	<select id="findHistoryData" resultType="com.banxian.entity.equip.DeviceInfoMap">
@@ -23,201 +42,78 @@
 		t3.meterPressure AS meterPressure,
 		t3.ambientTemp AS ambientTemp,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="storage" />
 		AND t2.attrKey = '储罐压力'
-		AND t2.delFlag = '0'
 		) AS storagePressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="storage" />
 		AND t2.attrKey = 'LNG液位'
-		AND t2.delFlag = '0'
 		) AS lngLiquidPosition,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="storage" />
 		AND t2.attrKey = 'LNG差压'
-		AND t2.delFlag = '0'
 		) AS differentialPressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="storage" />
 		AND t2.attrKey = 'LNG高度'
-		AND t2.delFlag = '0'
 		) AS lngHeight,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="storage" />
 		AND t2.attrKey = 'LNG重量'
-		AND t2.delFlag = '0'
 		) AS lngWeight,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '泵前压力'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '2001'
 		) AS beforePressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '泵后压力'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '2001'
 		) AS affterPressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '泵池温度'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '2001'
 		) AS pumpTemp,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '变频器频率'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '2001'
 		) AS converterFrequency,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '变频器电流'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '2001'
 		) AS converterCurrent,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '汽化器后压力'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS cbtBeforePressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '汽化器后温度'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS cbtAffterTemp,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '流量计温度'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS flowmeterTemp,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '流量计瞬时流量'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS flowmeterInstFlow,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '流量计压力'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS flowmeterPressure,
 		(
-		SELECT
-		t2.attrValue
-		FROM
-		attr_value t2
-		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
+		<include refid="pumpAndCarburetor" />
 		AND t2.attrKey = '流量计总流量'
-		AND t2.delFlag = '0'
-		AND t1.orgId = t4.id
 		AND t4.orgType = '3001'
 		) AS flowmeterTotalFlow
 		FROM
