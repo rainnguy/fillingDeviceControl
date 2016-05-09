@@ -19,7 +19,7 @@ import com.banxian.util.PropertiesUtils;
  */
 @Controller
 @RequestMapping("/deviceMonitor/")
-public class DeviceMonitorController extends BaseController {
+public class AlarmMonitorController extends BaseController {
 
 	@RequestMapping("list")
 	public String listUI() throws Exception {
