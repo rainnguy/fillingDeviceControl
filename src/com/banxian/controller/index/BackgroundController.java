@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.entity.MenuFormBean;
+import com.banxian.entity.StationFormBean;
 import com.banxian.entity.UserFormBean;
 import com.banxian.entity.UserLoginFormBean;
 import com.banxian.util.Common;
@@ -114,8 +115,11 @@ public class BackgroundController extends BaseController {
 		TreeUtil treeUtil = new TreeUtil();
 		List<TreeObject> ns = treeUtil.getChildTreeObjects(list, 0);
 		model.addAttribute("list", ns);
+		
+		StationFormBean stationMap = new StationFormBean();
 		// 登陆的信息回传页面
 		model.addAttribute("userFormMap",(UserFormBean) Common.findUserSession());
+		SecurityUtils.getSubject().getSession().setAttribute("stationFormMap",stationMap.findByAll());
 		return "/index";
 	}
 
