@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- /.aside -->
-<link rel="stylesheet" href="./css/widgets/app.v1.css" type="text/css">
-<link rel="stylesheet" href="./css/widgets/font.css" type="text/css">
+<link rel="stylesheet" href="./notebook/widgets/app.v1.css" type="text/css">
+<link rel="stylesheet" href="./notebook/widgets/font.css" type="text/css">
 
 <section id="content">
 	<section class="vbox">
@@ -14,7 +14,7 @@
 			</p>
 		</header>
 		<section class="scrollable wrapper">
-			<div class="col-lg-8">
+			<div class="col-lg-10">
 				<div class="row">
 					<c:forEach var="key" items="${stationFormMap}" varStatus="s">
 						<div class="col-sm-6">
