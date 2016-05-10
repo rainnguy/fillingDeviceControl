@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>	
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/system/equip/historyInfo.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/date/jquery.datetimepicker.css"/>
-<script src="${pageContext.request.contextPath}/js/jquery/jquery-1.8.3.js"></script>
 <script src="${pageContext.request.contextPath}/js/jquery/jquery.datetimepicker.full.min.js"></script>
 <style type="text/css">
 .input::-ms-input-placeholder {
@@ -13,10 +12,18 @@
 }
 </style>
 <script type="text/javascript">
-$('#startDate').datetimepicker();
+$('#startDate').datetimepicker({
+});
+
 $('#endDate').datetimepicker();
+
+$('#s').datetimepicker({
+    lang:"ch",           //语言选择中文
+    format:"Y-m-d",      //格式化日期
+    timepicker:false    //关闭时间选项
+});
 </script>
-	<div class="m-b-md">
+	<div class="m-b-md"> 
 		<form class="form-inline" role="form" id="searchForm" name="searchForm">
 			<div class="form-group">
 				<label class="control-label"> <span
