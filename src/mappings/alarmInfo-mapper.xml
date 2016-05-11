@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.equip.AlarmInfoMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+
+	<sql id="">
+		<!-- common -->
+	</sql>
+
+	<select id="unsolvedAlarmTotal" resultType="java.util.HashMap">
+		SELECT
+		count(1)
+		from
+		alarm_info_temp t1, alarm_def t2, sys_device t3, sys_orga t4
+		WHERE
+		t1.statusId = '1'
+		and t1.alarmDefId = t2.alarmDefId
+		and t1.deviceId =
+		t3.deviceId
+		and t2.delFlag = '0'
+		and t4.orgCode = '${orgCode}'
+		and
+		t3.orgId = t4.id
+		and t4.delFlag = '0'
+	</select>
+
+	<select id="findUnsolvedAlarmData" resultType="com.banxian.entity.equip.UnsolvedAlarmInfoMap">
+		SELECT
+		t1.alarmTime as alarmTime,
+		t6.constantName as alarmLevel,
+		t2.alarmContent as alarmContent,
+		t3.deviceName as deviceName,
+		t4.orgName as orgName,
+		t4.orgTel as orgTel,
+		t4.orgAddr as orgAddr,
+		t5.statusName as statusName
+		from
+		alarm_info_temp t1, alarm_def t2, sys_device t3,
+		sys_orga t4, alarm_status t5, sys_constant t6
+		WHERE
+		t1.statusId = '1'
+		and t1.alarmDefId = t2.alarmDefId
+		and t1.deviceId = t3.deviceId
+		and t2.delFlag = '0'
+		and t3.orgId = t4.id
+		and t4.orgCode = '${orgCode}'
+		and t4.delFlag = '0'
+		and t6.kind = '29'
+		and t2.alarmLvl = t6.constantValue
+		and t1.statusId = t5.statusId
+	</select>
+
+	<select id="findAlarmData" resultType="com.banxian.entity.equip.AlarmInfoMap">
+		SELECT
+		count(1)
+		from
+		alarm_info t1, alarm_def t2, sys_device t3, sys_orga t4, alarm_status t5, sys_constant t6
+		WHERE
+		t1.statusId = '1'
+		and t1.alarmDefId = t2.alarmDefId
+		and t1.deviceId = t3.deviceId
+		and t2.delFlag = '0'
+		and t3.orgId = t4.id
+		and t4.orgCode = '${orgCode}'
+		and t4.delFlag = '0'
+		and t6.kind = '29'
+		and t2.alarmLvl = t6.constantValue
+		and t1.statusId = t5.statusId
+	</select>
+
+</mapper>
