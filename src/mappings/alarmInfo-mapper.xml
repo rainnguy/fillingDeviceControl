@@ -14,7 +14,7 @@
 
 	<select id="unsolvedAlarmTotal" resultType="java.util.HashMap">
 		SELECT
-		count(1)
+		count(1) as totalNum
 		from
 		alarm_info_temp t1, alarm_def t2, sys_device t3, sys_orga t4
 		WHERE
@@ -33,8 +33,8 @@
 		SELECT
 		t1.alarmTime as alarmTime,
 		t6.constantName as alarmLevel,
-		t2.alarmContent as alarmContent,
 		t3.deviceName as deviceName,
+		t2.alarmContent as alarmContent,
 		t4.orgName as orgName,
 		t4.orgTel as orgTel,
 		t4.orgAddr as orgAddr,
@@ -55,11 +55,38 @@
 		and t1.statusId = t5.statusId
 	</select>
 
-	<select id="findAlarmData" resultType="com.banxian.entity.equip.AlarmInfoMap">
+	<select id="findHistoryAlarmData" resultType="com.banxian.entity.equip.AlarmInfoMap">
 		SELECT
-		count(1)
+		t4.orgCode as orgCode,
+		t4.orgName as orgName,
+		t1.alarmTime as alarmTime,
+		t6.constantName as alarmLevel,
+		t3.deviceName as deviceName,
+		t2.alarmContent as alarmContent,
+		t5.statusName as statusName,
+		case t1.statusId when '1' then
+		null
+		when '2' then
+		t1.handlerCode 
+		end as handlerCode,
+		case t1.statusId when '1' then
+		null
+		when '2' then
+		t7.userName
+		end as handlerName,
+		case t1.statusId when '1' then
+		null
+		when '2' then
+		t1.handleTime
+		end as handleTime
 		from
-		alarm_info t1, alarm_def t2, sys_device t3, sys_orga t4, alarm_status t5, sys_constant t6
+		alarm_info t1, 
+		alarm_def t2, 
+		sys_device t3, 
+		sys_orga t4, 
+		alarm_status t5, 
+		sys_constant t6, 
+		sys_user t7
 		WHERE
 		t1.statusId = '1'
 		and t1.alarmDefId = t2.alarmDefId
@@ -71,6 +98,31 @@
 		and t6.kind = '29'
 		and t2.alarmLvl = t6.constantValue
 		and t1.statusId = t5.statusId
+		and 
+		(t1.statusId = '1' 
+		or 
+		(t1.statusId = '2'
+		and t7.accName = t1.handlerCode
+		and t7.delFlag = '0'
+		))
+		<if test="roleKey != 'admin'">
+			<if test="orgCode != null and orgCode != ''">
+				and t4.orgCode = '${orgCode}'
+			</if>
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and t4.orgName like '%${orgName}%'
+		</if>
+		<if test="currTimeFrom != null and currTimeFrom != ''">
+			and t1.currTime &gt;= '${currTimeFrom}'
+		</if>
+		<if test="currTimeTo != null and currTimeTo != ''">
+			and t.currTime &lt;= '${currTimeTo}'
+		</if>
+		GROUP BY t1.alarmId
+		ORDER BY t1.alarmTime desc,
+				 t1.statusId desc,
+				 t6.constantValue asc
 	</select>
 
 </mapper>
