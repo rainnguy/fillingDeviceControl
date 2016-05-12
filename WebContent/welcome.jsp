@@ -31,10 +31,10 @@
 								<a class="list-group-item" href="#">
 									<span class="badge bg-success"></span>联系电话:&nbsp;${key.orgTel}
 								</a>
-								<a class="list-group-item" href="#">
-									<span class="badge bg-success">25</span>未处理的报警数:&nbsp;//TODO
+								<a class="list-group-item" href="/GasMonitor/gasEquip/detail.sxml">
+									<span class="badge bg-success">${key.totalNum}</span>未处理的报警数:&nbsp;//TODO
 								</a>
-								<a class="list-group-item" href="/GasMonitor/role/addUI.sxml">详细信息</a> 
+								<a class="list-group-item" href="/GasMonitor/gasEquip/detail.sxml">详细信息</a> 
 							</div>
 						</section>
 					</div>

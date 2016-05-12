@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.equip.StationMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+
+	<sql id="storage">
+		<!-- common -->
+	</sql>
+
+	<select id="findStationData" resultType="com.banxian.entity.equip.StationMap">
+		SELECT
+		t1.orgCode as orgCode,
+		t1.orgName as orgName,
+		t1.orgTel as orgTel,
+		t2.totalNum as totalNum
+		from
+		sys_orga t1 left join 
+		(SELECT
+		tp3.orgId as orgId,
+		count(tp1.id) as totalNum
+		from
+		alarm_info_temp tp1, alarm_def tp2, sys_device tp3
+		WHERE
+		tp1.statusId = '1'
+		and tp1.alarmDefId = tp2.alarmDefId
+		and tp1.deviceId = tp3.deviceId
+		and tp2.delFlag = '0'
+		group by orgId
+		) t2 on t2.orgId = t1.id
+		WHERE t1.delFlag = '0'
+		<if test="roleKey != 'admin'">
+			<if test="orgCode != null and orgCode != ''">
+				and t1.orgCode = '${orgCode}'
+			</if>
+		</if>
+		group by t1.id
+		order by t1.orgCode
+	</select>
+
+</mapper>

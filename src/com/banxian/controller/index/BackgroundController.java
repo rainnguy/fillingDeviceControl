@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.entity.MenuFormBean;
-import com.banxian.entity.StationFormBean;
 import com.banxian.entity.UserFormBean;
 import com.banxian.entity.UserLoginFormBean;
+import com.banxian.entity.equip.StationMap;
 import com.banxian.util.Common;
 import com.banxian.util.DateUtil;
 import com.banxian.util.SysConsts;
@@ -116,10 +116,17 @@ public class BackgroundController extends BaseController {
 		List<TreeObject> ns = treeUtil.getChildTreeObjects(list, 0);
 		model.addAttribute("list", ns);
 		
-		StationFormBean stationMap = new StationFormBean();
+		
+		StationMap stationMap = getFormMap(StationMap.class);
+		stationMap.put(SysConsts.ROLE_KEY,
+				Common.findAttrValue(SysConsts.ROLE_KEY));
+		stationMap.put(SysConsts.ORG_CODE,
+				Common.findAttrValue(SysConsts.ORG_CODE));
+		
 		// 登陆的信息回传页面
 		model.addAttribute("userFormMap",(UserFormBean) Common.findUserSession());
-		SecurityUtils.getSubject().getSession().setAttribute("stationFormMap",stationMap.findByAll());
+		SecurityUtils.getSubject().getSession().setAttribute("stationFormMap",
+				StationMap.mapper().findStationData(stationMap));
 		return "/index";
 	}
 
