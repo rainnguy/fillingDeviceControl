@@ -57,7 +57,7 @@ $(function() {
 					}
 				}
 			} ],
-		jsonUrl : rootPath + '/gasEquip/findHistoryAlarmData.sxml',
+		jsonUrl : rootPath + '/gasAlarm/findHistoryAlarmData.sxml',
 		// checkbox : true,
 		serNumber : true
 	});
