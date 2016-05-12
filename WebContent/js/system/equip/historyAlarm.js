@@ -12,7 +12,7 @@ $(function() {
 				colkey : "alarmTime",
 				name : "报警时间",
 				renderData : function(rowindex, data, rowdata, column) {
-					return data;
+					return new Date(data).format("yyyy-MM-dd hh:mm:ss");
 				}
 			}, {
 				colkey : "alarmLevel",
@@ -53,7 +53,7 @@ $(function() {
 					if (data == "") {
 						return "-";
 					} else {
-						return data;
+						return new Date(data).format("yyyy-MM-dd hh:mm:ss");
 					}
 				}
 			} ],
