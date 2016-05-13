@@ -41,5 +41,26 @@
 		group by t1.id
 		order by t1.orgCode
 	</select>
+	
+	<select id="findStationList" resultType="com.banxian.entity.StationFormBean">
+		SELECT
+		orgCode,
+		orgName,
+		case orgType when '2001' then
+		'加气站'
+		when '3001' then
+		'气化站'
+		end as orgType,
+		orgAddr,
+		orgTel
+		FROM
+		sys_orga
+		WHERE
+		delFlag = '0'
+		<if test="orgName != null and orgName != ''">
+			and orgName like '%${orgName}%'
+		</if>
+		order by orgCode
+	</select>
 
 </mapper>
