@@ -111,12 +111,12 @@
 		t7.accName = t1.handlerCode
 		))))
 		<if test="orgName != null and orgName != ''">
-			and t4.orgName like '%${orgName}%'
+			and tp2.orgName like '%${orgName}%'
 		</if>
 		<if test="roleKey != 'admin'">
 			and tp2.orgId = t7.orgId
 			<if test="orgCode != null and orgCode != ''">
-				and t4.orgCode = '${orgCode}'
+				and tp2.orgCode = '${orgCode}'
 			</if>
 		</if>
 		<if test="currTimeFrom != null and currTimeFrom != ''">
