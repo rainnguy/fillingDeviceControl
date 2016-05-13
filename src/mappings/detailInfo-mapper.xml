@@ -118,6 +118,14 @@
 		t1.orgId = t4.id
 		AND t1.orgId = t3.orgId
 		AND t1.currTime = t3.currTime
+		AND t1.currTime &gt;=(
+			select
+			max(tp.currTime)
+			from
+			attr_key tp
+			where
+			tp.orgId = t4.id
+		)
 		AND t1.deviceId = t5.deviceId
 		AND t1.delFlag = '0'
 		AND t3.delFlag = '0'
