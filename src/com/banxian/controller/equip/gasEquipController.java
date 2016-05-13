@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -64,21 +65,20 @@ public class gasEquipController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@ResponseBody
-	@RequestMapping("findDetailData")
-	public PageView findDetailData(String pageNow, String pageSize)
-			throws Exception {
+	@RequestMapping("equipDetail")
+	public String findDetailData(ModelMap model) throws Exception {
 
 		DeviceInfoMap deviceInfoMap = getFormMap(DeviceInfoMap.class);
-		deviceInfoMap = toFormMap(deviceInfoMap, pageNow, pageSize);
+
 		// 用户所属站的编号
-		deviceInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		deviceInfoMap.put(SysConsts.ORG_CODE, deviceInfoMap.get(SysConsts.ORG_CODE));
+		
+		System.out.println(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
+		
+		model.addAttribute("equipData", DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
 
-		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(
-				deviceInfoMap));
+		return Common.BACKGROUND_PATH + "/system/equip/equip";
 
-		return pageView;
 	}
 
 	/**
@@ -102,20 +102,6 @@ public class gasEquipController extends BaseController {
 		}
 		dataMap.put("flag", true);
 		return dataMap;
-	}
-
-	/**
-	 * 单站详细信息
-	 * 
-	 * @author xk
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("detail")
-	public String detail(Model model) throws Exception {
-		model.addAttribute("res", findByRes());
-		return Common.BACKGROUND_PATH + "/system/equip/detail";
 	}
 
 	/**

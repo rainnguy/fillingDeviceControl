@@ -50,14 +50,11 @@ public class AlarmMonitorController extends BaseController {
 		AlarmInfoMap alarmInfoMap = getFormMap(AlarmInfoMap.class);
 		alarmInfoMap = toFormMap(alarmInfoMap, pageNow, pageSize);
 		// 用户权限
-		alarmInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		alarmInfoMap.put(SysConsts.ROLE_KEY,Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		alarmInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		alarmInfoMap.put(SysConsts.ORG_CODE,Common.findAttrValue(SysConsts.ORG_CODE));
 
-		pageView.setRecords(AlarmInfoMap.mapper().findHistoryAlarmData(
-				alarmInfoMap));
+		pageView.setRecords(AlarmInfoMap.mapper().findHistoryAlarmData(alarmInfoMap));
 
 		return pageView;
 	}
