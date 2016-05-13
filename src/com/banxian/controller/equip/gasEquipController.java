@@ -77,7 +77,7 @@ public class gasEquipController extends BaseController {
 		
 		model.addAttribute("equipData", DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
 
-		return Common.BACKGROUND_PATH + "/system/equip/equip";
+		return Common.BACKGROUND_PATH + "/system/equip/equipDetail";
 
 	}
 
