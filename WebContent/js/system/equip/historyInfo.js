@@ -16,7 +16,8 @@ $(function() {
 				colkey : "currTime",
 				name : "时间",
 				renderData : function(rowindex, data, rowdata, column) {
-					return new Date(data).format("yyyy-MM-dd hh:mm:ss");
+//					return new Date(data).format("yyyy-MM-dd hh:mm:ss");
+					return data;
 				}
 			}, {
 				colkey : "deviceName",
@@ -155,7 +156,8 @@ $(function() {
 				colkey : "currTime",
 				name : "时间",
 				renderData : function(rowindex, data, rowdata, column) {
-					return new Date(data).format("yyyy-MM-dd hh:mm:ss");
+//					return new Date(data).format("yyyy-MM-dd hh:mm:ss");
+					return data;
 				}
 			}, {
 				colkey : "deviceName",

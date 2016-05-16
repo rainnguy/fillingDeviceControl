@@ -130,11 +130,11 @@
 		<if test="orgName != null and orgName != ''">
 			and t4.orgName like '%${orgName}%'
 		</if>
-		<if test="currTimeFrom != null and currTimeFrom != ''">
-			and t1.currTime &gt;= '${currTimeFrom}'
+		<if test="startDate != null and startDate != ''">
+			and t1.currTime &gt;= '${startDate}'
 		</if>
-		<if test="currTimeTo != null and currTimeTo != ''">
-			and t.currTime &lt;= '${currTimeTo}'
+		<if test="endDate != null and endDate != ''">
+			and t1.currTime &lt;= '${endDate}'
 		</if>
 		order by
 		t1.currTime desc,
