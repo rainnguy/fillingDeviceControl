@@ -150,7 +150,8 @@
 				<section id="content">
 					<section class="vbox">
 						<header class="header bg-white b-b b-light">
-							<p class="h3 m-t-xs m-b-xs">加气站详细信息</p>
+							<p class="h3 m-t-xs m-b-xs">${stationName}</p>
+							<small>&nbsp;&nbsp;编号-${orgCode}</small>
 						</header>
 						<section class="scrollable">
 							<section class="hbox stretch">
@@ -194,205 +195,50 @@
 										<header class="header bg-light bg-gradient">
 											<ul class="nav nav-tabs nav-white">
 												<li class="active"><a href="#activity"
-													data-toggle="tab">XX站详细信息</a></li>
-												<li class=""><a href="#events"
-													data-toggle="tab">报警信息</a></li>
+													data-toggle="tab">详细信息</a></li>
+												<li class="events"><a href="#events"
+													data-toggle="tab">未处理报警信息</a></li>
 											</ul>
 										</header>
 										<section class="scrollable">
 											<div class="tab-content">
-												<div class="tab-pane active" id="activity">
-													<ul
-														class="list-group no-radius m-b-none m-t-n-xxs list-group-lg no-border">
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 minuts ago</small> <strong
-																class="block">Drew Wllon</strong> <small>Wellcome
-																	and play this web application template ... </small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 hour ago</small> <strong
-																class="block">Jonathan George</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">2 hours ago</small> <strong
-																class="block">Josh Long</strong> <small>Vestibulum
-																	ullamcorper sodales nisi nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 day ago</small> <strong
-																class="block">Jack Dorsty</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 days ago</small> <strong
-																class="block">Morgen Kntooh</strong> <small>Mobile
-																	first web app for startup...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">Jun 21</small> <strong class="block">Yoha
-																	Omish</strong> <small>Morbi nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">May 10</small> <strong class="block">Gole
-																	Lido</strong> <small>Vestibulum ullamcorper sodales nisi
-																	nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">Jan 2</small> <strong class="block">Jonthan
-																	Snow</strong> <small>Morbi nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item" href="#email-content"
-															data-toggle="class:show"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 minuts ago</small> <strong
-																class="block">Drew Wllon</strong> <small>Vestibulum
-																	ullamcorper sodales nisi nec sodales nisi nec sodales
-																	nisi nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 hour ago</small> <strong
-																class="block">Jonathan George</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">2 hours ago</small> <strong
-																class="block">Josh Long</strong> <small>Vestibulum
-																	ullamcorper sodales nisi nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 day ago</small> <strong
-																class="block">Jack Dorsty</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 days ago</small> <strong
-																class="block">Morgen Kntooh</strong> <small>Mobile
-																	first web app for startup...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">Jun 21</small> <strong class="block">Yoha
-																	Omish</strong> <small>Morbi nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">May 10</small> <strong class="block">Gole
-																	Lido</strong> <small>Vestibulum ullamcorper sodales nisi
-																	nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">Jan 2</small> <strong class="block">Jonthan
-																	Snow</strong> <small>Morbi nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item" href="#email-content"
-															data-toggle="class:show"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 minuts ago</small> <strong
-																class="block">Drew Wllon</strong> <small>Vestibulum
-																	ullamcorper sodales nisi nec sodales nisi nec sodales
-																	nisi nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 hour ago</small> <strong
-																class="block">Jonathan George</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">2 hours ago</small> <strong
-																class="block">Josh Long</strong> <small>Vestibulum
-																	ullamcorper sodales nisi nec...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar_default.jpg"
-																class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">1 day ago</small> <strong
-																class="block">Jack Dorsty</strong> <small>Morbi
-																	nec nunc condimentum...</small>
-														</a></li>
-														<li class="list-group-item"><a href="#"
-															class="thumb-sm pull-left m-r-sm"> <img
-																src="./profile_files/avatar.jpg" class="img-circle">
-														</a> <a href="#" class="clear"> <small
-																class="pull-right">3 days ago</small> <strong
-																class="block">Morgen Kntooh</strong> <small>Mobile
-																	first web app for startup...</small>
-														</a></li>
-													</ul>
+												<div class="tab-pane events" id="events">
+													<section class="panel panel-default">
+													<c:forEach items="${unsolvedAlarmData}" var="key" varStatus="ind">
+														<table class="table table-striped m-b-none">
+													   		<c:if test="${ind.index eq 0}">
+													   			<thead>
+																	<tr>
+																		<th >报警时间</th>
+																		<th >报警级别</th>
+																		<th >报警设备</th>
+																		<th >报警内容</th>
+																		<th >处理操作</th>
+																	</tr>
+																</thead>
+													   		</c:if>
+															<tbody >
+																<tr >
+																	<td style="width: 20%">${key.alarmTime}</td>
+																	<td style="width: 10%">${key.alarmLevel}</td>
+																	<td style="width: 15%">${key.deviceName}</td>
+																	<td style="width: 25%">${key.alarmContent}</td>
+																	<td style="width: 10%"><input type="button" value="确认"/></td>
+																</tr>
+															</tbody>
+														</table>  
+													</c:forEach>
+													</section>
 												</div>
-												<div class="tab-pane" id="events">
+												<div class="tab-pane active" id="activity">
 													<div class="col-sm-6">
 														<section class="panel panel-default">
 															<c:forEach items="${equipData}" var="key" varStatus="ind">
 																<c:choose> 
-															 		<c:when test="${key.deviceType == '01'}">   
-																   		<table class="table table-striped m-b-none">
-																	   		<c:if test="${ind.index eq 0}">
-																	   			<thead>
+																	<c:when test="${key.deviceType == '01'}">   
+																		<table class="table table-striped m-b-none">
+																			<c:if test="${ind.index eq 0}">
+																				<thead>
 																					<tr>
 																						<th >设备名称</th>
 																						<th >压力</th>
@@ -402,7 +248,7 @@
 																						<th >LNG重量</th>
 																					</tr>
 																				</thead>
-																	   		</c:if>
+																			</c:if>
 																			<tbody >
 																				<tr >
 																					<td style="width: 25%">${key.deviceName}</td>
@@ -424,9 +270,9 @@
 														<section class="panel panel-default">
 															<c:forEach items="${equipData}" var="key" varStatus="ind">
 																<c:choose> 
-																 	<c:when test="${key.deviceType == '02'}">   
-																   		<table class="table table-striped m-b-none">
-																   		<c:if test="${tempKey eq '01'}">
+																	<c:when test="${key.deviceType == '02'}">   
+																		<table class="table table-striped m-b-none">
+																		<c:if test="${tempKey eq '01'}">
 																			<thead>
 																				<tr >
 																					<th >设备名称</th>
@@ -440,12 +286,12 @@
 																		</c:if>
 																			<tbody>
 																				<tr >
-																					<td style="width: 25%">${key.deviceName}</td>
+																					<td style="width: 20%">${key.deviceName}</td>
 																					<td style="width: 15%">${key.beforePressure}</td>
 																					<td style="width: 15%">${key.affterPressure}</td>
 																					<td style="width: 15%">${key.pumpTemp}</td>
-																					<td style="width: 15%">${key.converterFrequency}</td>
-																					<td style="width: 15%">${key.converterCurrent}</td>
+																					<td style="width: 18%">${key.converterFrequency}</td>
+																					<td style="width: 17%">${key.converterCurrent}</td>
 																				</tr>
 																			</tbody>
 																		</table> 

@@ -18,6 +18,7 @@
 		t6.constantName as alarmLevel,
 		t3.deviceName as deviceName,
 		t2.alarmContent as alarmContent,
+		t4.orgCode as orgCode,
 		t4.orgName as orgName,
 		t4.orgTel as orgTel,
 		t4.orgAddr as orgAddr,
@@ -32,7 +33,9 @@
 		and t1.deviceId = t3.deviceId
 		and t2.delFlag = '0'
 		and t3.orgId = t4.id
-		and t4.orgCode = '${orgCode}'
+		<if test="orgCode != null and orgCode != ''">
+			and t4.orgCode = '${orgCode}'
+		</if>
 		and t4.delFlag = '0'
 		and t6.kind = '29'
 		and t2.alarmLvl = t6.constantValue
@@ -129,7 +132,8 @@
 		ORDER BY
 		t1.statusId ASC,
 		tp.constantValue ASC,
-		t1.alarmTime DESC
+		t1.alarmTime DESC,
+		tp2.orgCode ASC
 	</select>
 
 </mapper>

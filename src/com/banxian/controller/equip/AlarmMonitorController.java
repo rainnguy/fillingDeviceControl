@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.equip.AlarmInfoMap;
+import com.banxian.entity.equip.UnsolvedAlarmInfoMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
-import com.banxian.util.PropertiesUtils;
 import com.banxian.util.SysConsts;
 
 /**
@@ -59,25 +59,42 @@ public class AlarmMonitorController extends BaseController {
 		return pageView;
 	}
 	
-	//////////////////////////////////////////////////////////////////
-
-	@RequestMapping("list")
-	public String listUI() throws Exception {
-		return Common.BACKGROUND_PATH + "/system/monitor/list";
+	/**
+	 * 未处理报警
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("unsolvedAlarm")
+	public String unsolvedAlarm(Model model) throws Exception {
+		model.addAttribute("res", findByRes());
+		return Common.BACKGROUND_PATH + "/system/equip/unsolvedAlarm";
 	}
 
-	@RequestMapping("info")
-	public String info(Model model) throws Exception {
-		model.addAttribute("cpu", PropertiesUtils.findPropertiesKey("cpu"));
-		model.addAttribute("jvm", PropertiesUtils.findPropertiesKey("jvm"));
-		model.addAttribute("ram", PropertiesUtils.findPropertiesKey("ram"));
-		model.addAttribute("toEmail",
-				PropertiesUtils.findPropertiesKey("toEmail"));
-		return Common.BACKGROUND_PATH + "/system/monitor/info";
-	}
+	/**
+	 * 未处理报警信息
+	 * 
+	 * @param pageNow
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping("unsolvedAlarmList")
+	public PageView unsolvedAlarmList(String pageNow, String pageSize)
+			throws Exception {
 
-	@RequestMapping("monitor")
-	public String monitor() throws Exception {
-		return Common.BACKGROUND_PATH + "/system/monitor/monitor";
+		UnsolvedAlarmInfoMap unsolvedAlarmMap = getFormMap(UnsolvedAlarmInfoMap.class);
+		unsolvedAlarmMap = toFormMap(unsolvedAlarmMap, pageNow, pageSize);
+
+		// 用户所属站的编号
+		unsolvedAlarmMap.put(SysConsts.ORG_CODE,
+				Common.findAttrValue(SysConsts.ORG_CODE));
+
+		pageView.setRecords(UnsolvedAlarmInfoMap.mapper()
+				.findUnsolvedAlarmData(unsolvedAlarmMap));
+
+		return pageView;
 	}
 }

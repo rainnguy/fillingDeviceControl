@@ -2,6 +2,7 @@ package com.banxian.controller.equip;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
+import com.banxian.entity.equip.DetailInfoMap;
 import com.banxian.entity.equip.DeviceInfoMap;
+import com.banxian.entity.equip.UnsolvedAlarmInfoMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 import com.banxian.util.PropertiesUtils;
@@ -68,15 +71,23 @@ public class gasEquipController extends BaseController {
 	@RequestMapping("equipDetail")
 	public String findDetailData(ModelMap model) throws Exception {
 
-		DeviceInfoMap deviceInfoMap = getFormMap(DeviceInfoMap.class);
-
+		DetailInfoMap detailInfoMap = getFormMap(DetailInfoMap.class);
+		UnsolvedAlarmInfoMap unsolvedAlarmInfoMap = getFormMap(UnsolvedAlarmInfoMap.class);
+		
 		// 用户所属站的编号
-		deviceInfoMap.put(SysConsts.ORG_CODE, deviceInfoMap.get(SysConsts.ORG_CODE));
+//		detailInfoMap.put(SysConsts.ORG_CODE, detailInfoMap.get(SysConsts.ORG_CODE));
+		unsolvedAlarmInfoMap.put(SysConsts.ORG_CODE, detailInfoMap.get(SysConsts.ORG_CODE));
 		
-		System.out.println(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
+		List<DetailInfoMap> detailInfo = DetailInfoMap.mapper().findDetailData(detailInfoMap);
 		
-		model.addAttribute("equipData", DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
-
+		model.addAttribute("equipData", detailInfo);
+		model.addAttribute("unsolvedAlarmData", UnsolvedAlarmInfoMap.mapper().
+				findUnsolvedAlarmData(unsolvedAlarmInfoMap));
+		model.addAttribute(SysConsts.ORG_CODE,detailInfoMap.get(SysConsts.ORG_CODE)); 
+		if(0 < detailInfo.size()) {
+			model.addAttribute("stationName", detailInfo.get(0).get(SysConsts.STATION_NAME));
+		}
+				
 		return Common.BACKGROUND_PATH + "/system/equip/equipDetail";
 
 	}

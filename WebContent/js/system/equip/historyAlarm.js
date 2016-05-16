@@ -25,7 +25,7 @@ $(function() {
 				name : "报警内容",
 			}, {
 				colkey : "statusName",
-				name : "处理状态",
+				name : "处理状态"
 			}, {
 				colkey : "handlerCode",
 				name : "处理人ID",

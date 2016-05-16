@@ -5,8 +5,7 @@ $(function() {
 		pagId : 'paging',
 		l_column : [ {
 			colkey : "orgCode",
-			name : "站点编号",
-			l_column : "3"
+			name : "站点编号"
 		}, {
 			colkey : "orgName",
 			name : "站点名称"
@@ -15,16 +14,10 @@ $(function() {
 			name : "站点类型",
 		}, {
 			colkey : "orgTel",
-			name : "联系电话",
-			width : '90px'
+			name : "联系电话"
 		}, {
 			colkey : "orgAddr",
 			name : "地址"
-		}, {
-			name : "操作",
-			renderData : function( rowindex ,data, rowdata, colkeyn) {
-				return "测试渲染函数";
-			}
 		} ],
 		jsonUrl : rootPath + '/staManage/findStationList.sxml',
 		checkbox : true,
@@ -57,7 +50,7 @@ $(function() {
 			title : "编辑",
 			type : 2,
 			area : [ "600px", "80%" ],
-			content : rootPath + '/staManage/editUI.sxml?userId=' + cbox
+			content : rootPath + '/staManage/editUI.sxml?orgId=' + cbox
 		});
 	}
 	

@@ -16,7 +16,6 @@
 		WHERE
 		t1.id = t2.foreignId
 		AND t1.currTime = t2.currTime
-		AND t2.delFlag = '0'
 	</sql>
 	
 	<sql id="pumpAndCarburetor">
@@ -122,13 +121,11 @@
 			select
 			max(tp.currTime)
 			from
-			attr_key tp
+			attr_key_temp tp
 			where
 			tp.orgId = t4.id
 		)
 		AND t1.deviceId = t5.deviceId
-		AND t1.delFlag = '0'
-		AND t3.delFlag = '0'
 		AND t4.delFlag = '0'
 		<if test="orgCode != null and orgCode != ''">
 			and t4.orgCode = '${orgCode}'

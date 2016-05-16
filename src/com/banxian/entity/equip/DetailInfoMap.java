@@ -5,7 +5,7 @@ import com.banxian.mapper.equip.DetailInfoMapper;
 import com.banxian.util.SpringIocUtils;
 
 /**
- * 查询历史信息实体
+ * 单站详细信息实体
  * 
  * @author xk
  * 
