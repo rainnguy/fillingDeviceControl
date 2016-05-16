@@ -122,11 +122,11 @@
 				and tp2.orgCode = '${orgCode}'
 			</if>
 		</if>
-		<if test="currTimeFrom != null and currTimeFrom != ''">
-			and t1.currTime &gt;= '${currTimeFrom}'
+		<if test="startDate != null and startDate != ''">
+			and t1.alarmTime &gt;= '${startDate}'
 		</if>
-		<if test="currTimeTo != null and currTimeTo != ''">
-			and t.currTime &lt;= '${currTimeTo}'
+		<if test="endDate != null and endDate != ''">
+			and t1.alarmTime &lt;= '${endDate}'
 		</if>
 		group by t1.alarmId
 		ORDER BY

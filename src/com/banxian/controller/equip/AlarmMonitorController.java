@@ -35,7 +35,7 @@ public class AlarmMonitorController extends BaseController {
 	}
 	
 	/**
-	 * 历史 报警信息
+	 * 历史报警信息
 	 * 
 	 * @param pageNow
 	 * @param pageSize
@@ -54,45 +54,6 @@ public class AlarmMonitorController extends BaseController {
 		alarmInfoMap.put(SysConsts.ORG_CODE,Common.findAttrValue(SysConsts.ORG_CODE));
 
 		pageView.setRecords(AlarmInfoMap.mapper().findHistoryAlarmData(alarmInfoMap));
-
-		return pageView;
-	}
-	
-	/**
-	 * 未处理报警
-	 * 
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("unsolvedAlarm")
-	public String unsolvedAlarm(Model model) throws Exception {
-		model.addAttribute("res", findByRes());
-		return Common.BACKGROUND_PATH + "/system/equip/unsolvedAlarm";
-	}
-
-	/**
-	 * 未处理报警信息
-	 * 
-	 * @param pageNow
-	 * @param pageSize
-	 * @return
-	 * @throws Exception
-	 */
-	@ResponseBody
-	@RequestMapping("unsolvedAlarmList")
-	public PageView unsolvedAlarmList(String pageNow, String pageSize)
-			throws Exception {
-
-		UnsolvedAlarmInfoMap unsolvedAlarmMap = getFormMap(UnsolvedAlarmInfoMap.class);
-		unsolvedAlarmMap = toFormMap(unsolvedAlarmMap, pageNow, pageSize);
-
-		// 用户所属站的编号
-		unsolvedAlarmMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
-
-		pageView.setRecords(UnsolvedAlarmInfoMap.mapper()
-				.findUnsolvedAlarmData(unsolvedAlarmMap));
 
 		return pageView;
 	}
