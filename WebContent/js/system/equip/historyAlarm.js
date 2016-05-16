@@ -62,7 +62,7 @@ $(function() {
 		serNumber : true
 	});
 	$("#search").click("click", function() {// 绑定查询按扭
-		var searchParams = $("#searchForm").serializeJson();// 初始化传参数
+		var searchParams = $("#alarmForm").serializeJson();// 初始化传参数
 		grid.setOptions({
 			data : searchParams
 		});

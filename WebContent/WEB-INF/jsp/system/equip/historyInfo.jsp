@@ -32,8 +32,8 @@ $('#s').datetimepicker({
 					name="DeviceInfoMap.orgName">
 			</div>
 			<div class="form-group">
-				<input class="input-medium ui-autocomplete-input" id="startDate" placeholder="开始时间" name="DeviceInfoMap.startDate" >
-				<input class="input-medium ui-autocomplete-input" id="endDate" placeholder="结束时间" name="DeviceInfoMap.endDate">
+				<input class="input-medium ui-autocomplete-input" id="startDate" placeholder="开始时间" name="deviceInfoMap.startDate" >
+				<input class="input-medium ui-autocomplete-input" id="endDate" placeholder="结束时间" name="deviceInfoMap.endDate">
 			</div>
 			<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
 			<a href="javascript:grid.exportData('/monitor/historyInfo.sxml')" class="btn btn-info" id="export">导出excel</a>
@@ -41,7 +41,7 @@ $('#s').datetimepicker({
 	</div>
 	<header class="panel-heading">
 	<div class="doc-buttons">
-	<input type="hidden" value="${orgType}" name="DeviceInfoMap.orgType" id="orgType">
+	<input type="hidden" value="${orgType}" name="deviceInfoMap.orgType" id="orgType">
 		<c:forEach items="${res}" var="key">
 			${key.menuDesc}
 		</c:forEach>
