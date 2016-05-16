@@ -86,6 +86,8 @@ public class gasEquipController extends BaseController {
 		model.addAttribute(SysConsts.ORG_CODE,detailInfoMap.get(SysConsts.ORG_CODE)); 
 		if(0 < detailInfo.size()) {
 			model.addAttribute("stationName", detailInfo.get(0).get(SysConsts.STATION_NAME));
+		}else {
+			model.addAttribute("stationName", "未知站");
 		}
 				
 		return Common.BACKGROUND_PATH + "/system/equip/equipDetail";
