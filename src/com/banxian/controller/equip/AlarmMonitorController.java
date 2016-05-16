@@ -44,8 +44,7 @@ public class AlarmMonitorController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("findHistoryAlarmData")
-	public PageView findHistoryAlarmData(String pageNow, String pageSize)
-			throws Exception {
+	public PageView findHistoryAlarmData(String pageNow, String pageSize) throws Exception {
 
 		AlarmInfoMap alarmInfoMap = getFormMap(AlarmInfoMap.class);
 		alarmInfoMap = toFormMap(alarmInfoMap, pageNow, pageSize);
