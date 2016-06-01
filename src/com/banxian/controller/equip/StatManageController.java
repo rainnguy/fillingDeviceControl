@@ -44,16 +44,53 @@ public class StatManageController extends BaseController {
 		return Common.BACKGROUND_PATH + "/system/equip/stationList";
 	}
 
+	/**
+	 * 显示站点信息
+	 * 
+	 * @param pageNow
+	 * @param pageSize
+	 * @return
+	 * @throws Exception
+	 */
 	@ResponseBody
 	@RequestMapping("findStationList")
 	public PageView findStationList( String pageNow,
 			String pageSize) throws Exception {
 		StationFormBean staFormMap = getFormMap(StationFormBean.class);
+		// 用户权限
+		staFormMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		staFormMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+				
 		staFormMap=toFormMap(staFormMap, pageNow, pageSize);
         pageView.setRecords(StationFormBean.mapper().findStationList(staFormMap));
         return pageView;
 	}
 
+	/**
+	 * 导出站点管理信息
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
+	@RequestMapping("/export")
+	public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String fileName = "站点信息_" + DateUtil.getCurrDate4();
+		StationFormBean stationFormMap = findHasHMap(StationFormBean.class);
+		// 用户权限
+		stationFormMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		stationFormMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+				
+		String exportData = stationFormMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<StationFormBean> list = staMapper.findStationList(stationFormMap);
+		POIUtils.exportToExcel(response, listMap, list, fileName);
+	}
+	
 	////////////////////////////////////////////////////////////////////////////
 	
 	@RequestMapping("addUI")
@@ -101,25 +138,6 @@ public class StatManageController extends BaseController {
 		return "success";
 	}
 	
-	@RequestMapping("/export")
-	public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String fileName = "用户列表";
-		StationFormBean stationFormMap = findHasHMap(StationFormBean.class);
-		//exportData = 
-		// [{"colkey":"sql_info","name":"SQL语句","hide":false},
-		// {"colkey":"total_time","name":"总响应时长","hide":false},
-		// {"colkey":"avg_time","name":"平均响应时长","hide":false},
-		// {"colkey":"record_time","name":"记录时间","hide":false},
-		// {"colkey":"call_count","name":"请求次数","hide":false}
-		// ]
-		String exportData = stationFormMap.getStr("exportData");// 列表头的json字符串
-
-		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
-
-		List<StationFormBean> lis = staMapper.findStationList(stationFormMap);
-		POIUtils.exportToExcel(response, listMap, lis, fileName);
-	}
-
 	@RequestMapping("editUI")
 	public String editUI(Model model) throws Exception {
 		String id = getPara(SysConsts.STATION_ID);

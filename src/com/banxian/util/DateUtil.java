@@ -312,6 +312,16 @@ public class DateUtil {
 		}
 		return result;
 	}
+	
+	/**
+	 * get current date
+	 * 
+	 * @return 返回字符型日期 yyyyMMddHHmmss格式
+	 */
+	public static String getCurrDate4() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		return dateFormat.format(new Date());
+	}
 
 	public static void main(String[] args) {
 		Date d = new Date();

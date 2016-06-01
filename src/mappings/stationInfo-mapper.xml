@@ -14,53 +14,54 @@
 
 	<select id="findStationData" resultType="com.banxian.entity.equip.StationMap">
 		SELECT
-		t1.orgCode as orgCode,
-		t1.orgName as orgName,
-		t1.orgTel as orgTel,
-		t2.totalNum as totalNum
-		from
-		sys_orga t1 left join 
-		(SELECT
-		tp3.orgId as orgId,
-		count(tp1.id) as totalNum
-		from
-		alarm_info_temp tp1, alarm_def tp2, sys_device tp3
-		WHERE
-		tp1.statusId = '1'
-		and tp1.alarmDefId = tp2.alarmDefId
-		and tp1.deviceId = tp3.deviceId
-		and tp2.delFlag = '0'
-		group by orgId
-		) t2 on t2.orgId = t1.id
+			t1.orgCode as orgCode,
+			t1.orgName as orgName,
+			t1.orgTel as orgTel,
+			t2.totalNum as totalNum
+		FROM
+			sys_orga t1 left join 
+			(SELECT
+				tp3.orgId as orgId,
+				count(tp1.id) as totalNum
+			FROM
+				alarm_info_temp tp1, alarm_def tp2, sys_device tp3
+			WHERE
+				tp1.statusId = '1'
+				and tp1.alarmDefId = tp2.alarmDefId
+				and tp1.deviceId = tp3.deviceId
+				and tp2.delFlag = '0'
+			GROUP BY orgId
+			) t2 on t2.orgId = t1.id
 		WHERE t1.delFlag = '0'
-		<if test="roleKey != 'admin'">
-			<if test="orgCode != null and orgCode != ''">
-				and t1.orgCode = '${orgCode}'
-			</if>
+		<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+			and t1.orgCode = '${orgCode}'
 		</if>
-		group by t1.id
-		order by t1.orgCode
+		GROUP BY t1.id
+		ORDER BY t1.orgCode
 	</select>
 	
 	<select id="findStationList" resultType="com.banxian.entity.StationFormBean">
 		SELECT
-		orgCode,
-		orgName,
-		case orgType when '2001' then
-		'加气站'
-		when '3001' then
-		'气化站'
-		end as orgType,
-		orgAddr,
-		orgTel
+			orgCode,
+			orgName,
+			case orgType when '2001' then
+			'加气站'
+			when '3001' then
+			'气化站'
+			end as orgType,
+			orgAddr,
+			orgTel
 		FROM
-		sys_orga
+			sys_orga
 		WHERE
-		delFlag = '0'
-		<if test="orgName != null and orgName != ''">
-			and orgName like '%${orgName}%'
-		</if>
-		order by orgCode
+			delFlag = '0'
+			<if test="roleKey != 'admin' and orgCode != null and orgCode != ''">
+				and orgCode = '${orgCode}'
+			</if>
+			<if test="orgName != null and orgName != ''">
+				and orgName like '%${orgName}%'
+			</if>
+		ORDER BY orgCode
 	</select>
 
 </mapper>

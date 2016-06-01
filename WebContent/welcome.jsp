@@ -10,7 +10,7 @@
 	<section class="vbox">
 		<header class="header bg-white b-b b-light">
 			<p>
-				Widgets <small>(colorful)</small>
+				<big>欢迎使用实时监控系统</big>
 			</p>
 		</header>
 		<section class="scrollable wrapper">

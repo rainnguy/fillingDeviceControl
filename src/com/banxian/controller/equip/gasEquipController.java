@@ -20,6 +20,9 @@ import com.banxian.entity.equip.DeviceInfoMap;
 import com.banxian.entity.equip.UnsolvedAlarmInfoMap;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
+import com.banxian.util.DateUtil;
+import com.banxian.util.JsonUtils;
+import com.banxian.util.POIUtils;
 import com.banxian.util.PropertiesUtils;
 import com.banxian.util.SysConsts;
 
@@ -31,7 +34,7 @@ import com.banxian.util.SysConsts;
 @Controller
 @RequestMapping("/gasEquip/")
 public class gasEquipController extends BaseController {
-
+	
 	/**
 	 * 历史信息
 	 * 
@@ -42,20 +45,16 @@ public class gasEquipController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("findHistoryData")
-	public PageView findHistoryData(String pageNow, String pageSize)
-			throws Exception {
+	public PageView findHistoryData(String pageNow, String pageSize) throws Exception {
 
 		DeviceInfoMap deviceInfoMap = getFormMap(DeviceInfoMap.class);
 		deviceInfoMap = toFormMap(deviceInfoMap, pageNow, pageSize);
 		// 用户权限
-		deviceInfoMap.put(SysConsts.ROLE_KEY,
-				Common.findAttrValue(SysConsts.ROLE_KEY));
+		deviceInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
 		// 用户所属站的编号
-		deviceInfoMap.put(SysConsts.ORG_CODE,
-				Common.findAttrValue(SysConsts.ORG_CODE));
+		deviceInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
 
-		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(
-				deviceInfoMap));
+		pageView.setRecords(DeviceInfoMap.mapper().findHistoryData(deviceInfoMap));
 
 		return pageView;
 	}
@@ -75,7 +74,6 @@ public class gasEquipController extends BaseController {
 		UnsolvedAlarmInfoMap unsolvedAlarmInfoMap = getFormMap(UnsolvedAlarmInfoMap.class);
 		
 		// 用户所属站的编号
-//		detailInfoMap.put(SysConsts.ORG_CODE, detailInfoMap.get(SysConsts.ORG_CODE));
 		unsolvedAlarmInfoMap.put(SysConsts.ORG_CODE, detailInfoMap.get(SysConsts.ORG_CODE));
 		
 		List<DetailInfoMap> detailInfo = DetailInfoMap.mapper().findDetailData(detailInfoMap);
@@ -104,8 +102,7 @@ public class gasEquipController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("/modifySer")
-	public Map<String, Object> modifySer(String key, String value)
-			throws Exception {
+	public Map<String, Object> modifySer(String key, String value) throws Exception {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			// 从输入流中读取属性列表（键和元素对）
@@ -130,14 +127,34 @@ public class gasEquipController extends BaseController {
 		// 判断权限不是admin
 		if ("admin".equals(Common.findAttrValue(SysConsts.ROLE_KEY)) == false) {
 			// 获取站点类型
-			model.addAttribute(SysConsts.ORG_TYPE,
-					Common.findAttrValue(SysConsts.ORG_TYPE));
+			model.addAttribute(SysConsts.ORG_TYPE, Common.findAttrValue(SysConsts.ORG_TYPE));
 		}
 		return Common.BACKGROUND_PATH + "/system/equip/historyInfo";
 	}
 	
+	/**
+	 * 导出历史信息
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	@RequestMapping("/export")
-	public void download(HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	public void export(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		String fileName = "历史信息_" + DateUtil.getCurrDate4();
+		DeviceInfoMap deviceInfoMap = findHasHMap(DeviceInfoMap.class);
+		// 用户权限
+		deviceInfoMap.put(SysConsts.ROLE_KEY, Common.findAttrValue(SysConsts.ROLE_KEY));
+		// 用户所属站的编号
+		deviceInfoMap.put(SysConsts.ORG_CODE, Common.findAttrValue(SysConsts.ORG_CODE));
+		
+		String exportData = deviceInfoMap.getStr("exportData");// 列表头的json字符串
+
+		List<Map<String, Object>> listMap = JsonUtils.parseJSONList(exportData);
+
+		List<DeviceInfoMap> list = DeviceInfoMap.mapper().findHistoryData(deviceInfoMap);
+		
+		POIUtils.exportToExcel(response, listMap, list, fileName);
 	}
 }

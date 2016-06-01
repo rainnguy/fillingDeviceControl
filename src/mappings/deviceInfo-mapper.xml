@@ -10,13 +10,13 @@
 
 	<sql id="storage">
 		SELECT
-		t2.attrValue
+			t2.attrValue
 		FROM
-		attr_value t2
+			attr_value t2
 		WHERE
-		t1.id = t2.foreignId
-		AND t1.currTime = t2.currTime
-		AND t2.delFlag = '0'
+			t1.id = t2.foreignId
+			AND t1.currTime = t2.currTime
+			AND t2.delFlag = '0'
 	</sql>
 	
 	<sql id="pumpAndCarburetor">
@@ -26,119 +26,119 @@
 
 	<select id="findHistoryData" resultType="com.banxian.entity.equip.DeviceInfoMap">
 		SELECT
-		DATE_FORMAT(t1.currTime,'%Y-%m-%d %H:%i:%s') AS currTime,
-		t1.deviceId AS deviceId,
-		t5.type AS deviceType,
-		t4.orgCode AS orgCode,
-		t4.orgName AS orgName,
-		t5.deviceName AS deviceName,
-		t3.meterPressure AS meterPressure,
-		t3.ambientTemp AS ambientTemp,
-		(
-		<include refid="storage" />
-		AND t2.attrKey = '储罐压力'
-		) AS storagePressure,
-		(
-		<include refid="storage" />
-		AND t2.attrKey = 'LNG液位'
-		) AS lngLiquidPosition,
-		(
-		<include refid="storage" />
-		AND t2.attrKey = 'LNG差压'
-		) AS differentialPressure,
-		(
-		<include refid="storage" />
-		AND t2.attrKey = 'LNG高度'
-		) AS lngHeight,
-		(
-		<include refid="storage" />
-		AND t2.attrKey = 'LNG重量'
-		) AS lngWeight,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '泵前压力'
-		AND t4.orgType = '2001'
-		) AS beforePressure,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '泵后压力'
-		AND t4.orgType = '2001'
-		) AS affterPressure,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '泵池温度'
-		AND t4.orgType = '2001'
-		) AS pumpTemp,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '变频器频率'
-		AND t4.orgType = '2001'
-		) AS converterFrequency,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '变频器电流'
-		AND t4.orgType = '2001'
-		) AS converterCurrent,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '汽化器后压力'
-		AND t4.orgType = '3001'
-		) AS cbtBeforePressure,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '汽化器后温度'
-		AND t4.orgType = '3001'
-		) AS cbtAffterTemp,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '流量计温度'
-		AND t4.orgType = '3001'
-		) AS flowmeterTemp,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '流量计瞬时流量'
-		AND t4.orgType = '3001'
-		) AS flowmeterInstFlow,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '流量计压力'
-		AND t4.orgType = '3001'
-		) AS flowmeterPressure,
-		(
-		<include refid="pumpAndCarburetor" />
-		AND t2.attrKey = '流量计总流量'
-		AND t4.orgType = '3001'
-		) AS flowmeterTotalFlow
+			DATE_FORMAT(t1.currTime,'%Y-%m-%d %H:%i:%s') AS currTime,
+			t1.deviceId AS deviceId,
+			t5.type AS deviceType,
+			t4.orgCode AS orgCode,
+			t4.orgName AS orgName,
+			t5.deviceName AS deviceName,
+			t3.meterPressure AS meterPressure,
+			t3.ambientTemp AS ambientTemp,
+			(
+			<include refid="storage" />
+			AND t2.attrKey = '储罐压力'
+			) AS storagePressure,
+			(
+			<include refid="storage" />
+			AND t2.attrKey = 'LNG液位'
+			) AS lngLiquidPosition,
+			(
+			<include refid="storage" />
+			AND t2.attrKey = 'LNG差压'
+			) AS differentialPressure,
+			(
+			<include refid="storage" />
+			AND t2.attrKey = 'LNG高度'
+			) AS lngHeight,
+			(
+			<include refid="storage" />
+			AND t2.attrKey = 'LNG重量'
+			) AS lngWeight,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '泵前压力'
+			AND t4.orgType = '2001'
+			) AS beforePressure,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '泵后压力'
+			AND t4.orgType = '2001'
+			) AS affterPressure,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '泵池温度'
+			AND t4.orgType = '2001'
+			) AS pumpTemp,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '变频器频率'
+			AND t4.orgType = '2001'
+			) AS converterFrequency,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '变频器电流'
+			AND t4.orgType = '2001'
+			) AS converterCurrent,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '汽化器后压力'
+			AND t4.orgType = '3001'
+			) AS cbtBeforePressure,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '汽化器后温度'
+			AND t4.orgType = '3001'
+			) AS cbtAffterTemp,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '流量计温度'
+			AND t4.orgType = '3001'
+			) AS flowmeterTemp,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '流量计瞬时流量'
+			AND t4.orgType = '3001'
+			) AS flowmeterInstFlow,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '流量计压力'
+			AND t4.orgType = '3001'
+			) AS flowmeterPressure,
+			(
+			<include refid="pumpAndCarburetor" />
+			AND t2.attrKey = '流量计总流量'
+			AND t4.orgType = '3001'
+			) AS flowmeterTotalFlow
 		FROM
-		attr_key t1,
-		attr_status t3,
-		sys_orga t4,
-		sys_device t5
+			attr_key t1,
+			attr_status t3,
+			sys_orga t4,
+			sys_device t5
 		WHERE
-		t1.orgId = t4.id
-		AND t1.orgId = t3.orgId
-		AND t1.currTime = t3.currTime
-		AND t1.deviceId = t5.deviceId
-		AND t1.delFlag = '0'
-		AND t3.delFlag = '0'
-		AND t4.delFlag = '0'
-		<if test="roleKey != 'admin'">
-			<if test="orgCode != null and orgCode != ''">
-				and t4.orgCode = '${orgCode}'
+			t1.orgId = t4.id
+			AND t1.orgId = t3.orgId
+			AND t1.currTime = t3.currTime
+			AND t1.deviceId = t5.deviceId
+			AND t1.delFlag = '0'
+			AND t3.delFlag = '0'
+			AND t4.delFlag = '0'
+			<if test="roleKey != 'admin'">
+				<if test="orgCode != null and orgCode != ''">
+					AND t4.orgCode = '${orgCode}'
+				</if>
 			</if>
-		</if>
-		<if test="orgName != null and orgName != ''">
-			and t4.orgName like '%${orgName}%'
-		</if>
-		<if test="startDate != null and startDate != ''">
-			and t1.currTime &gt;= '${startDate}'
-		</if>
-		<if test="endDate != null and endDate != ''">
-			and t1.currTime &lt;= '${endDate}'
-		</if>
-		order by
-		t1.currTime desc,
-		t1.deviceId asc
+			<if test="orgName != null and orgName != ''">
+				AND t4.orgName like '%${orgName}%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND t1.currTime &gt;= '${startDate}'
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND t1.currTime &lt;= '${endDate}'
+			</if>
+		ORDER BY
+			t1.currTime desc,
+			t1.deviceId asc
 	</select>
 
 </mapper>
