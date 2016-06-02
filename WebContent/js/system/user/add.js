@@ -3,7 +3,22 @@ jQuery.validator.addMethod("checkacc", function(value, element) {
 	return this.optional(element)
 			|| ((value.length <= 30) && (value.length >= 3));
 }, "账号由3至30位字符组合构成");
+
+
 $(function() {
+	
+	$("#submitButton").click(function(){
+		var v = $("#accountName").val();
+		alert("v = " + v);
+		if(v == null || v == ''){
+			alert("Can't be null");
+			$(".l_err").css('display', 'block');
+			// element.css('border','3px solid #FFCCCC');
+			$(".l_err").html('请输入账号');
+			return false;
+		}
+	});
+		
 	$("form").validate({
 		submitHandler : function(form) {// 必须写在验证前面，否则无法ajax提交
 			ly.ajaxSubmit(form, {// 验证新增是否成功
@@ -28,7 +43,7 @@ $(function() {
 				required : true,
 				remote : { // 异步验证是否存在
 					type : "POST",
-					url : 'isExist.sxml',
+					url : 'isExist.shtml',
 					data : {
 						name : function() {
 							return $("#accountName").val();
@@ -39,7 +54,7 @@ $(function() {
 		},
 		messages : {
 			"userFormMap.accountName" : {
-				required : "请输入账号",
+				required : "请输入账号2",
 				remote : "该账号已经存在"
 			}
 		},
