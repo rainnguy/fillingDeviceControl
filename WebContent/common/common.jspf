@@ -25,6 +25,7 @@ user-scalable - 用户是否可以手动缩放
 <script type="text/javascript" src="${ctx}/notebook/notebook_files/app.v1.js"></script>
 <script type="text/javascript" src="${ctx}/notebook/notebook_files/app.plugin.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery/jquery-validation/jquery.metadata.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery/jquery-validation/jquery.validate.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery/jquery-validation/messages_cn.js"></script>
 <script type="text/javascript" src="${ctx}/js/layer-v1.9.2/layer/layer.js"></script>
@@ -42,7 +43,7 @@ user-scalable - 用户是否可以手动缩放
 <script type="text/javascript" src="${ctx}/js/date/bootstrap.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/date/moment.js"></script>
 <script type="text/javascript" src="${ctx}/js/date/daterangepicker.js"></script>--%>
-<script type="text/javascript" src="${ctx}/js/system/user/updatePassword.js"></script> 
+<%-- <script type="text/javascript" src="${ctx}/js/system/user/updatePassword.js"></script>  --%>
 
 <!-- end new line -->
 
