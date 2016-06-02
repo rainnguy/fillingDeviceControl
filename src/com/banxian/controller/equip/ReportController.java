@@ -19,6 +19,7 @@ import com.banxian.entity.equip.GraphDataMap;
 import com.banxian.entity.equip.Series;
 import com.banxian.util.Common;
 import com.banxian.util.DateUtil;
+import com.banxian.util.EhcacheUtils;
 import com.banxian.util.SysConsts;
 
 /**
@@ -30,10 +31,10 @@ import com.banxian.util.SysConsts;
 @RequestMapping("/gasReport/")
 public class ReportController extends BaseController {
 
-	@RequestMapping("list")
-	public String listUI() throws Exception {
-		return Common.BACKGROUND_PATH + "/system/monitor/list";
-	}
+//	@RequestMapping("list")
+//	public String listUI() throws Exception {
+//		return Common.BACKGROUND_PATH + "/system/monitor/list";
+//	}
 	
 	/**
 	 * 折线图
@@ -46,8 +47,37 @@ public class ReportController extends BaseController {
 	public String lineGraph(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
 		
-		// model.addAttribute(SysConsts.ORG_TYPE,
-		// Common.findAttrValue(SysConsts.ORG_TYPE));
+		Map<String, String> orgCodeMap = new HashMap<String, String>();
+		// 设置默认的空值
+		orgCodeMap.put("", "选择站点");
+		@SuppressWarnings("unchecked")
+		// 获取所有的站点
+		List<Map<String, Object>> stationMap =  (List<Map<String, Object>>) EhcacheUtils.get(SysConsts.SYS_ORGA_DATA);
+
+		// 用户权限
+		String roleKey=Common.findAttrValue(SysConsts.ROLE_KEY);
+		if("admin".equals(roleKey)){
+			for(Map<String, Object> map : stationMap){
+				String orgName = (String) map.get("orgName");
+				String orgNum = (String) map.get("orgCode");
+				orgCodeMap.put(orgNum, orgName);
+			}
+		}else{
+			// 用户所属站的编号
+			String selfOrgCode=Common.findAttrValue(SysConsts.ORG_CODE);
+			for(Map<String, Object> map : stationMap){
+				//  当前记录的编号
+				String orgNum = map.get("orgCode").toString();
+				if(selfOrgCode.equals(orgNum)){
+					// 当前记录的名称
+					String orgName = map.get("orgName").toString();
+					orgCodeMap.put(orgNum, orgName);
+				}
+			}
+		}
+		
+		model.addAttribute("orgValue", orgCodeMap);
+		model.addAttribute(SysConsts.ORG_TYPE, Common.findAttrValue(SysConsts.ORG_TYPE));
 		
 		return Common.BACKGROUND_PATH + "/system/equip/lineGraph";
 	}
@@ -113,6 +143,7 @@ public class ReportController extends BaseController {
 			month = graphDataMap.get("month").toString();
 		}
 
+		// 设定横坐标值
 		if (day.isEmpty() == false) {
 			axis = new ArrayList<String>(Arrays.asList(new String[] { "01",
 					"02", "03", "04", "05", "06", "07", "08", "09", "10", "11",

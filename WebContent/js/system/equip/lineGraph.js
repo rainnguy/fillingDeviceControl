@@ -66,7 +66,7 @@ $(function() {
 			}
 		},
 		error : function(errMsg) {
-			console.error("加载数据失败")
+			console.error("加载数据失败");
 		}
 	});
 
