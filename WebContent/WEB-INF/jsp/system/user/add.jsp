@@ -28,7 +28,7 @@ label[class^="btn btn-default"] {
 <body>
 	<div class="l_err" style="width: 100%; margin-top: 2px;"></div>
 	<form id="form" name="form" class="form-horizontal" method="post"
-		action="${ctx}/user/addEntity.sxml">
+		action="${ctx}/user/addEntity.shtml">
 		<section class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
@@ -37,7 +37,7 @@ label[class^="btn btn-default"] {
 				</div>
 				<div class="col-sm-9">
 					<input type="text" class="form-control"
-						placeholder="请输入用户名" name="userFormBean.userName" id="userName">
+						placeholder="请输入用户名" name="userFormMap.userName" id="userName">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
@@ -45,19 +45,18 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">账号</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control checkacc"
-						placeholder="请输入账号" name="userFormBean.accName" id="accountName">
+						placeholder="请输入账号" name="userFormMap.accountName" id="accountName">
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">密码</label>
-				<input type="hidden" value="123456" name="userFormBean.userPass" id="password">
 				<div class="col-sm-9" style="color: red;">
-					默认密码为:123456
+					默认密码为:123456789
 				</div>
 			</div>
 			<div class="line line-dashed line-lg pull-in"></div>
-			<div class="form-group" id="selRole" data-url="/role/selRole.sxml"></div>
+<!-- 			<div class="form-group" id="selRole" data-url="/role/selRole.shtml"></div> -->
 			<div class="line line-dashed line-lg pull-in"></div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">是否禁用</label>
@@ -69,9 +68,9 @@ label[class^="btn btn-default"] {
 						</button>
 						<ul class="dropdown-menu dropdown-select">
 							<li class=""><a href="#"><input type="radio"
-									name="userFormBean.locked" value="0" checked="checked">是</a></li>
+									name="userFormMap.locked" value="0" checked="checked">是</a></li>
 							<li class="active"><a href="#"><input type="radio"
-									name="userFormBean.locked" value="1">否</a></li>
+									name="userFormMap.locked" value="1">否</a></li>
 						</ul>
 					</div>
 				</div>
@@ -81,12 +80,12 @@ label[class^="btn btn-default"] {
 				<label class="col-sm-3 control-label">描述</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" placeholder="请输入账号描述"
-						name="userFormBean.description" id="description">
+						name="userFormMap.description" id="description">
 				</div>
 			</div>
 		</div>
 		<footer class="panel-footer text-right bg-light lter">
-		<button type="submit" class="btn btn-success btn-s-xs">提交</button>
+		<input type="submit" class="btn btn-success btn-s-xs" id="submitButton" value="提交" />
 		</footer> </section>
 	</form>
 	<script type="text/javascript">
