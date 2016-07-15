@@ -140,5 +140,31 @@
 			t1.currTime desc,
 			t1.deviceId asc
 	</select>
+	
+	<select id="findDeviceId" resultType="com.banxian.entity.equip.DeviceInfoMap">
+		SELECT
+			*
+		FROM
+			(
+			SELECT
+				deviceId
+			From
+				sys_device
+			WHERE
+				type = '${type}'
+				AND orgId = (
+					SELECT
+						id
+					FROM
+						sys_orga
+					WHERE
+						orgCode = '${station}'
+						AND delFlag = '0'
+				)
+			ORDER BY
+				deviceId
+			) a
+		LIMIT ${number}
+	</select>
 
 </mapper>

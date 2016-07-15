@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.banxian.mapper.equip.CollectDataMapper">
+	<!--mybatis ehcache缓存配置 -->
+	<!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 <cache type="org.mybatis.caches.ehcache.LoggingEhcache" 
+		/> -->
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+	<!-- 以下与实体类的中字段一致 -->
+
+	<sql id="findOrgId">
+		(SELECT
+			id
+		FROM
+			sys_orga
+		WHERE
+			orgCode = #{map.station}
+			AND delFlag = '0'
+		),
+	</sql>
+	
+	<insert id="insertAttrKeyTemp" parameterType="java.util.List">
+		INSERT INTO attr_key_temp
+		(id,
+		currTime,
+		orgId,
+		deviceId
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.mainCode},
+			#{map.time},
+			<include refid="findOrgId" />
+			#{map.deviceId}
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertAttrStaTemp" parameterType="java.util.List">
+		INSERT INTO attr_status_temp
+		(id,
+		currTime,
+		orgId,
+		deviceId
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(<include refid="findOrgId" />
+			#{map.time},
+			#{map.meterPressure},
+			#{map.envirTemp}
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertAttrValueTemp" parameterType="java.util.List">
+		INSERT INTO attr_value_temp
+		(foreignId,
+		currTime,
+		attrKey,
+		attrValue
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.mainCode},
+			#{map.time},
+			#{map.key},
+			#{map.value}
+			)
+		</foreach>
+	</insert>
+	
+</mapper>	
