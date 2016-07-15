@@ -13,4 +13,6 @@ public interface StationMapper extends BaseMapper {
 	public List<StationFormBean> findStationList(StationFormBean staFormBean);
 
 	public List<StationFormBean> findStationByOrgName(StationFormBean staFormBean);
+	
+	public int getOrgMaxCode();
 }
