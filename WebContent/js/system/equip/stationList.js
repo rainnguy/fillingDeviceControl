@@ -4,6 +4,11 @@ $(function() {
 	grid = lyGrid({
 		pagId : 'paging',
 		l_column : [ {
+			colkey : "id",
+			name : "id",
+			width : "50px",
+			hide : true
+		}, {
 			colkey : "orgCode",
 			name : "站点编号"
 		}, {
