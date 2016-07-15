@@ -28,7 +28,7 @@
   </servlet-mapping>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring-shiro.xml,classpath:spring-application.xml</param-value>
+    <param-value>classpath:spring-shiro.xml,classpath:spring-application.xml,classpath:quartz-application.xml</param-value>
   </context-param>
   <listener>
     <listener-class>
