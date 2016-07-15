@@ -42,13 +42,14 @@ public class AnalyseDataController {
 	/**
 	 * 执行
 	 */
-	public void run() {
+	public void execute() {
+		System.out.println("test**************************************");
 
 		// 文件的目录
-		String folder = getFolder();
+//		String folder = getFolder();
 
 		// 解析并获取实时信息
-		getRealtimeInfo(folder);
+//		getRealtimeInfo(folder);
 		// 获取历史信息
 		// 解析并获取报警信息
 

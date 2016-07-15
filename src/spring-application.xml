@@ -59,37 +59,34 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.banxian.mapper" />
 	</bean>
-	<!-- 自定义 by xk -->
-	<bean id="getDataJob" class="com.banxian.controller.equip.AnalyseDataController"/>
-	<bean id="getDataJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-        <property name="targetObject">  
-	        <ref bean="getDataJob"/>  
-	    </property>  
-	    <property name="targetMethod">  <!-- 要执行的方法名称 -->  
-	        <value>run</value>  
-	    </property>
-	    <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 --> 
-        <property name="concurrent">
-        	<value>false</value>
-        </property> 
-	</bean>
-	<bean id="getDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">  
-       <property name="jobDetail" ref="getDataJobDetail"/>  
-       <property name="cronExpression" value="0 */1 * * * ?"/><!-- 每隔1分钟触发一次 -->  
-	</bean>
-	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
-       <property name="triggers">  
-           <list>  
-              <ref bean="getDataTrigger"/>  
-           </list>  
-       </property>  
-       <property name="autoStartup" value="true"/>  
-	</bean>
-	
 	<!-- 事务配置 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- schedular -->
+	<bean id="testJob" class="com.banxian.controller.equip.AnalyseDataController"/>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+      <property name="triggers">  
+           <list>  
+              <ref bean="testTrigger"/>  
+           </list>  
+       </property>  
+       <property name="autoStartup" value="true"/>  
+	</bean>  
+	
+	<bean id="testTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="testJobDetail"/>  
+       <property name="cronExpression" value="*/1 * * * * ?"/> <!-- 每隔1秒钟触发一次 -->  
+	</bean>  
+	
+	<bean id="testJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="testJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>
 	
 	<!-- <aop:config>
