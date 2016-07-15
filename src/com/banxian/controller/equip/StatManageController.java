@@ -95,7 +95,7 @@ public class StatManageController extends BaseController {
 	
 	@RequestMapping("addUI")
 	public String addUI(Model model) throws Exception {
-		return Common.BACKGROUND_PATH + "/system/equip/StationAdd";
+		return Common.BACKGROUND_PATH + "/system/equip/add";
 	}
 
 	@ResponseBody
@@ -105,14 +105,7 @@ public class StatManageController extends BaseController {
 	public String addEntity(String txtGroupsSelect){
 		try {
 			StationFormBean staFormMap = getFormMap(StationFormBean.class);
-			staFormMap.put("parentId", "0");
-			staFormMap.put("orgId", Common.findAttrValue(SysConsts.STATION_ID));
-			staFormMap.put("roleId", txtGroupsSelect.trim());
-			staFormMap.put("tel", "123456789");
-			staFormMap.put("mail", "123456@qq.com");
-			staFormMap.put("delFlag", "N");
-			staFormMap.put("userStat", "0");
-			staFormMap.put("operCode", Common.findAttrValue(SysConsts.OPER_CODE));
+			staFormMap.put("orgCode", this.getMaxStationCode());
 			fillCommValeu(staFormMap);
 			staFormMap.save();
 		} catch (Exception e) {
@@ -121,7 +114,14 @@ public class StatManageController extends BaseController {
 		return "success";
 	}
 	
+	public int getMaxStationCode(){
+		int stationCode = staMapper.getOrgMaxCode();
+		
+		return stationCode;
+	}
+	
 	public void fillCommValeu(Map<String, Object> targetMap){
+		targetMap.put("operCode", Common.findAttrValue(SysConsts.OPER_CODE));
 		targetMap.put("updateTime", DateUtil.getCurrDate());
 		
 	}
@@ -129,7 +129,7 @@ public class StatManageController extends BaseController {
 	@ResponseBody
 	@RequestMapping("deleteEntity")
 	@Transactional(readOnly=false)
-	@SystemLog(module="系统管理",methods="用户管理-删除用户")//凡需要处理业务逻辑的.都需要记录操作日志
+	@SystemLog(module="系统管理",methods="站点管理-删除站点")
 	public String deleteEntity() throws Exception {
 		String[] ids = getParaValues("ids");
 		for (String id : ids) {
@@ -142,9 +142,9 @@ public class StatManageController extends BaseController {
 	public String editUI(Model model) throws Exception {
 		String id = getPara(SysConsts.STATION_ID);
 		if(Common.isNotEmpty(id)){
-			model.addAttribute("orgId", new StationFormBean().findById(id));
+			model.addAttribute("station", new StationFormBean().findById(id));
 		}
-		return Common.BACKGROUND_PATH + "/system/equip/StationEdit";
+		return Common.BACKGROUND_PATH + "/system/equip/edit";
 	}
 
 	@ResponseBody

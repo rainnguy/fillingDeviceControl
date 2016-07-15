@@ -63,5 +63,9 @@
 			</if>
 		ORDER BY orgCode
 	</select>
+	
+	<select id="getOrgMaxCode" resultType="java.lang.Integer">
+		SELECT max(orgCode) + 1 FROM sys_orga
+	</select>
 
 </mapper>

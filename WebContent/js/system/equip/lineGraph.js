@@ -46,8 +46,7 @@ $(function() {
 		},
 		series : []
 	};
-
-	// 采用ajax异步请求数据
+	
 	$.ajax({
 		type : 'post',
 		url : rootPath + '/gasReport/findGraphData.sxml',
@@ -66,8 +65,37 @@ $(function() {
 			}
 		},
 		error : function(errMsg) {
-			console.error("加载数据失败");
+			console.error("加载数据失败")
 		}
 	});
+	
+	$("#search").click("click", function() {// 绑定查询按扭
+		alert("ettt");
+		var searchParams = $("#searchForm").serializeJson();// 初始化传参数
+		$.ajax({
+			type : 'post',
+			url : rootPath + '/gasReport/findGraphData.sxml',
+			data : searchParams,
+			dataType : 'json',
+			success : function(result) {
+				if (result) {
+					// 将返回的category和series对象赋值给options对象内的category和series
+					option.xAxis.data = result.axis;
+					option.legend.data = result.legend;
+					var series_arr = result.series;
+					for (var i = 0; i < series_arr.length; i++) {
+						option.series[i] = result.series[i];
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+				}
+			},
+			error : function(errMsg) {
+				console.error("加载数据失败")
+			}
+		});
+	});
+
 
 });
+
