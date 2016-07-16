@@ -21,7 +21,8 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
       <property name="triggers">  
            <list>  
-              <ref bean="trigger"/>  
+              <ref bean="trigger"/>
+              <ref bean="trigger2"/>
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -29,13 +30,26 @@
 	
 	<bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="jobDetail"/>  
-       <property name="cronExpression" value="*/1 * * * * ?"/> <!-- 每隔1秒钟触发一次 -->  
-	</bean>  
+       <property name="cronExpression" value="*/3 * * * * ?"/> <!-- 每隔1秒钟触发一次 -->  
+	</bean>
+	
+	<bean id="trigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="jobDetail2"/>  
+       <property name="cronExpression" value="*/5 * * * * ?"/> <!-- 每隔1秒钟触发一次 -->  
+	</bean>
+	
 	
 	<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
         <property name="targetObject" ref="job"/>  
-        <property name="targetMethod" value="execute"/>  
-        <property name="concurrent" value="false"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="true"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+	</bean>
+	
+		<bean id="jobDetail2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="job"/>  
+        <property name="targetMethod" value="execute2"/>
+        <property name="concurrent" value="true"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>
 </beans>
