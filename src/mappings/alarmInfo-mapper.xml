@@ -136,4 +136,55 @@
 		tp2.orgCode ASC
 	</select>
 
+	<insert id="insertAlarmInfoTemp" parameterType="java.util.List">
+		INSERT INTO alarm_info_temp
+		(deviceId,
+		alarmDefId,
+		statusId,
+		alarmTime
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.deviceId},
+			(SELECT
+				alarmDefId
+			FROM
+				alarm_def
+			WHERE
+				alarmKind = #{map.constantKind}
+				AND position = #{map.constantValue}
+				AND delFlag = '0'
+			),
+			'1',
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s')
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertAlarmInfo" parameterType="java.util.List">
+		INSERT INTO alarm_info
+		(deviceId,
+		alarmDefId,
+		statusId,
+		alarmTime,
+		createTime
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.deviceId},
+			(SELECT
+				alarmDefId
+			FROM
+				alarm_def
+			WHERE
+				alarmKind = #{map.constantKind}
+				AND position = #{map.constantValue}
+				AND delFlag = '0'
+			),
+			'1',
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+			DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')
+			)
+		</foreach>
+	</insert>
 </mapper>

@@ -124,4 +124,18 @@ public class CurrentTime {
 		String dateString = dateFormat.format(cal.getTime());
 		return dateString;
 	}
+	
+	/**
+	 * 获取前一天的日期，格式：yyyyMMdd
+	 * @return
+	 */
+	public String getLastDay(){
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_YEAR, - 1);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		String dateString = dateFormat.format(calendar.getTime());
+		return dateString;
+	}
 }

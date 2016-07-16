@@ -7,16 +7,24 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.banxian.entity.equip.AlarmInfoMap;
 import com.banxian.entity.equip.AttrKeyMap;
 import com.banxian.entity.equip.AttrStaMap;
 import com.banxian.entity.equip.AttrValueMap;
 import com.banxian.entity.equip.DeviceInfoMap;
+import com.banxian.mapper.equip.AlarmInfoMapper;
 import com.banxian.mapper.equip.CollectDataMapper;
 import com.banxian.mapper.equip.DeviceInfoMapper;
 import com.banxian.util.CurrentTime;
 import com.banxian.util.FileUtil;
 import com.banxian.util.Sequence;
 
+/**
+ * 解析数据并存入数据库
+ * 
+ * @author xk
+ *
+ */
 public class AnalyseDataController {
 
 	@Inject
@@ -24,6 +32,9 @@ public class AnalyseDataController {
 
 	@Inject
 	private CollectDataMapper collectDataMapper;
+	
+	@Inject
+	private AlarmInfoMapper alarmInfoMapper;
 
 	/** 储罐的类别号 */
 	private static final String TANK = "01";
@@ -37,22 +48,48 @@ public class AnalyseDataController {
 	/** 流量计的类别号 */
 	private static final String FLOWMETER = "04";
 
+	/** 储罐区报警信息的类别号 */
+	private static final String CONSTANT_TANK_KIND = "21";
+
+	/** 撬装区报警信息的类别号 */
+	private static final String CONSTANT_SKID_MOUNTED_KIND = "22";
+
+	/** 流量计区报警信息的类别号 */
+	private static final String CONSTANT_FLOWMETER_KIND = "24";
+
+	/** 气化器区报警信息的类别号 */
+	private static final String CONSTANT_CARBURETOR_KIND = "25";
+
+	/** 其他类型报警信息的类别号 */
+	private static final String CONSTANT_OTHER_KIND = "23";
+
 	Sequence sequence = Sequence.getInstance();
+	CurrentTime currentTime = CurrentTime.getInstance();
 
 	/**
-	 * 执行
+	 * 解析并获取实时数据
 	 */
-	public void execute() {
-//		System.out.println("test**************************************");
-
+	public void runRealtime() {
+		
 		// 文件的目录
-//		String folder = getFolder();
+		String folder = getFolder();
 
 		// 解析并获取实时信息
-//		getRealtimeInfo(folder);
-		// 获取历史信息
-		// 解析并获取报警信息
+		getRealtimeInfo(folder);
 
+		// 解析并获取报警信息
+		getAlarmInfo(folder);
+	}
+
+	/**
+	 * 解析并获取历史数据
+	 */
+	public void runEveryDay() {
+
+		// 文件的目录
+		String folder = getFolder();
+		// 获取历史信息
+		getHistoryInfo(folder);
 	}
 
 	/**
@@ -62,8 +99,6 @@ public class AnalyseDataController {
 	 */
 	private void getRealtimeInfo(String folder) {
 
-		CurrentTime currentTime = CurrentTime.getInstance();
-
 		// 获取实时信息的目录
 		String realtimeFolder = folder + "RealtimeData\\" + currentTime.getNowDate();
 		List<String> fileNameList = getFileNames(realtimeFolder);
@@ -72,7 +107,7 @@ public class AnalyseDataController {
 		}
 
 		// 获取文件名列表中不同站点的最新文件的索引
-		List<Integer> indexList = getIndex(fileNameList);
+		List<Integer> indexList = getNewIndex(fileNameList);
 
 		List<AttrValueMap> attrValueList = new ArrayList<AttrValueMap>();
 		List<AttrStaMap> attrStaList = new ArrayList<AttrStaMap>();
@@ -87,352 +122,691 @@ public class AnalyseDataController {
 			List<String> dataList = fileUtil.readFileByLines(realtimeFolder + "\\" + fileName);
 
 			// 解析文件内容
-			for (String data : dataList) {
-
-				String[] dataTemp = data.split(",");
-
-				AttrStaMap attrStaMap = new AttrStaMap();
-				attrStaMap.put("station", dataTemp[0]);
-				attrStaMap.put("time", dataTemp[3]);
-				// 仪表风压力 
-				attrStaMap.put("meterPressure", dataTemp[84]);
-				// 环境温度 
-				attrStaMap.put("envirTemp", dataTemp[85]);
-				// 给attrStaList追加值
-				attrStaList.add(attrStaMap);
-
-				// 解析读取方式： 16位二进制数：0000 0000 0000 0000
-				String readType = dataTemp[2];
-				// 高8位的第一第二位
-				String high12 = readType.substring(6, 8);
-				// 低8位中低4位
-				String lowlow4 = readType.substring(12);
-				// 低8位中高4位
-				String lowhigh4 = readType.substring(8, 12);
-
-				if ("00".equals(high12)) {
-					// 加气站
-					if ("0001".equals(lowlow4)) {
-						// 1个LNG泵
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						idList.add(sequence.nextId());
-
-						// 追加第1个LNG泵的值
-						getPump1(attrValueList, dataTemp, idList.get(0));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, PUMP);
-
-					} else if ("0010".equals(lowlow4)) {
-						// 2个LNG泵
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 2; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个LNG泵的值
-						getPump1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个LNG泵的值
-						getPump2(attrValueList, dataTemp, idList.get(1));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, PUMP);
-
-					} else if ("0011".equals(lowlow4)) {
-						// 3个LNG泵
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 3; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个LNG泵的值
-						getPump1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个LNG泵的值
-						getPump2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个LNG泵的值
-						getPump3(attrValueList, dataTemp, idList.get(2));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, PUMP);
-
-					} else if ("0100".equals(lowlow4)) {
-						// 4个LNG泵
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 4; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个LNG泵的值
-						getPump1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个LNG泵的值
-						getPump2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个LNG泵的值
-						getPump3(attrValueList, dataTemp, idList.get(2));
-						// 追加第4个LNG泵的值
-						getPump4(attrValueList, dataTemp, idList.get(3));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, PUMP);
-					}
-
-					if ("0001".equals(lowhigh4)) {
-						// 1个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						idList.add(sequence.nextId());
-
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, TANK);
-
-					} else if ("0010".equals(lowhigh4)) {
-						// 2个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 2; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, TANK);
-
-					} else if ("0011".equals(lowhigh4)) {
-						// 3个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 3; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个低温储罐的值
-						getTank3(attrValueList, dataTemp, idList.get(2));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, TANK);
-
-					} else if ("0100".equals(lowhigh4)) {
-						// 4个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 4; k++) {
-							idList.add(sequence.nextId());
-						}
-
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个低温储罐的值
-						getTank3(attrValueList, dataTemp, idList.get(2));
-						// 追加第4个低温储罐的值
-						getTank4(attrValueList, dataTemp, idList.get(3));
-
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, TANK);
-					}
-
-				} else if ("01".equals(high12)) {
-					// 气化站
-					if ("0001".equals(lowhigh4)) {
-						// 1个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						idList.add(sequence.nextId());
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, TANK);
-
-					} else if ("0010".equals(lowhigh4)) {
-						// 2个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 2; k++) {
-							idList.add(sequence.nextId());
-						}
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, TANK);
-
-					} else if ("0011".equals(lowhigh4)) {
-						// 3个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 3; k++) {
-							idList.add(sequence.nextId());
-						}
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个低温储罐的值
-						getTank3(attrValueList, dataTemp, idList.get(2));
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, TANK);
-
-					} else if ("0100".equals(lowhigh4)) {
-						// 4个低温储罐
-
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 4; k++) {
-							idList.add(sequence.nextId());
-						}
-						// 追加第1个低温储罐的值
-						getTank1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个低温储罐的值
-						getTank2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个低温储罐的值
-						getTank3(attrValueList, dataTemp, idList.get(2));
-						// 追加第4个低温储罐的值
-						getTank4(attrValueList, dataTemp, idList.get(3));
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, TANK);
-					}
-					
-					if ("0001".equals(lowlow4)) {
-						// 1个气化器
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						idList.add(sequence.nextId());
-						
-						// 追加第1个气化器的值
-						getCarburetor1(attrValueList, dataTemp, idList.get(0));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, CARBURETOR);
-						
-					} else if ("0010".equals(lowlow4)) {
-						// 2个气化器
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 2; k++) {
-							idList.add(sequence.nextId());
-						}
-						
-						// 追加第1个气化器的值
-						getCarburetor1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个气化器的值
-						getCarburetor2(attrValueList, dataTemp, idList.get(1));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, CARBURETOR);
-						
-					} else if ("0011".equals(lowlow4)) {
-						// 3个气化器
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 3; k++) {
-							idList.add(sequence.nextId());
-						}
-						
-						// 追加第1个气化器的值
-						getCarburetor1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个气化器的值
-						getCarburetor2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个气化器的值
-						getCarburetor3(attrValueList, dataTemp, idList.get(2));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, CARBURETOR);
-						
-					} else if ("0100".equals(lowlow4)){
-						// 4个气化器
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 4; k++) {
-							idList.add(sequence.nextId());
-						}
-						
-						// 追加第1个气化器的值
-						getCarburetor1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个气化器的值
-						getCarburetor2(attrValueList, dataTemp, idList.get(1));
-						// 追加第3个气化器的值
-						getCarburetor3(attrValueList, dataTemp, idList.get(2));
-						// 追加第4个气化器的值
-						getCarburetor4(attrValueList, dataTemp, idList.get(3));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, CARBURETOR);
-					}
-					
-					// 高8位的第五第六位
-					String high56 = readType.substring(2, 4);
-					if("01".equals(high56)){
-						// 1个流量计
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						idList.add(sequence.nextId());
-						
-						// 追加第1个流量计的值
-						getFlowmeter1(attrValueList, dataTemp, idList.get(0));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, FLOWMETER);
-						
-					} else if("10".equals(high56)){
-						// 2个流量计
-						
-						// 主键idList
-						List<String> idList = new LinkedList<String>();
-						for (int k = 0; k < 2; k++) {
-							idList.add(sequence.nextId());
-						}
-						
-						// 追加第1个流量计的值
-						getFlowmeter1(attrValueList, dataTemp, idList.get(0));
-						// 追加第2个流量计的值
-						getFlowmeter2(attrValueList, dataTemp, idList.get(1));
-						
-						// 对attrKeyList追加值
-						addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, FLOWMETER);
-					}
-				}
-			}
+			parseFile(dataList, attrValueList, attrStaList, attrKeyList);
 		}
 
 		// 把数据存入数据库
 		collectDataMapper.insertAttrKeyTemp(attrKeyList);
-		collectDataMapper.insertAttrStaTemp(attrStaList);
+		collectDataMapper.insertAttrStatusTemp(attrStaList);
 		collectDataMapper.insertAttrValueTemp(attrValueList);
 
 		// 删除文件名列表中的临时文件
 		deleteFiles(realtimeFolder);
+	}
+
+	/**
+	 * 解析并获取报警信息
+	 * 
+	 * @param folder
+	 */
+	private void getAlarmInfo(String folder) {
+
+		// 获取报警信息的目录
+		String alarmInfoFolder = folder + "AlarmData\\" + currentTime.getNowMonth();
+		List<String> fileNameList = getFileNames(alarmInfoFolder);
+		if (fileNameList == null) {
+			return;
+		}
+
+		List<AlarmInfoMap> alarmInfoList = new ArrayList<AlarmInfoMap>();
+		for (String fileName : fileNameList) {
+
+			// 获取文件内容
+			FileUtil fileUtil = FileUtil.getInstance();
+			List<String> dataList = fileUtil.readFileByLines(alarmInfoFolder + "\\" + fileName);
+
+			// 解析文件内容
+			parseAlarm(dataList, alarmInfoList);
+			
+			// 把数据存入数据库
+			alarmInfoMapper.insertAlarmInfoTemp(alarmInfoList);
+			alarmInfoMapper.insertAlarmInfo(alarmInfoList);
+			
+			// 转移报警信息临时文件
+			
+		}
+	}
+
+	/**
+	 * 解析并获取历史信息
+	 * 
+	 * @param folder
+	 */
+	private void getHistoryInfo(String folder) {
+
+		// 获取历史信息的目录
+		String historyDataFolder = folder + "HistoryData\\" + currentTime.getNowMonth();
+		List<String> fileNameList = getFileNames(historyDataFolder);
+		if (fileNameList == null) {
+			return;
+		}
+
+		// 获取文件名列表中要读取的文件的索引
+		List<String> targetList = getTargetFiles(fileNameList);
+
+		List<AttrValueMap> attrValueList = new ArrayList<AttrValueMap>();
+		List<AttrStaMap> attrStaList = new ArrayList<AttrStaMap>();
+		List<AttrKeyMap> attrKeyList = new ArrayList<AttrKeyMap>();
+		for (String fileName : targetList) {
+			// 获取文件内容
+			FileUtil fileUtil = FileUtil.getInstance();
+			List<String> dataList = fileUtil.readFileByLines(historyDataFolder + "\\" + fileName);
+
+			// 解析文件内容
+			parseFile(dataList, attrValueList, attrStaList, attrKeyList);
+		}
+
+		// 把数据存入数据库
+		collectDataMapper.insertAttrKey(attrKeyList);
+		collectDataMapper.insertAttrStatus(attrStaList);
+		collectDataMapper.insertAttrValue(attrValueList);
+	}
+
+	/**
+	 * 解析报警内容
+	 * 
+	 * @param dataList
+	 * @param alarmInfoList
+	 */
+	private void parseAlarm(List<String> dataList, List<AlarmInfoMap> alarmInfoList) {
+
+		for (String data : dataList) {
+			String[] dataTemp = data.split(",");
+
+			// 如果已读取，则忽略该条数据
+			if (!"0".equals(dataTemp[0])) {
+				continue;
+			}
+
+			String stationCode = dataTemp[1];
+			String time = dataTemp[4];
+
+			// 解析读取方式： 16位二进制数：0000 0000 0000 0000
+			String readType = dataTemp[3];
+			// 高8位的第一第二位
+			String high12 = readType.substring(6, 8);
+			// 低8位中低4位
+			String lowlow4 = readType.substring(12);
+			// 低8位中高4位
+			String lowhigh4 = readType.substring(8, 12);
+
+			if ("00".equals(high12)) {
+				// 撬装区报警
+				getSkidMountedOrCarburetorAlarm(lowlow4, stationCode, alarmInfoList, dataTemp, time, PUMP,
+						CONSTANT_SKID_MOUNTED_KIND);
+
+				// 其他类型报警
+				if (dataTemp[13] != null && !dataTemp[13].isEmpty()) {
+					// 追加第1个流量计区的报警
+					getAlarmParam(alarmInfoList, dataTemp[13], stationCode, time, "", CONSTANT_OTHER_KIND);
+				}
+			} else if ("01".equals(high12)) {
+				
+				// 气化器区报警
+				getSkidMountedOrCarburetorAlarm(lowlow4, stationCode, alarmInfoList, dataTemp, time, CARBURETOR,
+						CONSTANT_CARBURETOR_KIND);
+
+				// 高8位的第五第六位
+				String high56 = readType.substring(2, 4);
+				if ("01".equals(high56)) {
+					// 1个流量计
+
+					// 获取设备id的参数：站点code、获取数量、设备类型
+					List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 1, FLOWMETER);
+
+					// 追加第1个流量计区的报警
+					getAlarmParam(alarmInfoList, dataTemp[13], stationCode, time,
+							deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_FLOWMETER_KIND);
+
+				} else if ("10".equals(high56)) {
+					// 2个流量计
+
+					// 获取设备id的参数：站点code、获取数量、设备类型
+					List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 2, FLOWMETER);
+
+					// 追加第1个流量计区的报警
+					getAlarmParam(alarmInfoList, dataTemp[13], stationCode, time,
+							deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_FLOWMETER_KIND);
+					// 追加第1个流量计区的报警
+					getAlarmParam(alarmInfoList, dataTemp[14], stationCode, time,
+							deviceInfoMapList.get(1).get("deviceId").toString(), CONSTANT_FLOWMETER_KIND);
+				}
+
+				// 其他类型报警
+				if (dataTemp[15] != null && !dataTemp[15].isEmpty()) {
+					// 追加第1个流量计区的报警
+					getAlarmParam(alarmInfoList, dataTemp[15], stationCode, time, "", CONSTANT_OTHER_KIND);
+				}
+			}
+
+			if ("0001".equals(lowhigh4)) {
+				// 1个储罐区
+
+				// 获取设备id的参数：站点code、获取数量、设备类型
+				List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 1, TANK);
+
+				// 追加第1个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[5], stationCode, time,
+						deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+			} else if ("0010".equals(lowhigh4)) {
+				// 2个储罐区
+
+				// 获取设备id的参数：站点code、获取数量、设备类型
+				List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 2, TANK);
+
+				// 追加第1个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[5], stationCode, time,
+						deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第2个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[6], stationCode, time,
+						deviceInfoMapList.get(1).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+			} else if ("0011".equals(lowhigh4)) {
+				// 3个储罐区
+
+				// 获取设备id的参数：站点code、获取数量、设备类型
+				List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 3, TANK);
+
+				// 追加第1个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[5], stationCode, time,
+						deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第2个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[6], stationCode, time,
+						deviceInfoMapList.get(1).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第3个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[7], stationCode, time,
+						deviceInfoMapList.get(2).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+			} else if ("0100".equals(lowhigh4)) {
+				// 4个储罐区
+
+				// 获取设备id的参数：站点code、获取数量、设备类型
+				List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 4, TANK);
+
+				// 追加第1个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[5], stationCode, time,
+						deviceInfoMapList.get(0).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第2个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[6], stationCode, time,
+						deviceInfoMapList.get(1).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第3个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[7], stationCode, time,
+						deviceInfoMapList.get(2).get("deviceId").toString(), CONSTANT_TANK_KIND);
+
+				// 追加第4个储罐的报警
+				getAlarmParam(alarmInfoList, dataTemp[8], stationCode, time,
+						deviceInfoMapList.get(3).get("deviceId").toString(), CONSTANT_TANK_KIND);
+			}
+		}
+	}
+
+	/**
+	 * 撬装区或气化器区报警
+	 * 
+	 * @param lowlow4
+	 * @param stationCode
+	 * @param alarmInfoList
+	 * @param dataTemp
+	 * @param time
+	 * @param type
+	 * @param kind
+	 */
+	private void getSkidMountedOrCarburetorAlarm(String lowlow4, String stationCode, List<AlarmInfoMap> alarmInfoList,
+			String[] dataTemp, String time, String type, String kind) {
+
+		if ("0001".equals(lowlow4)) {
+			// 1个区
+
+			// 获取设备id的参数：站点code、获取数量、设备类型
+			List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 1, type);
+
+			// 追加第1个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[9], stationCode, time,
+					deviceInfoMapList.get(0).get("deviceId").toString(), kind);
+
+		} else if ("0010".equals(lowlow4)) {
+			// 2个区
+
+			// 获取设备id的参数：站点code、获取数量、设备类型
+			List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 2, type);
+
+			// 追加第1个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[9], stationCode, time,
+					deviceInfoMapList.get(0).get("deviceId").toString(), kind);
+			// 追加第2个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[10], stationCode, time,
+					deviceInfoMapList.get(1).get("deviceId").toString(), kind);
+
+		} else if ("0011".equals(lowlow4)) {
+			// 3个区
+
+			// 获取设备id的参数：站点code、获取数量、设备类型
+			List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 3, type);
+
+			// 追加第1个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[9], stationCode, time,
+					deviceInfoMapList.get(0).get("deviceId").toString(), kind);
+			// 追加第2个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[10], stationCode, time,
+					deviceInfoMapList.get(1).get("deviceId").toString(), kind);
+			// 追加第3个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[11], stationCode, time,
+					deviceInfoMapList.get(2).get("deviceId").toString(), kind);
+
+		} else if ("0100".equals(lowlow4)) {
+			// 4个区
+
+			// 获取设备id的参数：站点code、获取数量、设备类型
+			List<DeviceInfoMap> deviceInfoMapList = getDeviceId(stationCode, 4, type);
+
+			// 追加第1个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[9], stationCode, time,
+					deviceInfoMapList.get(0).get("deviceId").toString(), kind);
+			// 追加第2个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[10], stationCode, time,
+					deviceInfoMapList.get(1).get("deviceId").toString(), kind);
+			// 追加第3个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[11], stationCode, time,
+					deviceInfoMapList.get(2).get("deviceId").toString(), kind);
+			// 追加第4个区的报警
+			getAlarmParam(alarmInfoList, dataTemp[12], stationCode, time,
+					deviceInfoMapList.get(3).get("deviceId").toString(), kind);
+		}
+	}
+
+	/**
+	 * 解析文件内容
+	 * 
+	 * @param dataList
+	 * @param attrValueList
+	 * @param attrStaList
+	 * @param attrKeyList
+	 */
+	private void parseFile(List<String> dataList, List<AttrValueMap> attrValueList, List<AttrStaMap> attrStaList,
+			List<AttrKeyMap> attrKeyList) {
+
+		for (String data : dataList) {
+
+			String[] dataTemp = data.split(",");
+
+			AttrStaMap attrStaMap = new AttrStaMap();
+			attrStaMap.put("station", dataTemp[0]);
+			attrStaMap.put("time", dataTemp[3]);
+			// 仪表风压力
+			attrStaMap.put("meterPressure", dataTemp[84]);
+			// 环境温度
+			attrStaMap.put("envirTemp", dataTemp[85]);
+			// 给attrStaList追加值
+			attrStaList.add(attrStaMap);
+
+			// 解析读取方式： 16位二进制数：0000 0000 0000 0000
+			String readType = dataTemp[2];
+			// 高8位的第一第二位
+			String high12 = readType.substring(6, 8);
+			// 低8位中低4位
+			String lowlow4 = readType.substring(12);
+			// 低8位中高4位
+			String lowhigh4 = readType.substring(8, 12);
+
+			if ("00".equals(high12)) {
+				// 加气站
+				if ("0001".equals(lowlow4)) {
+					// 1个LNG泵
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					idList.add(sequence.nextId());
+
+					// 追加第1个LNG泵的值
+					getPump1(attrValueList, dataTemp, idList.get(0));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, PUMP);
+
+				} else if ("0010".equals(lowlow4)) {
+					// 2个LNG泵
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 2; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个LNG泵的值
+					getPump1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个LNG泵的值
+					getPump2(attrValueList, dataTemp, idList.get(1));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, PUMP);
+
+				} else if ("0011".equals(lowlow4)) {
+					// 3个LNG泵
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 3; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个LNG泵的值
+					getPump1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个LNG泵的值
+					getPump2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个LNG泵的值
+					getPump3(attrValueList, dataTemp, idList.get(2));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, PUMP);
+
+				} else if ("0100".equals(lowlow4)) {
+					// 4个LNG泵
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 4; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个LNG泵的值
+					getPump1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个LNG泵的值
+					getPump2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个LNG泵的值
+					getPump3(attrValueList, dataTemp, idList.get(2));
+					// 追加第4个LNG泵的值
+					getPump4(attrValueList, dataTemp, idList.get(3));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, PUMP);
+				}
+
+				if ("0001".equals(lowhigh4)) {
+					// 1个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					idList.add(sequence.nextId());
+
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, TANK);
+
+				} else if ("0010".equals(lowhigh4)) {
+					// 2个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 2; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, TANK);
+
+				} else if ("0011".equals(lowhigh4)) {
+					// 3个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 3; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个低温储罐的值
+					getTank3(attrValueList, dataTemp, idList.get(2));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, TANK);
+
+				} else if ("0100".equals(lowhigh4)) {
+					// 4个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 4; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个低温储罐的值
+					getTank3(attrValueList, dataTemp, idList.get(2));
+					// 追加第4个低温储罐的值
+					getTank4(attrValueList, dataTemp, idList.get(3));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, TANK);
+				}
+
+			} else if ("01".equals(high12)) {
+				// 气化站
+				if ("0001".equals(lowhigh4)) {
+					// 1个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					idList.add(sequence.nextId());
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, TANK);
+
+				} else if ("0010".equals(lowhigh4)) {
+					// 2个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 2; k++) {
+						idList.add(sequence.nextId());
+					}
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, TANK);
+
+				} else if ("0011".equals(lowhigh4)) {
+					// 3个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 3; k++) {
+						idList.add(sequence.nextId());
+					}
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个低温储罐的值
+					getTank3(attrValueList, dataTemp, idList.get(2));
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, TANK);
+
+				} else if ("0100".equals(lowhigh4)) {
+					// 4个低温储罐
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 4; k++) {
+						idList.add(sequence.nextId());
+					}
+					// 追加第1个低温储罐的值
+					getTank1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个低温储罐的值
+					getTank2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个低温储罐的值
+					getTank3(attrValueList, dataTemp, idList.get(2));
+					// 追加第4个低温储罐的值
+					getTank4(attrValueList, dataTemp, idList.get(3));
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, TANK);
+				}
+
+				if ("0001".equals(lowlow4)) {
+					// 1个气化器
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					idList.add(sequence.nextId());
+
+					// 追加第1个气化器的值
+					getCarburetor1(attrValueList, dataTemp, idList.get(0));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, CARBURETOR);
+
+				} else if ("0010".equals(lowlow4)) {
+					// 2个气化器
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 2; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个气化器的值
+					getCarburetor1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个气化器的值
+					getCarburetor2(attrValueList, dataTemp, idList.get(1));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, CARBURETOR);
+
+				} else if ("0011".equals(lowlow4)) {
+					// 3个气化器
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 3; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个气化器的值
+					getCarburetor1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个气化器的值
+					getCarburetor2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个气化器的值
+					getCarburetor3(attrValueList, dataTemp, idList.get(2));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 3, CARBURETOR);
+
+				} else if ("0100".equals(lowlow4)) {
+					// 4个气化器
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 4; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个气化器的值
+					getCarburetor1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个气化器的值
+					getCarburetor2(attrValueList, dataTemp, idList.get(1));
+					// 追加第3个气化器的值
+					getCarburetor3(attrValueList, dataTemp, idList.get(2));
+					// 追加第4个气化器的值
+					getCarburetor4(attrValueList, dataTemp, idList.get(3));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 4, CARBURETOR);
+				}
+
+				// 高8位的第五第六位
+				String high56 = readType.substring(2, 4);
+				if ("01".equals(high56)) {
+					// 1个流量计
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					idList.add(sequence.nextId());
+
+					// 追加第1个流量计的值
+					getFlowmeter1(attrValueList, dataTemp, idList.get(0));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 1, FLOWMETER);
+
+				} else if ("10".equals(high56)) {
+					// 2个流量计
+
+					// 主键idList
+					List<String> idList = new LinkedList<String>();
+					for (int k = 0; k < 2; k++) {
+						idList.add(sequence.nextId());
+					}
+
+					// 追加第1个流量计的值
+					getFlowmeter1(attrValueList, dataTemp, idList.get(0));
+					// 追加第2个流量计的值
+					getFlowmeter2(attrValueList, dataTemp, idList.get(1));
+
+					// 对attrKeyList追加值
+					addAttrKeyList(attrKeyList, idList, dataTemp[0], dataTemp[3], 2, FLOWMETER);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 追加第1个储罐的报警
+	 * 
+	 * @param alarmInfoList
+	 * @param alarmInfo
+	 * @param stationCode
+	 * @param time
+	 * @param deviceId
+	 * @param constantKind
+	 */
+	private void getAlarmParam(List<AlarmInfoMap> alarmInfoList, String alarmInfo, String stationCode, String time,
+			String deviceId, String constantKind) {
+
+		if (alarmInfo.contains("1")) {
+
+			int index = 0;
+			while (index < alarmInfo.length()) {
+				AlarmInfoMap map = new AlarmInfoMap();
+
+				if (index == 0) {
+					index = alarmInfo.indexOf("1");
+				} else {
+					index = alarmInfo.indexOf("1", index + 1);
+				}
+
+				if (index != -1) {
+					map.put("constantValue", String.valueOf(index));
+					map.put("constantKind", constantKind);
+					map.put("deviceId", deviceId);
+					map.put("time", time);
+
+					alarmInfoList.add(map);
+				} else {
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -447,7 +821,7 @@ public class AnalyseDataController {
 	 */
 	private void addAttrKeyList(List<AttrKeyMap> attrKeyList, List<String> idList, String station, String time,
 			Integer number, String type) {
-		// 获取设备id的参数：站点code、设备名称、设备类型、获取数量
+		// 获取设备id的参数：站点code、获取数量、设备类型
 		List<DeviceInfoMap> deviceInfoMapList = getDeviceId(station, number, type);
 
 		if (deviceInfoMapList != null) {
@@ -506,9 +880,9 @@ public class AnalyseDataController {
 	 * @param mainCode
 	 */
 	private void getTank1(List<AttrValueMap> attrValueList, String[] dataTemp, String mainCode) {
-		
+
 		AttrValueMap attrValueMap = new AttrValueMap();
-		
+
 		attrValueMap = setIdAndTime(mainCode, dataTemp[3]);
 		attrValueMap.put("key", "储罐压力");
 		attrValueMap.put("value", dataTemp[4]);
@@ -545,7 +919,7 @@ public class AnalyseDataController {
 	private void getTank2(List<AttrValueMap> attrValueList, String[] dataTemp, String mainCode) {
 
 		AttrValueMap attrValueMap = new AttrValueMap();
-		
+
 		attrValueMap = setIdAndTime(mainCode, dataTemp[3]);
 		attrValueMap.put("key", "储罐压力");
 		attrValueMap.put("value", dataTemp[14]);
@@ -655,7 +1029,7 @@ public class AnalyseDataController {
 	 */
 	private void getPump1(List<AttrValueMap> attrValueList, String[] dataTemp, String mainCode) {
 		AttrValueMap attrValueMap = new AttrValueMap();
-		
+
 		attrValueMap = setIdAndTime(mainCode, dataTemp[3]);
 		attrValueMap.put("key", "泵前压力");
 		attrValueMap.put("value", dataTemp[44]);
@@ -1027,7 +1401,7 @@ public class AnalyseDataController {
 	 * @param fileNameList
 	 * @return
 	 */
-	private List<Integer> getIndex(List<String> fileNameList) {
+	private List<Integer> getNewIndex(List<String> fileNameList) {
 
 		// 文件名列表中需要解析的文件的索引
 		List<Integer> indexList = new ArrayList<Integer>();
@@ -1061,6 +1435,28 @@ public class AnalyseDataController {
 		}
 
 		return indexList;
+	}
+
+	/**
+	 * 获取文件名列表中需要解析的文件的索引
+	 * 
+	 * @param fileNameList
+	 * @return
+	 */
+	private List<String> getTargetFiles(List<String> fileNameList) {
+
+		CurrentTime ct = CurrentTime.getInstance();
+
+		// 文件名列表中需要解析的文件的索引
+		List<String> targetList = new ArrayList<String>();
+		String lastDay = ct.getLastDay();
+
+		for (String fileName : fileNameList) {
+			if (lastDay.equals(fileName.substring(9, 17))) {
+				targetList.add(fileName);
+			}
+		}
+		return targetList;
 	}
 
 	/**

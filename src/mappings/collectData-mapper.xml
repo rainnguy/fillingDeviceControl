@@ -29,24 +29,24 @@
 		VALUES
 		<foreach collection="list" item="map" open="" separator="," close="">  
 			(#{map.mainCode},
-			#{map.time},
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
 			<include refid="findOrgId" />
 			#{map.deviceId}
 			)
 		</foreach>
 	</insert>
 	
-	<insert id="insertAttrStaTemp" parameterType="java.util.List">
+	<insert id="insertAttrStatusTemp" parameterType="java.util.List">
 		INSERT INTO attr_status_temp
-		(id,
+		(orgId,
 		currTime,
-		orgId,
-		deviceId
+		meterPressure,
+		ambientTemp
 		)
 		VALUES
 		<foreach collection="list" item="map" open="" separator="," close="">  
 			(<include refid="findOrgId" />
-			#{map.time},
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
 			#{map.meterPressure},
 			#{map.envirTemp}
 			)
@@ -63,11 +63,67 @@
 		VALUES
 		<foreach collection="list" item="map" open="" separator="," close="">  
 			(#{map.mainCode},
-			#{map.time},
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
 			#{map.key},
 			#{map.value}
 			)
 		</foreach>
 	</insert>
 	
+	<insert id="insertAttrKey" parameterType="java.util.List">
+		INSERT INTO attr_key
+		(id,
+		currTime,
+		orgId,
+		deviceId,
+		createTime
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.mainCode},
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+			<include refid="findOrgId" />
+			#{map.deviceId},
+			DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertAttrStatus" parameterType="java.util.List">
+		INSERT INTO attr_status
+		(orgId,
+		DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+		meterPressure,
+		ambientTemp,
+		createTime
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(<include refid="findOrgId" />
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+			#{map.meterPressure},
+			#{map.envirTemp},
+			DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="insertAttrValue" parameterType="java.util.List">
+		INSERT INTO attr_value
+		(foreignId,
+		currTime,
+		attrKey,
+		attrValue,
+		createTime
+		)
+		VALUES
+		<foreach collection="list" item="map" open="" separator="," close="">  
+			(#{map.mainCode},
+			DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+			#{map.key},
+			#{map.value},
+			DATE_FORMAT(now(),'%Y-%m-%d %H:%i:%s')
+			)
+		</foreach>
+	</insert>
 </mapper>	

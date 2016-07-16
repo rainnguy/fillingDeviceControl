@@ -12,4 +12,9 @@ public interface AlarmInfoMapper extends BaseMapper {
 
 	public List<UnsolvedAlarmInfoMap> findUnsolvedAlarmData(
 			UnsolvedAlarmInfoMap unsolvedAlarmInfoMap);
+	
+	public void insertAlarmInfoTemp(List<AlarmInfoMap> list);
+	
+	public void insertAlarmInfo(List<AlarmInfoMap> list);
+	
 }
