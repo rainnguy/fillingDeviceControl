@@ -43,7 +43,7 @@ public class AnalyseDataController {
 	 * 执行
 	 */
 	public void execute() {
-		System.out.println("test**************************************");
+//		System.out.println("test**************************************");
 
 		// 文件的目录
 //		String folder = getFolder();

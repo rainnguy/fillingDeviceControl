@@ -3,18 +3,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/date/jquery.datetimepicker.css"/>
 <script src="${pageContext.request.contextPath}/js/jquery/jquery.datetimepicker.full.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery/monthSelect.js"></script>
 
 <script type="text/javascript">
-$('#yearMonth').datetimepicker({
-	lang:"ch",           //语言选择中文
-    format:"Y-m-d",      //格式化日期
-    timepicker:false    //关闭时间选项
-});
-$('#date').datetimepicker({
-	lang:"ch",           //语言选择中文
-    format:"Y-m-d",      //格式化日期
-    timepicker:false    //关闭时间选项
-});
+$(function () { 
+    $.ms_DatePicker({ 
+        YearSelector: ".sel_year", 
+        MonthSelector: ".sel_month", 
+        DaySelector: ".sel_day" 
+    }); 
+}); 
 </script>
 
 <header class="panel-heading">
@@ -34,10 +32,14 @@ $('#date').datetimepicker({
 				</select>
 		</div>
 		<div class="form-group">
-			<input class="input-medium ui-autocomplete-input" id="yearMonth" placeholder="选择月份" name="graphDataMap.yearMonth" >
-			<input class="input-medium ui-autocomplete-input" id="date" placeholder="选择日期" name="graphDataMap.date">
+			<label>日　　期</label>  
+			<select class="sel_year" class="input-small" name="graphDataMap.searchYear"> </select> 年 
+			<select class="sel_month" class="input-small" name="graphDataMap.searchMonth"> </select> 月 
+			<select class="sel_day" class="input-small" name="graphDataMap.searchDay"> </select> 日 
 		</div>
-		<a href="javascript:void(0)" class="btn btn-default" id="search">查询</a>
+		<div class="form-group">
+			<a href="javascript:void(0)" class="btn btn-default" id="search">&nbsp;&nbsp;查询</a>
+		</div>
 	</form>
 </div>
 

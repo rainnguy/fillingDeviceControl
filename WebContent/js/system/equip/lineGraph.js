@@ -70,7 +70,6 @@ $(function() {
 	});
 	
 	$("#search").click("click", function() {// 绑定查询按扭
-		alert("ettt");
 		var searchParams = $("#searchForm").serializeJson();// 初始化传参数
 		$.ajax({
 			type : 'post',
