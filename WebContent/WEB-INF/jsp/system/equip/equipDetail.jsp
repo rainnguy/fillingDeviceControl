@@ -219,6 +219,7 @@
 													   		</c:if>
 															<tbody >
 																<tr >
+																	<td style="display:none">${key.id}</td>
 																	<td style="width: 20%">${key.alarmTime}</td>
 																	<td style="width: 10%">${key.alarmLevel}</td>
 																	<td style="width: 15%">${key.deviceName}</td>
