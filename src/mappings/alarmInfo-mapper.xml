@@ -14,6 +14,7 @@
 
 	<select id="findUnsolvedAlarmData" resultType="com.banxian.entity.equip.UnsolvedAlarmInfoMap">
 		SELECT
+		t1.id as id,
 		t1.alarmTime as alarmTime,
 		t6.constantName as alarmLevel,
 		t3.deviceName as deviceName,
