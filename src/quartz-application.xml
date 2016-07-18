@@ -29,13 +29,16 @@
 	</bean>  
 	
 	<bean id="realtimeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="jobDetail"/>  
-       <property name="cronExpression" value="0 */5 * * * ?"/> <!-- 每隔5分钟触发一次 -->  
+       <property name="jobDetail" ref="jobDetail"/>
+		<!-- 每隔5分钟触发一次 -->
+       <property name="cronExpression" value="0 */5 * * * ?"/>
 	</bean>
 	
 	<bean id="everyDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="jobDetail2"/>  
-       <property name="cronExpression" value="0 0 3 * * ?"/> <!-- 每天凌晨3点触发一次 -->  
+       <property name="jobDetail" ref="jobDetail2"/>
+		<!-- 每天凌晨3点触发一次 -->
+       <property name="cronExpression" value="0 0 3 * * ?"/>
+<!--        <property name="cronExpression" value="0 */3 * * * ?"/> -->
 	</bean>
 	
 	

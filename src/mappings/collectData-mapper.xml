@@ -92,7 +92,7 @@
 	<insert id="insertAttrStatus" parameterType="java.util.List">
 		INSERT INTO attr_status
 		(orgId,
-		DATE_FORMAT(#{map.time},'%Y-%m-%d %H:%i:%s'),
+		currTime,
 		meterPressure,
 		ambientTemp,
 		createTime

@@ -32,7 +32,7 @@ public class AnalyseDataController {
 
 	@Inject
 	private CollectDataMapper collectDataMapper;
-	
+
 	@Inject
 	private AlarmInfoMapper alarmInfoMapper;
 
@@ -70,7 +70,7 @@ public class AnalyseDataController {
 	 * 解析并获取实时数据
 	 */
 	public void runRealtime() {
-		
+
 		// 文件的目录
 		String folder = getFolder();
 
@@ -102,7 +102,7 @@ public class AnalyseDataController {
 		// 获取实时信息的目录
 		String realtimeFolder = folder + "RealtimeData\\" + currentTime.getNowDate();
 		List<String> fileNameList = getFileNames(realtimeFolder);
-		if (fileNameList == null) {
+		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
 		}
 
@@ -126,9 +126,15 @@ public class AnalyseDataController {
 		}
 
 		// 把数据存入数据库
-		collectDataMapper.insertAttrKeyTemp(attrKeyList);
-		collectDataMapper.insertAttrStatusTemp(attrStaList);
-		collectDataMapper.insertAttrValueTemp(attrValueList);
+		if (attrKeyList.size() != 0) {
+			collectDataMapper.insertAttrKeyTemp(attrKeyList);
+		}
+		if (attrStaList.size() != 0) {
+			collectDataMapper.insertAttrStatusTemp(attrStaList);
+		}
+		if (attrValueList.size() != 0) {
+			collectDataMapper.insertAttrValueTemp(attrValueList);
+		}
 
 		// 删除文件名列表中的临时文件
 		deleteFiles(realtimeFolder);
@@ -144,26 +150,31 @@ public class AnalyseDataController {
 		// 获取报警信息的目录
 		String alarmInfoFolder = folder + "AlarmData\\" + currentTime.getNowMonth();
 		List<String> fileNameList = getFileNames(alarmInfoFolder);
-		if (fileNameList == null) {
+		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
 		}
 
 		List<AlarmInfoMap> alarmInfoList = new ArrayList<AlarmInfoMap>();
 		for (String fileName : fileNameList) {
 
+			// 获取文件绝对路径
+			String filePath = alarmInfoFolder + "\\" + fileName;
+
 			// 获取文件内容
 			FileUtil fileUtil = FileUtil.getInstance();
-			List<String> dataList = fileUtil.readFileByLines(alarmInfoFolder + "\\" + fileName);
+			List<String> dataList = fileUtil.readFileByLines(filePath);
 
 			// 解析文件内容
 			parseAlarm(dataList, alarmInfoList);
-			
+
 			// 把数据存入数据库
-			alarmInfoMapper.insertAlarmInfoTemp(alarmInfoList);
-			alarmInfoMapper.insertAlarmInfo(alarmInfoList);
-			
-			// 转移报警信息临时文件
-			
+			if (alarmInfoList.size() != 0) {
+				alarmInfoMapper.insertAlarmInfoTemp(alarmInfoList);
+				alarmInfoMapper.insertAlarmInfo(alarmInfoList);
+			}
+
+			// 备份报警信息文件
+			moveAlarmFile(folder, filePath, fileName);
 		}
 	}
 
@@ -177,7 +188,7 @@ public class AnalyseDataController {
 		// 获取历史信息的目录
 		String historyDataFolder = folder + "HistoryData\\" + currentTime.getNowMonth();
 		List<String> fileNameList = getFileNames(historyDataFolder);
-		if (fileNameList == null) {
+		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
 		}
 
@@ -187,19 +198,27 @@ public class AnalyseDataController {
 		List<AttrValueMap> attrValueList = new ArrayList<AttrValueMap>();
 		List<AttrStaMap> attrStaList = new ArrayList<AttrStaMap>();
 		List<AttrKeyMap> attrKeyList = new ArrayList<AttrKeyMap>();
-		for (String fileName : targetList) {
-			// 获取文件内容
-			FileUtil fileUtil = FileUtil.getInstance();
-			List<String> dataList = fileUtil.readFileByLines(historyDataFolder + "\\" + fileName);
+		if (targetList.size() != 0) {
+			for (String fileName : targetList) {
+				// 获取文件内容
+				FileUtil fileUtil = FileUtil.getInstance();
+				List<String> dataList = fileUtil.readFileByLines(historyDataFolder + "\\" + fileName);
 
-			// 解析文件内容
-			parseFile(dataList, attrValueList, attrStaList, attrKeyList);
+				// 解析文件内容
+				parseFile(dataList, attrValueList, attrStaList, attrKeyList);
+			}
 		}
 
 		// 把数据存入数据库
-		collectDataMapper.insertAttrKey(attrKeyList);
-		collectDataMapper.insertAttrStatus(attrStaList);
-		collectDataMapper.insertAttrValue(attrValueList);
+		if (attrKeyList.size() != 0) {
+			collectDataMapper.insertAttrKey(attrKeyList);
+		}
+		if (attrStaList.size() != 0) {
+			collectDataMapper.insertAttrStatus(attrStaList);
+		}
+		if (attrValueList.size() != 0) {
+			collectDataMapper.insertAttrValue(attrValueList);
+		}
 	}
 
 	/**
@@ -211,7 +230,7 @@ public class AnalyseDataController {
 	private void parseAlarm(List<String> dataList, List<AlarmInfoMap> alarmInfoList) {
 
 		for (String data : dataList) {
-			String[] dataTemp = data.split(",");
+			String[] dataTemp = data.split(",", -1);
 
 			// 如果已读取，则忽略该条数据
 			if (!"0".equals(dataTemp[0])) {
@@ -241,7 +260,7 @@ public class AnalyseDataController {
 					getAlarmParam(alarmInfoList, dataTemp[13], stationCode, time, "", CONSTANT_OTHER_KIND);
 				}
 			} else if ("01".equals(high12)) {
-				
+
 				// 气化器区报警
 				getSkidMountedOrCarburetorAlarm(lowlow4, stationCode, alarmInfoList, dataTemp, time, CARBURETOR,
 						CONSTANT_CARBURETOR_KIND);
@@ -433,7 +452,7 @@ public class AnalyseDataController {
 
 		for (String data : dataList) {
 
-			String[] dataTemp = data.split(",");
+			String[] dataTemp = data.split(",", -1);
 
 			AttrStaMap attrStaMap = new AttrStaMap();
 			attrStaMap.put("station", dataTemp[0]);
@@ -1429,11 +1448,10 @@ public class AnalyseDataController {
 						}
 					}
 				}
-
 				indexList.add(indexTemp);
 			}
 		}
-
+		
 		return indexList;
 	}
 
@@ -1469,13 +1487,58 @@ public class AnalyseDataController {
 		// 获取要删除的文件的绝对路径
 		List<String> filePathList = getFilePath(folder);
 
-		if (filePathList != null) {
+		if (filePathList != null && filePathList.size() != 0) {
 			for (String filePath : filePathList) {
 				File file = new File(filePath);
 				if (file.exists()) {
 					file.delete();
 				}
 			}
+		}
+	}
+
+	/**
+	 * 备份报警信息文件
+	 * 
+	 * @param folder
+	 * @param filePath
+	 * @param fileName
+	 */
+	private void moveAlarmFile(String folder, String filePath, String fileName) {
+
+		// 判断备份目录存不存在，不存在则创建
+		String backupPath = folder + "AlarmData\\backup";
+
+		File file1 = new File(backupPath);
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		if (!file1.exists()) {
+			file1.mkdir();
+		}
+
+		String backupPath2 = backupPath + "\\" + currentTime.getNowMonth();
+		File file2 = new File(backupPath2);
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		if (!file2.exists()) {
+			file2.mkdir();
+		}
+
+		// 移动报警文件到备份目录
+		moveFile(filePath, backupPath2 + "\\" + fileName);
+	}
+
+	/**
+	 * 移动文件到指定目录
+	 * 
+	 * @param oldFilePath
+	 * @param newFilePath
+	 */
+	private void moveFile(String oldFilePath, String newFilePath) {
+
+		try {
+			File afile = new File(oldFilePath);
+			afile.renameTo(new File(newFilePath));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
