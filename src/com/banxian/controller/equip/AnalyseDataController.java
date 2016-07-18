@@ -74,6 +74,12 @@ public class AnalyseDataController {
 		// 文件的目录
 		String folder = getFolder();
 
+		File file = new File(folder);
+		// 判断文件夹是否存在
+		if (!file.exists()) {
+			return;
+		}
+
 		// 解析并获取实时信息
 		getRealtimeInfo(folder);
 
@@ -88,6 +94,13 @@ public class AnalyseDataController {
 
 		// 文件的目录
 		String folder = getFolder();
+
+		File file = new File(folder);
+		// 判断文件夹是否存在
+		if (!file.exists()) {
+			return;
+		}
+
 		// 获取历史信息
 		getHistoryInfo(folder);
 	}
@@ -101,6 +114,13 @@ public class AnalyseDataController {
 
 		// 获取实时信息的目录
 		String realtimeFolder = folder + "RealtimeData\\" + currentTime.getNowDate();
+
+		File file = new File(realtimeFolder);
+		// 判断文件夹是否存在
+		if (!file.exists()) {
+			return;
+		}
+
 		List<String> fileNameList = getFileNames(realtimeFolder);
 		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
@@ -149,6 +169,13 @@ public class AnalyseDataController {
 
 		// 获取报警信息的目录
 		String alarmInfoFolder = folder + "AlarmData\\" + currentTime.getNowMonth();
+
+		File file = new File(alarmInfoFolder);
+		// 判断文件夹是否存在
+		if (!file.exists()) {
+			return;
+		}
+
 		List<String> fileNameList = getFileNames(alarmInfoFolder);
 		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
@@ -187,6 +214,13 @@ public class AnalyseDataController {
 
 		// 获取历史信息的目录
 		String historyDataFolder = folder + "HistoryData\\" + currentTime.getNowMonth();
+
+		File file = new File(historyDataFolder);
+		// 判断文件夹是否存在
+		if (!file.exists()) {
+			return;
+		}
+
 		List<String> fileNameList = getFileNames(historyDataFolder);
 		if (fileNameList == null || fileNameList.size() == 0) {
 			return;
@@ -808,11 +842,7 @@ public class AnalyseDataController {
 			while (index < alarmInfo.length()) {
 				AlarmInfoMap map = new AlarmInfoMap();
 
-				if (index == 0) {
-					index = alarmInfo.indexOf("1");
-				} else {
-					index = alarmInfo.indexOf("1", index + 1);
-				}
+				index = alarmInfo.indexOf("1", index);
 
 				if (index != -1) {
 					map.put("constantValue", String.valueOf(index));
@@ -821,6 +851,8 @@ public class AnalyseDataController {
 					map.put("time", time);
 
 					alarmInfoList.add(map);
+
+					index++;
 				} else {
 					break;
 				}
@@ -1451,7 +1483,7 @@ public class AnalyseDataController {
 				indexList.add(indexTemp);
 			}
 		}
-		
+
 		return indexList;
 	}
 
@@ -1506,20 +1538,25 @@ public class AnalyseDataController {
 	 */
 	private void moveAlarmFile(String folder, String filePath, String fileName) {
 
-		// 判断备份目录存不存在，不存在则创建
-		String backupPath = folder + "AlarmData\\backup";
+		String backupPath2 = null;
+		try {
+			// 判断备份目录存不存在，不存在则创建
+			String backupPath = folder + "AlarmData\\backup";
 
-		File file1 = new File(backupPath);
-		// 判断文件夹是否存在,如果不存在则创建文件夹
-		if (!file1.exists()) {
-			file1.mkdir();
-		}
+			File file1 = new File(backupPath);
+			// 判断文件夹是否存在,如果不存在则创建文件夹
+			if (!file1.exists()) {
+				file1.mkdir();
+			}
 
-		String backupPath2 = backupPath + "\\" + currentTime.getNowMonth();
-		File file2 = new File(backupPath2);
-		// 判断文件夹是否存在,如果不存在则创建文件夹
-		if (!file2.exists()) {
-			file2.mkdir();
+			backupPath2 = backupPath + "\\" + currentTime.getNowMonth();
+			File file2 = new File(backupPath2);
+			// 判断文件夹是否存在,如果不存在则创建文件夹
+			if (!file2.exists()) {
+				file2.mkdir();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		// 移动报警文件到备份目录
