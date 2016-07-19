@@ -845,6 +845,8 @@ public class AnalyseDataController {
 				index = alarmInfo.indexOf("1", index);
 
 				if (index != -1) {
+					index++;
+					
 					map.put("constantValue", String.valueOf(index));
 					map.put("constantKind", constantKind);
 					map.put("deviceId", deviceId);
@@ -852,7 +854,6 @@ public class AnalyseDataController {
 
 					alarmInfoList.add(map);
 
-					index++;
 				} else {
 					break;
 				}
