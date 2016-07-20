@@ -13,7 +13,7 @@
 	</sql>
 
 	<select id="findGraphData" resultType="com.banxian.entity.equip.GraphDataMap">
-		select
+		SELECT
 			<if test="yearMonth == null or yearMonth == ''">
 			DATE_FORMAT(t1.currTime,'%d') AS currTime,
 			</if>
@@ -49,23 +49,29 @@
 			and t5.type = '01'
 			AND t1.delFlag = '0'
 			AND t4.delFlag = '0'
-			<if test="orgName != null and orgName != ''">
-			and t4.orgName like '%${orgName}%'
-			</if>
-			<if test="orgName == null or orgName == ''">
-			and t4.orgCode = '${orgCode}'
-			</if>
-			<if test="yearMonth == null or yearMonth == ''">
-			and DATE_FORMAT(t1.currTime,'%Y%m') = '${currYearMonth}'
-			</if>
-			<if test="yearMonth != null and yearMonth != '' and (date == null or date == '')">
-			and DATE_FORMAT(t1.currTime,'%Y%m') = '${yearMonth}'
-			</if>
-			<if test="yearMonth != null and yearMonth != '' and date != null and date != ''">
-			and DATE_FORMAT(t1.currTime,'%Y%m%d') = '${date}'
-			</if>
-		GROUP BY deviceId, DATE_FORMAT(t1.currTime,'%d')
-		ORDER BY deviceId, currTime
+			<choose>
+				<when test="orgNum != null and orgNum != ''">
+					AND t4.orgCode = '${orgNum}'
+				</when>
+				<otherwise>
+					AND t4.orgCode = '${orgCode}'
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="yearMonth == null or yearMonth == ''">
+					AND DATE_FORMAT(t1.currTime,'%Y%m') = '${currYearMonth}'
+				</when>
+				<when test="yearMonth != null and yearMonth != '' and (date == null or date == '')">
+					AND DATE_FORMAT(t1.currTime,'%Y%m') = '${yearMonth}'
+				</when>
+				<when test="yearMonth != null and yearMonth != '' and date != null and date != ''">
+					AND DATE_FORMAT(t1.currTime,'%Y%m%d') = '${date}'
+				</when>
+			</choose>
+		<if test="date == null or date == ''">
+			GROUP BY deviceId
+		</if>
+		ORDER BY deviceId, DATE_FORMAT(currTime, '%Y-%m-%d %H:%i:%s')
 	</select>
 	
 </mapper>

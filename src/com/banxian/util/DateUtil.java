@@ -322,6 +322,18 @@ public class DateUtil {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 		return dateFormat.format(new Date());
 	}
+	
+	/**
+	 * 获取当前年,格式：yyyy
+	 * 
+	 * @return 当前年月
+	 */
+	public static String getNowYear() {
+		Date date = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+		String dateString = dateFormat.format(date);
+		return dateString;
+	}
 
 	public static void main(String[] args) {
 		Date d = new Date();

@@ -1,9 +1,11 @@
-var date = '';
+var year = document.getElementById("year").value;
+var month = document.getElementById("month").value;
+var day = document.getElementById("day").value;
 $(function() {
+	var myChart = null;
 	// 基于准备好的dom，初始化echarts实例
-	var myChart = echarts.init(document.getElementById('main'));
 	var xname = '';
-	if (date != null && date != "") {
+	if (day != null && day != "") {
 		xname = '小时';
 	} else {
 		xname = '日';
@@ -60,6 +62,7 @@ $(function() {
 				for (var i = 0; i < series_arr.length; i++) {
 					option.series[i] = result.series[i];
 				}
+				myChart = echarts.init(document.getElementById('main'));
 				// 使用刚指定的配置项和数据显示图表。
 				myChart.setOption(option);
 			}
@@ -86,6 +89,9 @@ $(function() {
 						option.series[i] = result.series[i];
 					}
 					// 使用刚指定的配置项和数据显示图表。
+					myChart = echarts.init(document.getElementById('main'));
+					//清空画布，防止缓存
+					myChart.clear();
 					myChart.setOption(option);
 				}
 			},
@@ -94,7 +100,5 @@ $(function() {
 			}
 		});
 	});
-
-
 });
 

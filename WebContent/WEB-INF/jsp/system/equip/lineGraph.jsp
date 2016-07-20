@@ -33,9 +33,9 @@ $(function () {
 		</div>
 		<div class="form-group">
 			<label>日　　期</label>  
-			<select class="sel_year" class="input-small" name="graphDataMap.searchYear"> </select> 年 
-			<select class="sel_month" class="input-small" name="graphDataMap.searchMonth"> </select> 月 
-			<select class="sel_day" class="input-small" name="graphDataMap.searchDay"> </select> 日 
+			<select class="sel_year" class="input-small" name="graphDataMap.searchYear" id="year"> </select> 年 
+			<select class="sel_month" class="input-small" name="graphDataMap.searchMonth" id="month"> </select> 月 
+			<select class="sel_day" class="input-small" name="graphDataMap.searchDay" id="day"> </select> 日 
 		</div>
 		<div class="form-group">
 			<a href="javascript:void(0)" class="btn btn-default" id="search">&nbsp;&nbsp;查询</a>
