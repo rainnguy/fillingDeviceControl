@@ -43,7 +43,7 @@ public class ConfigUtils {
 					pro.getProperty("jdbc.password")); // 2、连接数据库
 			String packageName = "com.banxian.entity";
 			// List<String> classNames = getClassName(packageName);
-			List<String> classNames = ClassUtil.getClassName(packageName, false);
+			List<String> classNames = ClassUtil.getClassName(packageName, true);
 			String tabs = "";
 			if (classNames != null) {
 				for (String className : classNames) {
@@ -86,6 +86,7 @@ public class ConfigUtils {
 				m.put("field", Common.trimComma(rs.getString("COLUMN_NAME")));
 				String ble =rs.getString("TABLE_NAME");//表名
 				m.put("column_key", map.get(ble));//获取表的主键
+				System.out.println(ble);
 				EhcacheUtils.put(ble, m);//某表对应的主键和字段放到缓存
 			}
 			

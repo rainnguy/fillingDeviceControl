@@ -3,6 +3,7 @@
 <html lang="en"
 	class="app js no-touch no-android chrome no-firefox no-iemobile no-ie no-ie10 no-ie11 no-ios no-ios7 ipad">
 <head>
+<%@include file="/common/common.jspf" %>
 <title>Notebook | Web Application</title>
 <meta name="description"
 	content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav">
@@ -224,7 +225,8 @@
 																	<td style="width: 10%">${key.alarmLevel}</td>
 																	<td style="width: 15%">${key.deviceName}</td>
 																	<td style="width: 25%">${key.alarmContent}</td>
-																	<td style="width: 10%"><input type="button" value="确认"/></td>
+																	<td style="width: 10%"><input id="confirmButton${key.id}" type="button" value="确认" onclick="confirmClick(${key.id})"/></td>
+<%-- 																	<td><a href="javascript:doUp(${ind.index})">修改</a></td> --%>
 																</tr>
 															</tbody>
 														</table>  
@@ -323,5 +325,21 @@
 	<!-- App -->
 	<script src="${pageContext.request.contextPath}/notebook/notebook_files/app.v1.js"></script>
 	<script src="${pageContext.request.contextPath}/notebook/notebook_files/app.plugin.js"></script>
+	<script type="text/javascript">
+	
+		function confirmClick(confirmId){
+			var url = 'http://localhost:8088/GasMonitor/gasAlarm/deleteAlarmInfo.sxml';
+			var s = CommnUtil.ajax(url, {
+				id : confirmId
+			}, "json");
+			if (s == "success") {
+				layer.msg('删除成功');
+				location.reload();
+			} else {
+				layer.msg('删除失败');
+			}
+		}
+	
+	</script>
 </body>
 </html>

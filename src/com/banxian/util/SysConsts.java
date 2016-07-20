@@ -29,5 +29,10 @@ public interface SysConsts {
 	//cache data
 	public static final String SYS_ORGA_DATA = "orgaData";
 	
+	//alarm constants
+	public static final String DEVICE_ID = "deviceId";
+	public static final String ALARM_DEF_ID = "alarmDefId";
+	public static final String ALARM_TIME = "alarmTime";
+	
 	
 }

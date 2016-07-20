@@ -20,6 +20,8 @@ public class DateUtil {
 	public static DateFormat dateFormat = null;
 
 	public static Calendar calendar = null;
+	
+	public static String const1 = "yyyy-MM-dd HH:mm:ss";
 
 	/**
 	 * 功能描述：格式化日期

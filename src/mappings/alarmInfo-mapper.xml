@@ -188,4 +188,14 @@
 			)
 		</foreach>
 	</insert>
+	
+	<update id="updateAlarmStatus"  parameterType="java.util.HashMap">
+          update alarm_info
+          <set>
+            statusId = '2'
+          </set>
+          where deviceId = #{deviceId}
+          and alarmDefId = #{alarmDefId}
+          and alarmTime = #{alarmTime}
+	</update>
 </mapper>
