@@ -36,6 +36,9 @@ public class AnalyseDataController {
 	@Inject
 	private AlarmInfoMapper alarmInfoMapper;
 
+	/** FTP服务器的目录 */
+	private static final String FTP_SERVER_FLOder = "E:\\stationDataCache";
+
 	/** 储罐的类别号 */
 	private static final String TANK = "01";
 
@@ -72,19 +75,19 @@ public class AnalyseDataController {
 	public void runRealtime() {
 
 		// 文件的目录
-		String folder = getFolder();
+		// String folder = getFolder();
 
-		File file = new File(folder);
+		File file = new File(FTP_SERVER_FLOder);
 		// 判断文件夹是否存在
 		if (!file.exists()) {
 			return;
 		}
 
 		// 解析并获取实时信息
-		getRealtimeInfo(folder);
+		getRealtimeInfo(FTP_SERVER_FLOder);
 
 		// 解析并获取报警信息
-		getAlarmInfo(folder);
+		getAlarmInfo(FTP_SERVER_FLOder);
 	}
 
 	/**
@@ -93,16 +96,61 @@ public class AnalyseDataController {
 	public void runEveryDay() {
 
 		// 文件的目录
-		String folder = getFolder();
+		// String folder = getFolder();
 
-		File file = new File(folder);
+		File file = new File(FTP_SERVER_FLOder);
 		// 判断文件夹是否存在
 		if (!file.exists()) {
 			return;
 		}
 
 		// 获取历史信息
-		getHistoryInfo(folder);
+		getHistoryInfo(FTP_SERVER_FLOder);
+	}
+
+	/**
+	 * 每天凌晨创建必要的收集数据的文件
+	 */
+	public void runAtZero() {
+
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(FTP_SERVER_FLOder);
+		
+		String floder = FTP_SERVER_FLOder + "\\RealtimeData";
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+
+		floder = FTP_SERVER_FLOder + "\\RealtimeData\\" + currentTime.getNowDate();
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+
+		floder = FTP_SERVER_FLOder + "\\HistoryData";
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+		
+		floder = FTP_SERVER_FLOder + "\\HistoryData\\" + currentTime.getNowMonth();
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+
+		floder = FTP_SERVER_FLOder + "\\AlarmData";
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+		
+		floder = FTP_SERVER_FLOder + "\\AlarmData\\" + currentTime.getNowMonth();
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		checkAndCreateFloder(floder);
+	}
+
+	/**
+	 * 判断文件夹是否存在,如果不存在则创建文件夹
+	 */
+	private void checkAndCreateFloder(String floder) {
+
+		File file = new File(floder);
+		// 判断文件夹是否存在,如果不存在则创建文件夹
+		if (!file.exists()) {
+			file.mkdir();
+		}
 	}
 
 	/**
@@ -846,7 +894,7 @@ public class AnalyseDataController {
 
 				if (index != -1) {
 					index++;
-					
+
 					map.put("constantValue", String.valueOf(index));
 					map.put("constantKind", constantKind);
 					map.put("deviceId", deviceId);

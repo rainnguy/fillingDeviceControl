@@ -23,6 +23,7 @@
            <list>  
               <ref bean="realtimeTrigger"/>
               <ref bean="everyDayTrigger"/>
+              <ref bean="everyZeroTrigger"/>
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -32,6 +33,7 @@
        <property name="jobDetail" ref="jobDetail"/>
 		<!-- 每隔5分钟触发一次 -->
        <property name="cronExpression" value="0 */5 * * * ?"/>
+<!--        <property name="cronExpression" value="0 */3 * * * ?"/> -->
 	</bean>
 	
 	<bean id="everyDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
@@ -39,6 +41,12 @@
 		<!-- 每天凌晨3点触发一次 -->
        <property name="cronExpression" value="0 0 3 * * ?"/>
 <!--        <property name="cronExpression" value="0 */3 * * * ?"/> -->
+	</bean>
+	
+	<bean id="everyZeroTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="jobDetail3"/>
+		<!-- 每天凌晨3点触发一次 -->
+       <property name="cronExpression" value="0 0 0 * * ?"/>
 	</bean>
 	
 	
@@ -49,9 +57,16 @@
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>
 	
-		<bean id="jobDetail2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	<bean id="jobDetail2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
         <property name="targetObject" ref="job"/>  
         <property name="targetMethod" value="runEveryDay"/>
+        <property name="concurrent" value="true"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+	</bean>
+	
+	<bean id="jobDetail3" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="job"/>  
+        <property name="targetMethod" value="runAtZero"/>
         <property name="concurrent" value="true"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
 	</bean>
