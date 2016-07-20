@@ -1,9 +1,12 @@
 package com.banxian.controller.equip;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.banxian.controller.index.BaseController;
 import com.banxian.entity.equip.AlarmInfoMap;
+import com.banxian.mapper.equip.AlarmInfoMapper;
 import com.banxian.plugin.PageView;
 import com.banxian.util.Common;
 import com.banxian.util.DateUtil;
@@ -29,6 +33,9 @@ import com.banxian.util.SysConsts;
 @Controller
 @RequestMapping("/gasAlarm/")
 public class AlarmMonitorController extends BaseController {
+	
+	@Inject
+	private AlarmInfoMapper alarmInfoMapper;
 	
 	/**
 	 * 历史报警
@@ -91,5 +98,38 @@ public class AlarmMonitorController extends BaseController {
 		List<AlarmInfoMap> list = AlarmInfoMap.mapper().findHistoryAlarmData(alarmInfoMap);
 		
 		POIUtils.exportToExcel(response, listMap, list, fileName);
+	}
+	
+	/**
+	 * update display alarm tips
+	 * 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("deleteAlarmInfo")
+	@ResponseBody
+	public String deleteAlarmInfo(Model model) throws Exception {
+
+		AlarmInfoMap infoMap = getFormMap(AlarmInfoMap.class);
+		
+		udpateAlarmInfoStatus(infoMap);
+		
+		infoMap.deleteById(getPara("id"));
+		return "success";
+		 
+	}
+
+	private void udpateAlarmInfoStatus(AlarmInfoMap infoMap) {
+
+		String alarmId = getPara(SysConsts.ID);
+		AlarmInfoMap resultMap = infoMap.findById(alarmId);
+		Map<String, String> parameterMap = new HashMap<String, String>();
+		parameterMap.put(SysConsts.DEVICE_ID, String.valueOf((Integer) resultMap.get(SysConsts.DEVICE_ID)));
+		parameterMap.put(SysConsts.ALARM_DEF_ID, String.valueOf((Integer) resultMap.get(SysConsts.ALARM_DEF_ID)));
+		parameterMap.put(SysConsts.ALARM_TIME, DateUtil.formatDateByFormat((Timestamp) resultMap.get(SysConsts.ALARM_TIME), DateUtil.const1));
+		alarmInfoMapper.updateAlarmStatus(parameterMap);
+		
+		
 	}
 }

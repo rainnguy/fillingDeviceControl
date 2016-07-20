@@ -1,9 +1,11 @@
 package com.banxian.entity.equip;
 
+import com.banxian.annotation.TableSeg;
 import com.banxian.entity.base.FormMap;
 import com.banxian.mapper.equip.AlarmInfoMapper;
 import com.banxian.util.SpringIocUtils;
 
+@TableSeg(tableName = "alarm_info_temp", id="id")
 public class AlarmInfoMap extends FormMap<String, Object>{
 
 	/**

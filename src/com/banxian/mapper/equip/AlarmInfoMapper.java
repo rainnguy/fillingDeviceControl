@@ -1,6 +1,7 @@
 package com.banxian.mapper.equip;
 
 import java.util.List;
+import java.util.Map;
 
 import com.banxian.entity.equip.AlarmInfoMap;
 import com.banxian.entity.equip.UnsolvedAlarmInfoMap;
@@ -16,5 +17,7 @@ public interface AlarmInfoMapper extends BaseMapper {
 	public void insertAlarmInfoTemp(List<AlarmInfoMap> list);
 	
 	public void insertAlarmInfo(List<AlarmInfoMap> list);
+	
+	public void updateAlarmStatus(Map<String, String> paramterMap);
 	
 }
