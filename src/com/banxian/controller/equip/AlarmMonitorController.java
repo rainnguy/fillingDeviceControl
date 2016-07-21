@@ -120,16 +120,25 @@ public class AlarmMonitorController extends BaseController {
 		 
 	}
 
+	/**
+	 * update alarm status
+	 * @param infoMap
+	 */
 	private void udpateAlarmInfoStatus(AlarmInfoMap infoMap) {
 
 		String alarmId = getPara(SysConsts.ID);
 		AlarmInfoMap resultMap = infoMap.findById(alarmId);
-		Map<String, String> parameterMap = new HashMap<String, String>();
-		parameterMap.put(SysConsts.DEVICE_ID, String.valueOf((Integer) resultMap.get(SysConsts.DEVICE_ID)));
-		parameterMap.put(SysConsts.ALARM_DEF_ID, String.valueOf((Integer) resultMap.get(SysConsts.ALARM_DEF_ID)));
-		parameterMap.put(SysConsts.ALARM_TIME, DateUtil.formatDateByFormat((Timestamp) resultMap.get(SysConsts.ALARM_TIME), DateUtil.const1));
-		alarmInfoMapper.updateAlarmStatus(parameterMap);
-		
+		if(resultMap != null){
+			Map<String, String> parameterMap = new HashMap<String, String>();
+			parameterMap.put(SysConsts.DEVICE_ID, String.valueOf((Integer) resultMap.get(SysConsts.DEVICE_ID)));
+			parameterMap.put(SysConsts.ALARM_DEF_ID, String.valueOf((Integer) resultMap.get(SysConsts.ALARM_DEF_ID)));
+			String datetime = DateUtil.formatDateByFormat((Timestamp) resultMap.get(SysConsts.ALARM_TIME), DateUtil.const1);
+			parameterMap.put(SysConsts.ALARM_TIME, datetime);
+			// 用户编号
+			parameterMap.put(SysConsts.OPER_CODE, Common.findAttrValue(SysConsts.OPER_CODE));
+			parameterMap.put(SysConsts.HANDLE_TIME, datetime);
+			alarmInfoMapper.updateAlarmStatus(parameterMap);
+		}
 		
 	}
 }

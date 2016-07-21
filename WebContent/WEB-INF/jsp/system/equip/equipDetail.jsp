@@ -304,6 +304,70 @@
 															</c:forEach>
 														</section>
 													</div>
+													<div class="col-sm-6">
+														<c:set value="05" var="tempKey" />
+														<section class="panel panel-default">
+															<c:forEach items="${equipData}" var="key" varStatus="ind">
+																<c:choose> 
+																	<c:when test="${key.deviceType == '03'}">   
+																		<table class="table table-striped m-b-none">
+																		<c:if test="${tempKey eq '05'}">
+																			<thead>
+																				<tr >
+																					<th >设备名称</th>
+																					<th >汽化器后压力</th>
+																					<th >汽化器后温度</th>
+																				</tr>
+																			</thead>
+																		</c:if>
+																			<tbody>
+																				<tr >
+																					<td style="width: 20%">${key.deviceName}</td>
+																					<td style="width: 15%">${key.cbtBeforePressure}</td>
+																					<td style="width: 15%">${key.cbtAffterTemp}</td>
+																				</tr>
+																			</tbody>
+																		</table> 
+																		<c:set value="01" var="tempKey"/> 
+																  	</c:when> 
+																</c:choose>
+															</c:forEach>
+														</section>
+													</div>
+													<div class="col-sm-6">
+														<c:set value="06" var="tempKey" />
+														<section class="panel panel-default">
+															<c:forEach items="${equipData}" var="key" varStatus="ind">
+																<c:choose> 
+																	<c:when test="${key.deviceType == '04'}">   
+																		<table class="table table-striped m-b-none">
+																		<c:if test="${tempKey eq '06'}">
+																			<thead>
+																				<tr >
+																					<th >设备名称</th>
+																					<th >流量计温度</th>
+																					<th >流量计瞬时流量</th>
+																					<th >流量计压力</th>
+																					<th >流量计总流量</th>
+																				</tr>
+																			</thead>
+																		</c:if>
+																			<tbody>
+																				<tr >
+																					<td style="width: 20%">${key.deviceName}</td>
+																					<td style="width: 15%">${key.flowmeterTemp}</td>
+																					<td style="width: 15%">${key.flowmeterInstFlow}</td>
+																					<td style="width: 15%">${key.flowmeterPressure}</td>
+																					<td style="width: 15%">${key.flowmeterTotalFlow}</td>
+																				</tr>
+																			</tbody>
+																		</table> 
+																		<c:set value="02" var="tempKey"/> 
+																  	</c:when> 
+																</c:choose>
+															</c:forEach>
+														</section>
+													</div>
 												</div>
 											</div>
 										</section>

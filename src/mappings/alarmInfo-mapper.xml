@@ -192,7 +192,9 @@
 	<update id="updateAlarmStatus"  parameterType="java.util.HashMap">
           update alarm_info
           <set>
-            statusId = '2'
+            statusId = '2',
+            handlerCode = #{operCode},
+            handleTime = #{handleTime}
           </set>
           where deviceId = #{deviceId}
           and alarmDefId = #{alarmDefId}

@@ -33,6 +33,6 @@ public interface SysConsts {
 	public static final String DEVICE_ID = "deviceId";
 	public static final String ALARM_DEF_ID = "alarmDefId";
 	public static final String ALARM_TIME = "alarmTime";
-	
+	public static final String HANDLE_TIME = "handleTime";
 	
 }
